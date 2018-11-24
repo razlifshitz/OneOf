@@ -8,31 +8,45 @@
 #include "params.h"
 #endif
 
+// todo: move this to the right place
+class WaveSpeed {
+   public:
+      void initData(int category, int minSpeed, int maxSpeed);
+      int category;   // speed category
+      int minSpeed;      // min speed range
+      int maxSpeed;  // max speed range
+};
+
+void WaveSpeed::initData(int cat, int minS, int maxS) {
+   category = cat;
+   minSpeed = minS;
+   maxSpeed = maxS;
+};
 
 int CalcRand(int nMin, int nMax) {
-  return (rand() % (nMax - nMin + 1) + nMin);
+  return (random() % (nMax - nMin + 1) + nMin);
 }
 
 int CalcNextRandVal (int firstParam, int secontParam, int limit, String paramName) {
     int attemptNumber = 0;
     int value = CalcRand(firstParam,secontParam);
 
-    #ifdef DEBUG_CALC_NEXT_RAND_VAL
-      Serial.println(String("value: ") + (value) + String(" firstParam: ") + (firstParam));
-      Serial.println(String("secontParam: ") + (secontParam) + String(" limit: ") + (limit));
-    #endif  
+      #ifdef DEBUG_CALC_NEXT_RAND_VAL
+        Serial.println(String("next value: ") + (value) + String(" lowEnd: ") + (firstParam));
+        Serial.println(String("highEnd: ") + (secontParam) + String(" minimum Change: ") + (limit));
+      #endif
     
     while (abs(firstParam - secontParam) < limit)
     {
+      Serial.println(String("attemptNumber: ") + attemptNumber);
       attemptNumber++;
       if (attemptNumber < 10000) {
-        value = CalcRand(firstParam,secontParam);
+        value = CalcRand(firstParam,secontParam); 
 
-        
       #ifdef DEBUG_CALC_NEXT_RAND_VAL
-        Serial.println(String("value: ") + (value) + String(" firstParam: ") + (firstParam));
-        Serial.println(String("secontParam: ") + (secontParam) + String(" limit: ") + (limit));
-      #endif  
+        Serial.println(String("next value: ") + (value) + String(" lowEnd: ") + (firstParam));
+        Serial.println(String("highEnd: ") + (secontParam) + String(" minimum Change: ") + (limit));
+      #endif
       }
       else {
         Serial.println(String("EndLess Loop in param: " + paramName));
@@ -85,6 +99,15 @@ bool HandleDelayOfMovement(int* movesCounter, int* currentCountOfMoves, int* cur
   }
   
   return true;
+}
+
+int calcNextSpeed(WaveSpeed* waveSpeeds, int arrLength) {
+  int categoryNumber = CalcRand(1, arrLength);
+        Serial.println(String("categoryNumber: ") + (categoryNumber));
+        //Serial.println(String("waveSpeeds[categoryNumber].minSpeed: ") + (waveSpeeds[categoryNumber].minSpeed));
+        //Serial.println(String("waveSpeeds[categoryNumber].maxSpeed: ") + (waveSpeeds[categoryNumber].maxSpeed));
+
+  return CalcRand(waveSpeeds[categoryNumber].minSpeed, waveSpeeds[categoryNumber].maxSpeed);
 }
 
 //boolean ToInitServoInLoc(VarSpeedServo* myServo, boolean action, int loc, boolean* alreadyHappend) {

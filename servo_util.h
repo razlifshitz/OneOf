@@ -117,11 +117,23 @@ bool servo_update() {
       int maxSpeed = 110;
       int minSpeed = 3;
 
+      int numOfSpeedCategories = 5;
+      WaveSpeed waveSpeeds[numOfSpeedCategories];
+      waveSpeeds[1].initData(1, 3, 15);
+      waveSpeeds[2].initData(2, 16, 40);
+      waveSpeeds[3].initData(3, 41, 70);
+      waveSpeeds[4].initData(4, 71, 100);
+      waveSpeeds[5].initData(5, 101, 110);
+      
+      int sssspeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
+      Serial.println(String("sssspeed: ") + sssspeed);
+      
       // First Move
       
       int posFrom = CalcRand(minFrom,maxFrom);
       int posTo = CalcRand(minTo,maxTo);
-      int waveSpeed = CalcRand(minSpeed,maxSpeed);
+      //int waveSpeed = CalcRand(minSpeed,maxSpeed);
+      int waveSpeed = sssspeed;
       int nextPos = toMoveUp ? posTo : posFrom;
 
       plateCounter++;

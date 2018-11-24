@@ -57,6 +57,7 @@ void ThreadEncoderUpdate() {
 
 void setup() {
   Serial.begin(115200);
+  randomSeed(analogRead(0));
   pinMode(PUSHBUTTON_PIN, INPUT_PULLUP);
   pinMode(MOTOR_DIR_PIN, INPUT_PULLUP);
   active = false;
