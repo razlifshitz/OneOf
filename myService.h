@@ -47,39 +47,41 @@ int CalcNextRandVal (int firstParam, int secontParam, int limit, String paramNam
     return value;
 }
 
-bool HandleDelayOfMovement(int* movesCounter, int* movesBeforeNextDelay, int* scheduledDelay, int minDelay, int maxDelay, int minChangeInDelay,
-                           int minNumOfCount, int maxNumOfCount, int minChangeInNumOfMoves, long* activeDelay) {
-  //Serial.println(String("movesCounter: ") + (*movesCounter) + String(" movesBeforeNextDelay: ") + (*movesBeforeNextDelay));
+bool HandleDelayOfMovement(int* movesCounter, int* currentCountOfMoves, int* currentDelay, int minDelay, int maxDelay, int minChangeInDelay,
+                           int minNumOfCount, int maxNumOfCount, int minChangeInNumOfMoves, long* servoActiveDelay) {
+  //Serial.println(String("movesCounter: ") + (*movesCounter) + String(" currentCountOfMoves: ") + (*currentCountOfMoves));
   // Checks if its time for make delay
-  if (*movesCounter == *movesBeforeNextDelay) {
+  if (*movesCounter == *currentCountOfMoves) {
 
     // Delay's the amount of time as calculated
     #ifdef DEBUG_SERVO_DELAY
-      Serial.println(String("scheduledDelay: ") + (*scheduledDelay));
+      Serial.println(String("currentDelay: ") + (*currentDelay));
     #endif    
 
-    *activeDelay = *scheduledDelay;
+    *servoActiveDelay = *currentDelay;
     
-    //delay(*scheduledDelay);
+    //delay(*currentDelay);
 
     /////////////////////////////// Calculates the data for the next delay
     *movesCounter = 0;
 
     // Delay Length calculation
-    *scheduledDelay = CalcNextRandVal(minDelay, maxDelay, minChangeInDelay, "minChangeInDelay");
+    *currentDelay = CalcNextRandVal(minDelay, maxDelay, minChangeInDelay, "minChangeInDelay");
 
-    if (*scheduledDelay == -1) {
+    if (*currentDelay == -1) {
       return false;
     }
 
     // Delay number of moves calculation
-    *movesBeforeNextDelay = CalcNextRandVal(minNumOfCount, maxNumOfCount, minChangeInNumOfMoves, "minChangeInNumOfMoves");
+    *currentCountOfMoves = CalcNextRandVal(minNumOfCount, maxNumOfCount, minChangeInNumOfMoves, "minChangeInNumOfMoves");
     
-    if (*movesBeforeNextDelay == -1) {
+    if (*currentCountOfMoves == -1) {
       return false;
     }
   }
-
+  else {
+    *servoActiveDelay = -1;
+  }
     return true;
 }
 

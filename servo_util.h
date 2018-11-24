@@ -8,60 +8,48 @@
 
 VarSpeedServo myservo;
 
-// -------------------------------------------- User Properties
-
 //////////////////////////////
 //////////CUP MODE////////////
 ////////////////////////////// 
 bool isCupMod = false;
 
-/*
- * RANGE DATA
- */
-
-// Lower range
-int minFrom = 1;
-int maxFrom = 15;
-// Upper range
-int minTo = 40;
-int maxTo = 70;
-
-
-/*
- * SPEED DATA
- */
-
-int maxSpeed = 110;
-int minSpeed = 3;
-
-// -------------------------------------------- Auto Generated Properties
-
+// -------------------------------------------- Properties
 /* 
  * DELAY DATA (The numbers are in Miliseconds)
- */
+*/
 
 // LENGTH
-int minDelay = -1;
-int maxDelay = -1;
 int minChangeInDelay = -1;
+// Delay range
+int maxDelay = -1;
+int minDelay = -1;
 
 // NUMBER OF MOVES (before each delay)
-int minNumOfCount = -1;
+int minChangeInNumOfMoves =  -1; 
+// count range
 int maxNumOfCount = -1;
-int minChangeInNumOfMoves = -1;
+int minNumOfCount = -1;
 
-// -------------------------------------------- System Properties
-
-int scheduledDelay = -1;      // Delay length of the next scheduled delay
-long activeDelay = -1;        // Length of the delay that is perfoming right now
-
-bool toMoveUp = true;         // Boolen that indicates whether the servo should go up or down
-int movesCounter = 0;         // Number of moves in the current wave 
-int movesBeforeNextDelay = 0; // Number of moves that the servo will perform before its next delay
-int plateMovesCounter = 0;    // Servo moves counter for the entire plate
+long lastUpdated = -1;
+long servoActiveDelay = -1;
+int plateCounter = 0;  // Number of moves for the entire plate
+int movesCounter = -1; // Number of moves in the current wave 
+bool toMoveUp = true;
+long lastServoLoc = myservo.read();
 
 
-//--------------------------------------------
+
+// -------------------------------------------- Logic Variables
+
+// Delay length
+int randDelay = -1;
+int currentDelay = -1;
+
+// Delay count of moves
+int randCountOfMoves = -1;
+int currentCountOfMoves = -1;
+
+//-------------------------------------- END DATA SETTING
 
 
 void servo_start() {
@@ -74,12 +62,12 @@ void servo_stop() {
   myservo.detach();
 }
 
-bool iservoMoving(int* lastServoLoc) {
+bool iservoMoving() {
   long firstTime = millis();
   while (millis() - firstTime < 25) {
     
   }
-  if (*lastServoLoc == myservo.read()) {
+  if (lastServoLoc == myservo.read()) {
     return false;
   }
   else {
@@ -88,35 +76,43 @@ bool iservoMoving(int* lastServoLoc) {
 }
 
 bool isDelayPending() {
-  if (activeDelay == -1) {
+  if (servoActiveDelay == -1) {
     return false;
   }
   else {
     long firstTime = millis();
-    while (millis() - firstTime < activeDelay) {
+    while (millis() - firstTime < servoActiveDelay) {
       // Executing the delay
         #ifdef DEBUG_SERVO_DELAY
-          Serial.println((String("The servo has preformed ") + (millis() - firstTime) + String("ms/") + (activeDelay) + String("ms of delay")));
+          Serial.println((String("The servo has preformed ") + (millis() - firstTime) + String("ms/") + (servoActiveDelay) + String("ms of delay")));
         #endif
     }
-    activeDelay = -1;
     return false;
   }
 }
 
 bool servo_update() {
   //Serial.println("servo_update()");
-  long lastServoLoc = myservo.read();
-  long lastUpdated = millis();
-
+  lastServoLoc = myservo.read();
   if (millis() - lastUpdated > SERVO_UPDATE_INTERVAL && 
-      !iservoMoving(&lastServoLoc) && !isDelayPending()) {
+      !iservoMoving() && !isDelayPending()) {
 
   #ifdef DEBUG_SERVO_DELAY
     Serial.println("-------------------------");
   #endif
-
       toMoveUp = !toMoveUp;
+      
+      // Bottom range
+      int minFrom = 1;
+      int maxFrom = 15;
+
+      // Upper range
+      int minTo = 40;
+      int maxTo = 70;
+
+      // Speed range
+      int maxSpeed = 110;
+      int minSpeed = 3;
 
       // First Move
       
@@ -125,10 +121,10 @@ bool servo_update() {
       int waveSpeed = CalcRand(minSpeed,maxSpeed);
       int nextPos = toMoveUp ? posTo : posFrom;
 
-      plateMovesCounter++;
+      plateCounter++;
       
       #ifdef DEBUG_SERVO_MOVE_COUNTER
-        Serial.println(String("Starting move: ") + (plateMovesCounter + String(" To location: ") + nextPos));
+        Serial.println(String("Starting move: ") + (plateCounter + String(" To location: ") + nextPos));
       #endif
       
       myservo.write(nextPos, waveSpeed, false);
@@ -139,15 +135,15 @@ bool servo_update() {
         movesCounter++;
         
         #ifdef DEBUG_SERVO_DELAY
-          Serial.println(String("movesCounter: ") + (movesCounter + String(" movesBeforeNextDelay: ") + (movesBeforeNextDelay)));
+          Serial.println(String("movesCounter: ") + (movesCounter + String("Next currentCountOfMoves: ") + (currentCountOfMoves)));
         #endif
         
-        if(!toMoveUp && !HandleDelayOfMovement(&movesCounter, &movesBeforeNextDelay, &scheduledDelay, minDelay, maxDelay, minChangeInDelay,
-            minNumOfCount,maxNumOfCount,minChangeInNumOfMoves, &activeDelay)) {
+        if(!toMoveUp && !HandleDelayOfMovement(&movesCounter,&currentCountOfMoves, &currentDelay, minDelay, maxDelay, minChangeInDelay,
+            minNumOfCount,maxNumOfCount,minChangeInNumOfMoves, &servoActiveDelay)) {
           return false;
         }
         
-        if (activeDelay != -1) {
+        if (servoActiveDelay != -1) {
           return true;
         }
       }
