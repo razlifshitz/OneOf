@@ -32,10 +32,13 @@ int minNumOfCount = -1;
 
 long lastUpdated = -1;
 long servoActiveDelay = -1;
+long firstTime;
+bool inDelayProcess = false;
 int plateCounter = 0;  // Number of moves for the entire plate
 int movesCounter = -1; // Number of moves in the current wave 
 bool toMoveUp = true;
 long lastServoLoc = myservo.read();
+int servoStartLocation; //todo: implementation is needed
 
 
 
@@ -62,6 +65,7 @@ void servo_stop() {
   myservo.detach();
 }
 
+// todo check if we can remove the 'while'
 bool iservoMoving() {
   long firstTime = millis();
   while (millis() - firstTime < 25) {
@@ -75,30 +79,32 @@ bool iservoMoving() {
   }
 }
 
-bool isDelayPending() {
-  if (servoActiveDelay == -1) {
-    return false;
-  }
-  else {
-    long firstTime = millis();
-    while (millis() - firstTime < servoActiveDelay) {
+bool isPerformingDelay() {
+  if (servoActiveDelay != -1) {
+    if (!inDelayProcess) {
+          firstTime = millis();
+          inDelayProcess = true;
+    }
+    if (millis() - firstTime < servoActiveDelay) {
       // Executing the delay
         #ifdef DEBUG_SERVO_DELAY
           Serial.println((String("The servo has preformed ") + (millis() - firstTime) + String("ms/") + (servoActiveDelay) + String("ms of delay")));
         #endif
+    } else {
+      // cancels the active delay
+      servoActiveDelay = -1;
+      inDelayProcess = false;
     }
-    // cancels the active delay
-    servoActiveDelay = -1;
-    
-    return false;
   }
+
+    return inDelayProcess;
 }
 
 bool servo_update() {
   //Serial.println("servo_update()");
   lastServoLoc = myservo.read();
   if (millis() - lastUpdated > SERVO_UPDATE_INTERVAL && 
-      !iservoMoving() && !isDelayPending()) {
+      !iservoMoving() && !isPerformingDelay()) {
 
   #ifdef DEBUG_SERVO_DELAY
     Serial.println("-------------------------");
@@ -126,7 +132,7 @@ bool servo_update() {
       waveSpeeds[5].initData(5, 101, 110);
       
       int sssspeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
-      Serial.println(String("sssspeed: ") + sssspeed);
+      //Serial.println(String("sssspeed: ") + sssspeed);
       
       // First Move
       

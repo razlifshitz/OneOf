@@ -65,7 +65,7 @@ bool HandleDelayOfMovement(int* movesCounter, int* currentCountOfMoves, int* cur
                            int minNumOfCount, int maxNumOfCount, int minChangeInNumOfMoves, long* servoActiveDelay) {
   //Serial.println(String("movesCounter: ") + (*movesCounter) + String(" currentCountOfMoves: ") + (*currentCountOfMoves));
   // Checks if its time for make delay
-        Serial.println(String("Before compare moveCounter !!!!!!!"));
+  //Serial.println(String("Before compare moveCounter !!!!!!!"));
 
   if (*movesCounter >= *currentCountOfMoves) {
           Serial.println(String("moveCounter are equals !!!!!!!!!!!!!!!!"));
@@ -103,7 +103,7 @@ bool HandleDelayOfMovement(int* movesCounter, int* currentCountOfMoves, int* cur
 
 int calcNextSpeed(WaveSpeed* waveSpeeds, int arrLength) {
   int categoryNumber = CalcRand(1, arrLength);
-        Serial.println(String("categoryNumber: ") + (categoryNumber));
+        //Serial.println(String("categoryNumber: ") + (categoryNumber));
         //Serial.println(String("waveSpeeds[categoryNumber].minSpeed: ") + (waveSpeeds[categoryNumber].minSpeed));
         //Serial.println(String("waveSpeeds[categoryNumber].maxSpeed: ") + (waveSpeeds[categoryNumber].maxSpeed));
 

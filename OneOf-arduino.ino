@@ -19,6 +19,8 @@ bool isLongPressed = false;
 bool alreadyHappend = false;
 Thread myThread = Thread();
 Thread myEncoderThread = Thread();
+ThreadController controller = ThreadController();
+
 long stopper;
 
 Encoder encoder(ENCODER1_PIN, ENCODER2_PIN);
@@ -26,33 +28,33 @@ Encoder encoder(ENCODER1_PIN, ENCODER2_PIN);
 void ThreadServoUpdate() {
   //Serial.println("ThreadServoUpdate()");
   if (!servo_update()) {
-    Serial.println("--------SERVO THREAD-----------------------------");
-    
-    #ifdef STOPPER
-      Serial.println(String("TIME: ") + (millis() - stopper));
-    #endif
-    
-    servo_stop();
-    motor_stop();
-    changed = false;
-    active = false;
-  }  
+      Serial.println("--------SERVO THREAD-----------------------------");
+      
+      #ifdef STOPPER
+        Serial.println(String("TIME: ") + (millis() - stopper));
+      #endif
+      
+      servo_stop();
+      motor_stop();
+      changed = false;
+      active = false;
+    } 
 }
 
 void ThreadEncoderUpdate() {
   //Serial.println("ThreadEncoderUpdate()");
   if (motor_reachedEnd(&encoder)) {
-    Serial.println("-----ENCODER THREAD-------------------------");
+      Serial.println("-----ENCODER THREAD-------------------------");
 
-    #ifdef STOPPER
-      Serial.println(String("TIME: ") + (millis() - stopper));
-    #endif
-    
-    servo_stop();
-    motor_stop();
-    changed = false;
-    active = false;
-  }  
+      #ifdef STOPPER
+        Serial.println(String("TIME: ") + (millis() - stopper));
+      #endif
+      
+      servo_stop();
+      motor_stop();
+      changed = false;
+      active = false;
+    } 
 }
 
 void setup() {
@@ -64,6 +66,10 @@ void setup() {
   changed = false;
   myThread.onRun(ThreadServoUpdate);
   myEncoderThread.onRun(ThreadEncoderUpdate);
+
+  // Now, put bunch of Threads inside it, FEED it!
+  controller.add(&myThread); // Notice the '&' sign before the thread, IF it's not instantied as a pointer.
+  controller.add(&myEncoderThread);
 }
 
 void initDataBeforeFirstRun() {
@@ -85,6 +91,7 @@ void initDataBeforeFirstRun() {
         Serial.println(String("------ NEW currentCountOfMoves: ") + (currentCountOfMoves));
 
         servoActiveDelay = -1;
+        inDelayProcess = false;
         movesCounter=0;
         plateCounter=0;
         stopper = millis();
@@ -144,8 +151,7 @@ void loop() {
         // Normal Behavior
         else {
           //Serial.println("Normal Behavior");
-          myThread.run();
-          myEncoderThread.run();
+          controller.run();
         }
       }
     }
