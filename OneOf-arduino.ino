@@ -99,6 +99,7 @@ void initDataBeforeFirstRun() {
 
         // villroy and boch
         isEncoderReachedDestination = true;
+        isServoReachedDestination = true;
         currentQuarter = 0;
 }
 

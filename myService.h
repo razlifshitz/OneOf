@@ -138,6 +138,14 @@ void motor_start(Encoder* encoder, int dir, int speedd) {
   }
 }
 
+boolean hasServoReachedDestination(VarSpeedServo* servo, int destination, bool toMoveUp) {
+  int servoPos = servo->read();
+  
+  return toMoveUp 
+  ? (servoPos) >= destination
+  : (servoPos) <= destination; 
+}
+
 boolean motor_reachDestination(Encoder* encoder, long destination) {
   long motorPos = abs(encoder->read());
   boolean isStopMotor = (motorPos) > destination;
