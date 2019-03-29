@@ -119,7 +119,7 @@ bool servo_update() {
         Serial.println(String("Starting move: ") + (plateCounter + String(" To location: ") + nextPos));
       #endif
       
-      myservo.write(nextPos, 15, false);
+      myservo.write(nextPos, waveSpeed, false);
       
       // // Handle the delay
       // if (!isCupMod) {
