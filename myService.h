@@ -138,15 +138,19 @@ void motor_start(Encoder* encoder, int dir, int speedd) {
   }
 }
 
-boolean motor_reachedEnd(Encoder* encoder) {
+boolean motor_reachDestination(Encoder* encoder, long destination) {
   long motorPos = abs(encoder->read());
-  boolean isStopMotor = (motorPos) > CLICKS_PER_ROUND;
+  boolean isStopMotor = (motorPos) > destination;
 
   #ifdef DEBUG_ENCODER
     Serial.println(String("Motor Pos: ") + (motorPos) + String(" CLICKS_PER_ROUND: ") + (CLICKS_PER_ROUND) + String(" isStopMotor: ") + (isStopMotor ? "TRUE" : "FALSE"));
   #endif  
   
   return isStopMotor;
+}
+
+boolean motor_reachedEnd(Encoder* encoder) {
+  return motor_reachDestination(encoder, CLICKS_PER_ROUND);
 }
 
 boolean motor_stop() {

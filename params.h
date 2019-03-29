@@ -1,6 +1,9 @@
 // clicks per rotation (64) * gear ration (70) * teeth ration (128/16=8)
 // 360 degrees: 50000
 #define CLICKS_PER_ROUND 67000L
+#define QUARTER_CLICKS_PER_ROUND 16750
+#define QUARTER_CLICKS_PER_ROUND_25 4188
+#define QUARTER_CLICKS_PER_ROUND_75 12561
 
 // The Angle that the servo will start working - CUP MODE
 #define SERVO_START_ANGLE 20000L

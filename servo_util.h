@@ -6,6 +6,7 @@
 #include "paramsGenerator.h"
 #include "myService.h"
 
+Encoder encoder(ENCODER1_PIN, ENCODER2_PIN);
 VarSpeedServo myservo;
 
 //////////////////////////////
@@ -30,7 +31,6 @@ int minChangeInNumOfMoves =  -1;
 int maxNumOfCount = -1;
 int minNumOfCount = -1;
 
-long lastUpdated = -1;
 long servoActiveDelay = -1;
 long firstTime;
 bool inDelayProcess = false;
@@ -52,6 +52,11 @@ int currentDelay = -1;
 int randCountOfMoves = -1;
 int currentCountOfMoves = -1;
 
+// Villroy and boch params
+int currentQuarter = 0;
+int encoderPosition;
+int currentQurterActiveServo;
+bool isEncoderReachedDestination = true;
 //-------------------------------------- END DATA SETTING
 
 
@@ -65,112 +70,88 @@ void servo_stop() {
   myservo.detach();
 }
 
-// todo check if we can remove the 'while'
-bool iservoMoving() {
-  long firstTime = millis();
-  while (millis() - firstTime < 25) {
-    
-  }
-  if (lastServoLoc == myservo.read()) {
-    return false;
-  }
-  else {
-    return true;
-  }
+int getNextServoDestination(bool toMoveUp) {
+  // Bottom range
+  int minFrom = 1;
+  int maxFrom = 15;
+
+  // Upper range
+  int minTo = 40;
+  int maxTo = 70;
+
+  // Speed range
+  int maxSpeed = 110;
+  int minSpeed = 3;
+
+  return toMoveUp ? CalcRand(minTo,maxTo) : CalcRand(minFrom,maxFrom);
 }
 
-bool isPerformingDelay() {
-  if (servoActiveDelay != -1) {
-    if (!inDelayProcess) {
-          firstTime = millis();
-          inDelayProcess = true;
-    }
-    if (millis() - firstTime < servoActiveDelay) {
-      // Executing the delay
-        #ifdef DEBUG_SERVO_DELAY
-          Serial.println((String("The servo has preformed ") + (millis() - firstTime) + String("ms/") + (servoActiveDelay) + String("ms of delay")));
-        #endif
-    } else {
-      // cancels the active delay
-      servoActiveDelay = -1;
-      inDelayProcess = false;
-    }
-  }
+int getNextServoSpeed() {
+  int numOfSpeedCategories = 5;
+  WaveSpeed waveSpeeds[numOfSpeedCategories];
+  waveSpeeds[1].initData(1, 3, 15);
+  waveSpeeds[2].initData(2, 16, 40);
+  waveSpeeds[3].initData(3, 41, 70);
+  waveSpeeds[4].initData(4, 71, 100);
+  waveSpeeds[5].initData(5, 101, 110);
+  
+  return calcNextSpeed(waveSpeeds, numOfSpeedCategories);
+}
 
-    return inDelayProcess;
+void calcNextLengthOfServoAction () {
+  currentQurterActiveServo = encoderPosition + CalcRand(QUARTER_CLICKS_PER_ROUND_25, QUARTER_CLICKS_PER_ROUND_75);
 }
 
 bool servo_update() {
-  //Serial.println("servo_update()");
   lastServoLoc = myservo.read();
-  if (millis() - lastUpdated > SERVO_UPDATE_INTERVAL && 
-      !iservoMoving() && !isPerformingDelay()) {
+  encoderPosition = abs(encoder.read());
 
-  #ifdef DEBUG_SERVO_DELAY
-    Serial.println("-------------------------");
-  #endif
-      toMoveUp = !toMoveUp;
-      
-      // Bottom range
-      int minFrom = 1;
-      int maxFrom = 15;
+  if (!isEncoderReachedDestination) {
 
-      // Upper range
-      int minTo = 40;
-      int maxTo = 70;
+      isEncoderReachedDestination = motor_reachDestination(&encoder, currentQurterActiveServo);
 
-      // Speed range
-      int maxSpeed = 110;
-      int minSpeed = 3;
-
-      int numOfSpeedCategories = 5;
-      WaveSpeed waveSpeeds[numOfSpeedCategories];
-      waveSpeeds[1].initData(1, 3, 15);
-      waveSpeeds[2].initData(2, 16, 40);
-      waveSpeeds[3].initData(3, 41, 70);
-      waveSpeeds[4].initData(4, 71, 100);
-      waveSpeeds[5].initData(5, 101, 110);
-      
-      int sssspeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
-      //Serial.println(String("sssspeed: ") + sssspeed);
-      
-      // First Move
-      
-      int posFrom = CalcRand(minFrom,maxFrom);
-      int posTo = CalcRand(minTo,maxTo);
-      //int waveSpeed = CalcRand(minSpeed,maxSpeed);
-      int waveSpeed = sssspeed;
-      int nextPos = toMoveUp ? posTo : posFrom;
+      toMoveUp = !toMoveUp;      
+      int waveSpeed = getNextServoSpeed();
+      int nextPos = getNextServoDestination(toMoveUp);
 
       plateCounter++;
-      
       #ifdef DEBUG_SERVO_MOVE_COUNTER
         Serial.println(String("Starting move: ") + (plateCounter + String(" To location: ") + nextPos));
       #endif
       
       myservo.write(nextPos, 15, false);
       
-      // Handle the delay
-      if (!isCupMod) {
-        // Delay count of moves
-        movesCounter++;
+      // // Handle the delay
+      // if (!isCupMod) {
+      //   // Delay count of moves
+      //   movesCounter++;
         
-        #ifdef DEBUG_SERVO_DELAY
-          Serial.println(String("movesCounter: ") + (movesCounter + String("Next currentCountOfMoves: ") + (currentCountOfMoves)));
-        #endif
+      //   #ifdef DEBUG_SERVO_DELAY
+      //     Serial.println(String("movesCounter: ") + (movesCounter + String("Next currentCountOfMoves: ") + (currentCountOfMoves)));
+      //   #endif
         
-        if(!toMoveUp && !HandleDelayOfMovement(&movesCounter,&currentCountOfMoves, &currentDelay, minDelay, maxDelay, minChangeInDelay,
-            minNumOfCount,maxNumOfCount,minChangeInNumOfMoves, &servoActiveDelay)) {
-          return false;
-        }
+      //   if(!toMoveUp && !HandleDelayOfMovement(&movesCounter,&currentCountOfMoves, &currentDelay, minDelay, maxDelay, minChangeInDelay,
+      //       minNumOfCount,maxNumOfCount,minChangeInNumOfMoves, &servoActiveDelay)) {
+      //     return false;
+      //   }
         
-        if (servoActiveDelay != -1) {
-          return true;
-        }
-      }
-      
-      lastUpdated = millis();
+      //   if (servoActiveDelay != -1) {
+      //     return true;
+      //   }
+      // }
+  } else if (encoderPosition <= currentQuarter * QUARTER_CLICKS_PER_ROUND) {
+      // do nothing.. delay
+  }
+  else {
+    currentQuarter++;
+
+    if (currentQuarter <= 4) {
+      // start next quarter
+      isEncoderReachedDestination = false;
+      calcNextLengthOfServoAction();
+    }
   }
   
   return true;
 }
+

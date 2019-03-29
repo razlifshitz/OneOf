@@ -23,8 +23,6 @@ ThreadController controller = ThreadController();
 
 long stopper;
 
-Encoder encoder(ENCODER1_PIN, ENCODER2_PIN);
-
 void ThreadServoUpdate() {
   //Serial.println("ThreadServoUpdate()");
   if (!servo_update()) {
@@ -98,6 +96,10 @@ void initDataBeforeFirstRun() {
         
         servo_start(); 
         motor_start(&encoder, digitalRead(MOTOR_DIR_PIN), ROTATION_SPEED);
+
+        // villroy and boch
+        isEncoderReachedDestination = true;
+        currentQuarter = 0;
 }
 
 void loop() {
