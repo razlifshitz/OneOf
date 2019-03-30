@@ -59,6 +59,7 @@ int currentQurterActiveServo;
 int nextServoLocation;
 bool isEncoderReachedDestination;
 bool isServoReachedDestination;
+int waveSpeed;
 //-------------------------------------- END DATA SETTING
 
 
@@ -116,6 +117,9 @@ bool servo_update() {
     // doing nothing if servo hasn't reached destination
     if (!isServoReachedDestination) {
       isServoReachedDestination = hasServoReachedDestination(lastServoLoc, nextServoLocation, toMoveUp);
+	  
+	  // continuing the movement to the current destination
+	  myservo.write(nextServoLocation, waveSpeed, false);
     }
     
     // servo reached destination, calc next servo move
@@ -123,7 +127,7 @@ bool servo_update() {
       isServoReachedDestination = false;
       // calc next servo move
       toMoveUp = !toMoveUp;      
-      int waveSpeed = getNextServoSpeed();
+      waveSpeed = getNextServoSpeed();
       nextServoLocation = getNextServoDestination(toMoveUp);
 
       // write to monitor
