@@ -37,7 +37,7 @@ bool inDelayProcess = false;
 int plateCounter = 0;  // Number of moves for the entire plate
 int movesCounter = -1; // Number of moves in the current wave 
 bool toMoveUp = true;
-long lastServoLoc = myservo.read();
+int lastServoLoc;
 int servoStartLocation; //todo: implementation is needed
 
 
@@ -115,7 +115,7 @@ bool servo_update() {
     // checking if servo reached destination.
     // doing nothing if servo hasn't reached destination
     if (!isServoReachedDestination) {
-      isServoReachedDestination = hasServoReachedDestination(&myservo, nextServoLocation, toMoveUp);
+      isServoReachedDestination = hasServoReachedDestination(lastServoLoc, nextServoLocation, toMoveUp);
     }
     
     // servo reached destination, calc next servo move

@@ -81,12 +81,12 @@ void initDataBeforeFirstRun() {
 
         randDelay = CalcRand(minDelay,maxDelay);
         currentDelay = randDelay;
-        Serial.println(String("------ NEW currentDelay: ") + (currentDelay));
+        //Serial.println(String("------ NEW currentDelay: ") + (currentDelay));
 
         
         randCountOfMoves = CalcRand(minNumOfCount,maxNumOfCount);
         currentCountOfMoves = randCountOfMoves;
-        Serial.println(String("------ NEW currentCountOfMoves: ") + (currentCountOfMoves));
+        //Serial.println(String("------ NEW currentCountOfMoves: ") + (currentCountOfMoves));
 
         servoActiveDelay = -1;
         inDelayProcess = false;
@@ -96,6 +96,8 @@ void initDataBeforeFirstRun() {
         
         servo_start(); 
         motor_start(&encoder, digitalRead(MOTOR_DIR_PIN), ROTATION_SPEED);
+
+        toMoveUp = true;
 
         // villroy and boch
         isEncoderReachedDestination = true;
@@ -126,7 +128,6 @@ void loop() {
         changed = false;
   	  }
       else {
-        Serial.println("servo_start()");
         initDataBeforeFirstRun();
         changed = false;
       }

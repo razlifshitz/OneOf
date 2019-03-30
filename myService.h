@@ -38,7 +38,7 @@ int CalcNextRandVal (int firstParam, int secontParam, int limit, String paramNam
     
     while (abs(firstParam - secontParam) < limit)
     {
-      Serial.println(String("attemptNumber: ") + attemptNumber);
+      //Serial.println(String("attemptNumber: ") + attemptNumber);
       attemptNumber++;
       if (attemptNumber < 10000) {
         value = CalcRand(firstParam,secontParam); 
@@ -68,7 +68,7 @@ bool HandleDelayOfMovement(int* movesCounter, int* currentCountOfMoves, int* cur
   //Serial.println(String("Before compare moveCounter !!!!!!!"));
 
   if (*movesCounter >= *currentCountOfMoves) {
-          Serial.println(String("moveCounter are equals !!!!!!!!!!!!!!!!"));
+    //Serial.println(String("moveCounter are equals !!!!!!!!!!!!!!!!"));
 
 
     // Delay's the amount of time as calculated
@@ -138,14 +138,16 @@ void motor_start(Encoder* encoder, int dir, int speedd) {
   }
 }
 
-boolean hasServoReachedDestination(VarSpeedServo* servo, int destination, bool toMoveUp) {
-  int servoPos = servo->read();
-  
+boolean hasServoReachedDestination(int lastServoLoc, int destination, bool toMoveUp) { 
+  Serial.println(String("lastServoLoc: ") + (lastServoLoc) + String(" destination: ") + (destination) + String(" toMoveUp: ") + (toMoveUp ? "TRUE" : "FALSE"));
+ 
   return toMoveUp 
-  ? (servoPos) >= destination
-  : (servoPos) <= destination; 
+  ? (lastServoLoc) >= destination
+  : (lastServoLoc) <= destination; 
 }
 
+
+// todo: change param encoder to encoderLocation
 boolean motor_reachDestination(Encoder* encoder, long destination) {
   long motorPos = abs(encoder->read());
   boolean isStopMotor = (motorPos) > destination;
