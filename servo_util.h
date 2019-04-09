@@ -54,12 +54,13 @@ int currentCountOfMoves = -1;
 
 // Villroy and boch params
 int currentQuarter = 0;
-int encoderLocation;
-int currentQurterActiveServo;
+long encoderLocation;
+long currentQurterActiveServo;
 int nextServoLocation;
 bool isEncoderReachedDestination;
 bool isServoReachedDestination;
 int waveSpeed;
+bool beforeStart;
 //-------------------------------------- END DATA SETTING
 
 
@@ -109,8 +110,9 @@ bool servo_update() {
   lastServoLoc = myservo.read();
   encoderLocation = abs(encoder.read());
 
-  // checking if encoder reached destination.
+  // As Long as Encoder hasn't reached to destination where servo should delay, servo will work.
   if (!isEncoderReachedDestination) {
+		beforeStart = false;
     isEncoderReachedDestination = motor_reachDestination(&encoder, currentQurterActiveServo);
 
     // checking if servo reached destination.
@@ -118,13 +120,13 @@ bool servo_update() {
     if (!isServoReachedDestination) {
       isServoReachedDestination = hasServoReachedDestination(lastServoLoc, nextServoLocation, toMoveUp);
 	  
-	  // continuing the movement to the current destination
-	  myservo.write(nextServoLocation, waveSpeed, false);
+	    // continuing the movement to the current destination
+	    myservo.write(nextServoLocation, waveSpeed, false);
     }
     
     // servo reached destination, calc next servo move
     else {
-      isServoReachedDestination = false;
+			isServoReachedDestination = false;
       // calc next servo move
       toMoveUp = !toMoveUp;      
       waveSpeed = getNextServoSpeed();
@@ -139,9 +141,19 @@ bool servo_update() {
       // start new servo move
       myservo.write(nextServoLocation, waveSpeed, false);
     }
-  } else if (encoderLocation <= currentQuarter * QUARTER_CLICKS_PER_ROUND) {
-      // do nothing.. delay
+  } 
+	// The Encoder has reached to destination where servo should delay, tell servo to go to low
+	// location and delay.
+	else if (!beforeStart && encoderLocation <= currentQuarter * QUARTER_CLICKS_PER_ROUND) {
+			waveSpeed = CalcRand(30, 70);
+			nextServoLocation = getNextServoDestination(false);
+      isServoReachedDestination = hasServoReachedDestination(lastServoLoc, nextServoLocation, false);
+
+			if (!isServoReachedDestination) {
+				myservo.write(nextServoLocation, waveSpeed, false);
+			}
   }
+	// prepares next movement parameters
   else {
     currentQuarter++;
 

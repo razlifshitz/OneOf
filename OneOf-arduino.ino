@@ -103,6 +103,7 @@ void initDataBeforeFirstRun() {
         isEncoderReachedDestination = true;
         isServoReachedDestination = true;
         currentQuarter = 0;
+        beforeStart = true; // determine whether the state is before the machine is active
 }
 
 void loop() {

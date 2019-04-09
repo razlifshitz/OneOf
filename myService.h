@@ -23,7 +23,7 @@ void WaveSpeed::initData(int cat, int minS, int maxS) {
    maxSpeed = maxS;
 };
 
-int CalcRand(int nMin, int nMax) {
+long CalcRand(long nMin, long nMax) {
   return (random() % (nMax - nMin + 1) + nMin);
 }
 
@@ -139,7 +139,7 @@ void motor_start(Encoder* encoder, int dir, int speedd) {
 }
 
 boolean hasServoReachedDestination(int lastServoLoc, int destination, bool toMoveUp) { 
-  Serial.println(String("lastServoLoc: ") + (lastServoLoc) + String(" destination: ") + (destination) + String(" toMoveUp: ") + (toMoveUp ? "TRUE" : "FALSE"));
+  //Serial.println(String("lastServoLoc: ") + (lastServoLoc) + String(" destination: ") + (destination) + String(" toMoveUp: ") + (toMoveUp ? "TRUE" : "FALSE"));
  
   return toMoveUp 
   ? (lastServoLoc) >= destination
