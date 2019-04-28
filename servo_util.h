@@ -65,37 +65,37 @@ bool beforeStart;
 
 
 void servo_start() {
-  Serial.println("servo_start()");
-  myservo.attach(SERVO_PIN);  // attaches the servo on pin 9 to the servo object
+	Serial.println("servo_start()");
+	myservo.attach(SERVO_PIN);  // attaches the servo on pin 9 to the servo object
 }
 
 void servo_stop() {
-  Serial.println("servo_stop()");
-  myservo.detach();
+	Serial.println("servo_stop()");
+	myservo.detach();
 }
 
 int getNextServoDestination(bool toMoveUp) {
-  // Bottom range
-  int minFrom = 5;
-  int maxFrom = 20;
+	// Bottom range
+	int minFrom = 5;
+	int maxFrom = 20;
 
-  // Upper range
-  int minTo = 40;
-  int maxTo = 60;
+	// Upper range
+	int minTo = 40;
+	int maxTo = 60;
 
-  return toMoveUp ? CalcRand(minTo,maxTo) : CalcRand(minFrom,maxFrom);
+	return toMoveUp ? CalcRand(minTo,maxTo) : CalcRand(minFrom,maxFrom);
 }
 
 int getNextServoSpeed() {
-  int numOfSpeedCategories = 5;
-  WaveSpeed waveSpeeds[numOfSpeedCategories];
-  waveSpeeds[1].initData(1, 10, 40);
-  waveSpeeds[2].initData(2, 40, 50);
-  waveSpeeds[3].initData(3, 50, 70);
-  waveSpeeds[4].initData(4, 71, 100);
-  waveSpeeds[5].initData(5, 101, 130);
-  
-  return calcNextSpeed(waveSpeeds, numOfSpeedCategories);
+	int numOfSpeedCategories = 5;
+	WaveSpeed waveSpeeds[numOfSpeedCategories];
+	waveSpeeds[1].initData(1, 10, 40);
+	waveSpeeds[2].initData(2, 40, 50);
+	waveSpeeds[3].initData(3, 50, 70);
+	waveSpeeds[4].initData(4, 71, 100);
+	waveSpeeds[5].initData(5, 101, 130);
+
+	return calcNextSpeed(waveSpeeds, numOfSpeedCategories);
 }
 
 void calcNextLengthOfServoAction () {
@@ -103,12 +103,14 @@ void calcNextLengthOfServoAction () {
 }
 
 bool servo_update() {
+  #ifdef DEBUG_SERVO_MOVE_COUNTER 
+    if (myservo.read() != lastServoLoc) {
+      Serial.println(String("Servo Location: ") + lastServoLoc);
+    }
+  #endif
+
   lastServoLoc = myservo.read();
   encoderLocation = abs(encoder.read());
-
-  #ifdef DEBUG_SERVO_MOVE_COUNTER
-    Serial.println(String("Servo Location: ") + lastServoLoc);
-  #endif
 
   // As Long as Encoder hasn't reached to destination where servo should delay, servo will work.
   if (!isEncoderReachedDestination) {
@@ -145,13 +147,17 @@ bool servo_update() {
 	// The Encoder has reached to destination where servo should delay, tell servo to go to low
 	// location and delay.
 	else if (!beforeStart && encoderLocation <= currentQuarter * QUARTER_CLICKS_PER_ROUND) {
-			waveSpeed = CalcRand(30, 70);
-			nextServoLocation = getNextServoDestination(false);
-      isServoReachedDestination = hasServoReachedDestination(lastServoLoc, nextServoLocation, false);
+		waveSpeed = CalcRand(30, 70);
+		nextServoLocation = getNextServoDestination(false);
+    isServoReachedDestination = hasServoReachedDestination(lastServoLoc, nextServoLocation, false);
 
-			if (!isServoReachedDestination) {
-				myservo.write(nextServoLocation, waveSpeed, false);
-			}
+    #ifdef DEBUG_SERVO_MOVE_COUNTER
+     	Serial.println(String("Starting move to location: ") + nextServoLocation + String(" and Afterwards STARTING DELAY!"));
+    #endif
+
+		if (!isServoReachedDestination) {
+			myservo.write(nextServoLocation, waveSpeed, false);
+		}
   }
 	// prepares next movement parameters
   else {
