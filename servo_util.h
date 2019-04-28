@@ -76,16 +76,16 @@ void servo_stop() {
 
 int getNextServoDestination(bool toMoveUp) {
   // Bottom range
-  int minFrom = 1;
-  int maxFrom = 15;
+  int minFrom = 5;
+  int maxFrom = 20;
 
   // Upper range
   int minTo = 40;
-  int maxTo = 70;
+  int maxTo = 60;
 
   // Speed range
-  int maxSpeed = 110;
-  int minSpeed = 3;
+  int maxSpeed = 130;
+  int minSpeed = 10;
 
   return toMoveUp ? CalcRand(minTo,maxTo) : CalcRand(minFrom,maxFrom);
 }
@@ -93,11 +93,11 @@ int getNextServoDestination(bool toMoveUp) {
 int getNextServoSpeed() {
   int numOfSpeedCategories = 5;
   WaveSpeed waveSpeeds[numOfSpeedCategories];
-  waveSpeeds[1].initData(1, 3, 15);
-  waveSpeeds[2].initData(2, 16, 40);
-  waveSpeeds[3].initData(3, 41, 70);
+  waveSpeeds[1].initData(1, 10, 40);
+  waveSpeeds[2].initData(2, 40, 50);
+  waveSpeeds[3].initData(3, 50, 70);
   waveSpeeds[4].initData(4, 71, 100);
-  waveSpeeds[5].initData(5, 101, 110);
+  waveSpeeds[5].initData(5, 101, 130);
   
   return calcNextSpeed(waveSpeeds, numOfSpeedCategories);
 }
