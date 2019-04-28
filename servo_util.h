@@ -83,10 +83,6 @@ int getNextServoDestination(bool toMoveUp) {
   int minTo = 40;
   int maxTo = 60;
 
-  // Speed range
-  int maxSpeed = 130;
-  int minSpeed = 10;
-
   return toMoveUp ? CalcRand(minTo,maxTo) : CalcRand(minFrom,maxFrom);
 }
 
@@ -109,6 +105,10 @@ void calcNextLengthOfServoAction () {
 bool servo_update() {
   lastServoLoc = myservo.read();
   encoderLocation = abs(encoder.read());
+
+  #ifdef DEBUG_SERVO_MOVE_COUNTER
+    Serial.println(String("Servo Location: ") + lastServoLoc);
+  #endif
 
   // As Long as Encoder hasn't reached to destination where servo should delay, servo will work.
   if (!isEncoderReachedDestination) {
@@ -135,7 +135,7 @@ bool servo_update() {
       // write to monitor
       plateCounter++;
       #ifdef DEBUG_SERVO_MOVE_COUNTER
-        Serial.println(String("Starting move: ") + (plateCounter + String(" To location: ") + nextServoLocation));
+        Serial.println(String("Starting move to location: ") + nextServoLocation);
       #endif
       
       // start new servo move
