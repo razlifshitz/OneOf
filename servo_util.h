@@ -39,8 +39,7 @@ int movesCounter = -1; // Number of moves in the current wave
 bool toMoveUp = true;
 int lastServoLoc;
 int servoStartLocation; //todo: implementation is needed
-
-
+long lastUpdate;
 
 // -------------------------------------------- Logic Variables
 
@@ -87,13 +86,13 @@ int getNextServoDestination(bool toMoveUp) {
 }
 
 int getNextServoSpeed() {
-	int numOfSpeedCategories = 5;
+	int numOfSpeedCategories = 1;
 	WaveSpeed waveSpeeds[numOfSpeedCategories];
-	waveSpeeds[1].initData(1, 10, 40);
-	waveSpeeds[2].initData(2, 40, 50);
-	waveSpeeds[3].initData(3, 50, 70);
-	waveSpeeds[4].initData(4, 71, 100);
-	waveSpeeds[5].initData(5, 101, 130);
+	//waveSpeeds[1].initData(1, 10, 40);
+	//waveSpeeds[2].initData(2, 40, 50);
+	//waveSpeeds[3].initData(3, 50, 70);
+	//waveSpeeds[4].initData(4, 71, 100);
+	waveSpeeds[0].initData(1, 35, 130);
 
 	return calcNextSpeed(waveSpeeds, numOfSpeedCategories);
 }
@@ -111,6 +110,11 @@ bool servo_update() {
 
   lastServoLoc = myservo.read();
   encoderLocation = abs(encoder.read());
+
+  // not continuing unless update update interval passed
+  if (millis() - lastUpdate < SERVO_UPDATE_INTERVAL) {
+    return true;
+  }
 
   // As Long as Encoder hasn't reached to destination where servo should delay, servo will work.
   if (!isEncoderReachedDestination) {
@@ -151,11 +155,11 @@ bool servo_update() {
 		nextServoLocation = getNextServoDestination(false);
     isServoReachedDestination = hasServoReachedDestination(lastServoLoc, nextServoLocation, false);
 
-    #ifdef DEBUG_SERVO_MOVE_COUNTER
-     	Serial.println(String("Starting move to location: ") + nextServoLocation + String(" and Afterwards STARTING DELAY!"));
-    #endif
-
 		if (!isServoReachedDestination) {
+      #ifdef DEBUG_SERVO_MOVE_COUNTER
+     	  Serial.println(String("Starting move to location: ") + nextServoLocation + String(" and Afterwards STARTING DELAY!"));
+      #endif
+
 			myservo.write(nextServoLocation, waveSpeed, false);
 		}
   }
@@ -170,6 +174,7 @@ bool servo_update() {
     }
   }
   
+  lastUpdate = millis();
   return true;
 }
 

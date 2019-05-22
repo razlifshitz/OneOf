@@ -17,7 +17,7 @@ long QUARTER_CLICKS_PER_ROUND_75 = QUARTER_CLICKS_PER_ROUND * 0.75;
 // direction can be 0 or 1
 #define ROTATION_DIRECTION 1
 
-#define SERVO_UPDATE_INTERVAL 150
+#define SERVO_UPDATE_INTERVAL 100
 
 boolean initServoInLoc = true;
 int locationToInit = 0;
