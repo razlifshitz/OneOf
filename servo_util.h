@@ -112,12 +112,13 @@ bool servo_update() {
       toMoveUp = !toMoveUp;
       
       // Bottom range
-      int minFrom = 5;
-      int maxFrom = 25;
+      int minFrom = 13;
+      int maxFrom = 30;
+
 
       // Upper range
-      int minTo = 55;
-      int maxTo = 70;
+      int minTo = 53;
+      int maxTo = 63;
 
       // Speed range
       int maxSpeed = 110;
@@ -125,11 +126,11 @@ bool servo_update() {
 
       int numOfSpeedCategories = 5;
       WaveSpeed waveSpeeds[numOfSpeedCategories];
-      waveSpeeds[1].initData(1, 40, 60);
+      waveSpeeds[1].initData(1, 45, 60);
       waveSpeeds[2].initData(2, 61, 75);
       waveSpeeds[3].initData(3, 76, 97);
       waveSpeeds[4].initData(4, 98, 115);
-      waveSpeeds[5].initData(5, 116, 130);
+      waveSpeeds[5].initData(5, 120, 150);
       
       int sssspeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
       //Serial.println(String("sssspeed: ") + sssspeed);

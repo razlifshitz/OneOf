@@ -6,7 +6,7 @@
 #define SERVO_START_ANGLE 20000L
 
 // possible values: 0-255
-#define ROTATION_SPEED 80
+#define ROTATION_SPEED 70
 
 // possible values: 0-255
 #define LONG_PRESSED_ROTATION_SPEED 200
