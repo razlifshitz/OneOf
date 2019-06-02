@@ -44,10 +44,10 @@ long lastUpdate;
 // -------------------------------------------- Logic Variables
 
 // DESTINATION
-int minFrom = 5;  // Bottom range - minimum
-int maxFrom = 20; // Bottom range - maximum
+int minFrom = 1;  // Bottom range - minimum
+int maxFrom = 15; // Bottom range - maximum
 int minTo = 40;   // Upper range - minimum
-int maxTo = 60;   // Upper range - maximum
+int maxTo = 70;   // Upper range - maximum
 
 // Delay length
 int randDelay = -1;
@@ -85,13 +85,12 @@ int getNextServoDestination(bool toMoveUp) {
 
 int getNextServoSpeed() {
   // FIXME: move to properties section when possible
-  int numOfSpeedCategories = 5;
+  int numOfSpeedCategories = 4;
   WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
-  waveSpeeds[1].initData(1, 10, 40);    // category 1
-  waveSpeeds[2].initData(2, 40, 50);    // category 2
-  waveSpeeds[3].initData(3, 50, 70);    // category 3
-  waveSpeeds[4].initData(4, 71, 100);   // category 4
-  waveSpeeds[5].initData(5, 101, 130);  // category 5
+  waveSpeeds[1].initData(2, 50, 120);    // category 2
+  waveSpeeds[2].initData(3, 121, 170);    // category 3
+  waveSpeeds[3].initData(4, 171, 200);   // category 4
+  waveSpeeds[4].initData(5, 201, 230);  // category 5
 
 	return calcNextSpeed(waveSpeeds, numOfSpeedCategories);
 }
@@ -140,7 +139,8 @@ bool servo_update() {
       // write to monitor
       plateCounter++;
       #ifdef DEBUG_SERVO_MOVE_COUNTER
-        Serial.println(String("Starting move to location: ") + nextServoLocation);
+        Serial.println(String("--- Servo Location: ") + lastServoLoc);
+        Serial.println(String("--- Starting move to location: ") + nextServoLocation);
       #endif
       
       // start new servo move

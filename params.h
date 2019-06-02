@@ -1,6 +1,6 @@
 // clicks per rotation (64) * gear ration (70) * teeth ration (128/16=8)
 // 360 degrees: 50000
-#define CLICKS_PER_ROUND 67000L
+#define CLICKS_PER_ROUND 68000L
 long QUARTER_CLICKS_PER_ROUND = CLICKS_PER_ROUND * 0.25;
 long QUARTER_CLICKS_PER_ROUND_25 = QUARTER_CLICKS_PER_ROUND * 0.25;
 long QUARTER_CLICKS_PER_ROUND_75 = QUARTER_CLICKS_PER_ROUND * 0.75;
@@ -9,7 +9,7 @@ long QUARTER_CLICKS_PER_ROUND_75 = QUARTER_CLICKS_PER_ROUND * 0.75;
 #define SERVO_START_ANGLE 20000L
 
 // possible values: 0-255
-#define ROTATION_SPEED 60
+#define ROTATION_SPEED 70
 
 // possible values: 0-255
 #define LONG_PRESSED_ROTATION_SPEED 200
@@ -36,7 +36,7 @@ int locationToInit = 0;
 
 // Debugger parameters
 
-//#define DEBUG_SERVO_MOVE_COUNTER 1
+#define DEBUG_SERVO_MOVE_COUNTER 1
 //#define DEBUG_SERVO_DELAY 1
 //#define DEBUG_CALC_NEXT_RAND_VAL 1
 //#define DEBUG_ENCODER 1
