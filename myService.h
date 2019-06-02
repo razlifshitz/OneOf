@@ -27,6 +27,10 @@ long CalcRand(long nMin, long nMax) {
   return (random() % (nMax - nMin + 1) + nMin);
 }
 
+int CalcRand(int nMin, int nMax) {
+  return (random() % (nMax - nMin + 1) + nMin);
+}
+
 int CalcNextRandVal (int firstParam, int secontParam, int limit, String paramName) {
     int attemptNumber = 0;
     int value = CalcRand(firstParam,secontParam);
@@ -103,11 +107,14 @@ bool HandleDelayOfMovement(int* movesCounter, int* currentCountOfMoves, int* cur
 
 int calcNextSpeed(WaveSpeed* waveSpeeds, int arrLength) {
   int categoryNumber = CalcRand(1, arrLength);
-        //Serial.println(String("categoryNumber: ") + (categoryNumber));
-        //Serial.println(String("waveSpeeds[categoryNumber].minSpeed: ") + (waveSpeeds[categoryNumber].minSpeed));
-        //Serial.println(String("waveSpeeds[categoryNumber].maxSpeed: ") + (waveSpeeds[categoryNumber].maxSpeed));
+  int result = CalcRand(waveSpeeds[categoryNumber].minSpeed, waveSpeeds[categoryNumber].maxSpeed);
 
-  return CalcRand(waveSpeeds[categoryNumber].minSpeed, waveSpeeds[categoryNumber].maxSpeed);
+  // Serial.println(String("categoryNumber: ") + (categoryNumber));
+  // Serial.println(String("waveSpeeds[categoryNumber].minSpeed: ") + (waveSpeeds[categoryNumber].minSpeed));
+  // Serial.println(String("waveSpeeds[categoryNumber].maxSpeed: ") + (waveSpeeds[categoryNumber].maxSpeed));
+  // Serial.println(String("Speed: ") + (result));
+
+  return result;
 }
 
 //boolean ToInitServoInLoc(VarSpeedServo* myServo, boolean action, int loc, boolean* alreadyHappend) {
