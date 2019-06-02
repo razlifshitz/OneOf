@@ -68,9 +68,6 @@ bool HandleDelayOfMovement(int* movesCounter, int* currentCountOfMoves, int* cur
   //Serial.println(String("Before compare moveCounter !!!!!!!"));
 
   if (*movesCounter >= *currentCountOfMoves) {
-          Serial.println(String("moveCounter are equals !!!!!!!!!!!!!!!!"));
-
-
     // Delay's the amount of time as calculated
     #ifdef DEBUG_SERVO_DELAY
       Serial.println(String("currentDelay: ") + (*currentDelay));
@@ -103,9 +100,9 @@ bool HandleDelayOfMovement(int* movesCounter, int* currentCountOfMoves, int* cur
 
 int calcNextSpeed(WaveSpeed* waveSpeeds, int arrLength) {
   int categoryNumber = CalcRand(1, arrLength);
-        //Serial.println(String("categoryNumber: ") + (categoryNumber));
-        //Serial.println(String("waveSpeeds[categoryNumber].minSpeed: ") + (waveSpeeds[categoryNumber].minSpeed));
-        //Serial.println(String("waveSpeeds[categoryNumber].maxSpeed: ") + (waveSpeeds[categoryNumber].maxSpeed));
+  // Serial.println(String("categoryNumber: ") + (categoryNumber));
+  // Serial.println(String("waveSpeeds[categoryNumber].minSpeed: ") + (waveSpeeds[categoryNumber].minSpeed));
+  // Serial.println(String("waveSpeeds[categoryNumber].maxSpeed: ") + (waveSpeeds[categoryNumber].maxSpeed));
 
   return CalcRand(waveSpeeds[categoryNumber].minSpeed, waveSpeeds[categoryNumber].maxSpeed);
 }

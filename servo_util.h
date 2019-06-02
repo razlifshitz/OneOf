@@ -124,7 +124,7 @@ bool servo_update() {
       int minSpeed = 3;
 
       int numOfSpeedCategories = 5;
-      WaveSpeed waveSpeeds[numOfSpeedCategories];
+      WaveSpeed waveSpeeds[numOfSpeedCategories+1];
       waveSpeeds[1].initData(1, 3, 15);
       waveSpeeds[2].initData(2, 16, 40);
       waveSpeeds[3].initData(3, 41, 70);
