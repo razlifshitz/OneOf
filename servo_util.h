@@ -67,10 +67,10 @@ void servo_stop() {
 
 // todo check if we can remove the 'while'
 bool iservoMoving() {
-  long firstTime = millis();
-  while (millis() - firstTime < 25) {
+  // long firstTime = millis();
+  // while (millis() - firstTime < 25) {
     
-  }
+  // }
   if (lastServoLoc == myservo.read()) {
     return false;
   }
@@ -79,6 +79,7 @@ bool iservoMoving() {
   }
 }
 
+//TODO CHANGE LOGIC
 bool isPerformingDelay() {
   if (servoActiveDelay != -1) {
     if (!inDelayProcess) {
@@ -117,7 +118,7 @@ bool servo_update() {
 
       // Upper range
       int minTo = 40;
-      int maxTo = 70;
+      int maxTo = 60;
 
       // Speed range
       int maxSpeed = 110;
@@ -145,7 +146,7 @@ bool servo_update() {
       plateCounter++;
       
       #ifdef DEBUG_SERVO_MOVE_COUNTER
-        Serial.println(String("Starting move: ") + (plateCounter + String(" To location: ") + nextPos));
+        Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextPos + " direction: " + (toMoveUp ? "Up" : "Down"));
       #endif
       
       myservo.write(nextPos, waveSpeed, false);
