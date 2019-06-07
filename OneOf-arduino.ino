@@ -95,7 +95,9 @@ void initDataBeforeFirstRun() {
         movesCounter=0;
         plateCounter=0;
         stopper = millis();
-        
+        servoReachedDest = false;
+        firstIteration = true;
+
         servo_start(); 
         motor_start(&encoder, digitalRead(MOTOR_DIR_PIN), ROTATION_SPEED);
 }

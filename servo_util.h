@@ -39,8 +39,9 @@ int movesCounter = -1; // Number of moves in the current wave
 bool toMoveUp = true;
 long lastServoLoc = myservo.read();
 int servoStartLocation; //todo: implementation is needed
-
-
+bool servoReachedDest;
+int nextPos;
+bool firstIteration;
 
 // -------------------------------------------- Logic Variables
 
@@ -66,18 +67,18 @@ void servo_stop() {
 }
 
 // todo check if we can remove the 'while'
-bool iservoMoving() {
-  // long firstTime = millis();
-  // while (millis() - firstTime < 25) {
+// bool iservoMoving() {
+//   // long firstTime = millis();
+//   // while (millis() - firstTime < 25) {
     
-  // }
-  if (lastServoLoc == myservo.read()) {
-    return false;
-  }
-  else {
-    return true;
-  }
-}
+//   // }
+//   if (lastServoLoc == myservo.read()) {
+//     return false;
+//   }
+//   else {
+//     return true;
+//   }
+// }
 
 //TODO CHANGE LOGIC
 bool isPerformingDelay() {
@@ -104,12 +105,14 @@ bool isPerformingDelay() {
 bool servo_update() {
   //Serial.println("servo_update()");
   lastServoLoc = myservo.read();
-  if (millis() - lastUpdated > SERVO_UPDATE_INTERVAL && 
-      !iservoMoving() && !isPerformingDelay()) {
 
-  #ifdef DEBUG_SERVO_DELAY
-    Serial.println("-------------------------");
-  #endif
+  if (!firstIteration && lastServoLoc == nextPos) {
+    servoReachedDest = true;
+  }
+
+  if (millis() - lastUpdated > SERVO_UPDATE_INTERVAL && 
+      (firstIteration || (servoReachedDest && !isPerformingDelay()))) {
+      firstIteration = false;
       toMoveUp = !toMoveUp;
       
       // Bottom range
@@ -117,8 +120,8 @@ bool servo_update() {
       int maxFrom = 15;
 
       // Upper range
-      int minTo = 40;
-      int maxTo = 60;
+      int minTo = 20;
+      int maxTo = 50;
 
       // Speed range
       int maxSpeed = 110;
@@ -126,31 +129,32 @@ bool servo_update() {
 
       int numOfSpeedCategories = 5;
       WaveSpeed waveSpeeds[numOfSpeedCategories+1];
-      waveSpeeds[1].initData(1, 3, 15);
-      waveSpeeds[2].initData(2, 16, 40);
-      waveSpeeds[3].initData(3, 41, 70);
-      waveSpeeds[4].initData(4, 71, 100);
-      waveSpeeds[5].initData(5, 101, 110);
+      waveSpeeds[1].initData(1, 25, 40);
+      waveSpeeds[2].initData(2, 50, 110);
+      waveSpeeds[3].initData(3, 120, 170);
+      waveSpeeds[4].initData(4, 171, 200);
+      waveSpeeds[5].initData(5, 200, 235);
       
       int sssspeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
       //Serial.println(String("sssspeed: ") + sssspeed);
       
       // First Move
       
-      int posFrom = CalcRand(minFrom,maxFrom);
+      int posFrom = 1; //CalcRand(minFrom,maxFrom);
       int posTo = CalcRand(minTo,maxTo);
       //int waveSpeed = CalcRand(minSpeed,maxSpeed);
       int waveSpeed = sssspeed;
-      int nextPos = toMoveUp ? posTo : posFrom;
+      nextPos = toMoveUp ? posTo : posFrom;
 
       plateCounter++;
       
       #ifdef DEBUG_SERVO_MOVE_COUNTER
-        Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextPos + " direction: " + (toMoveUp ? "Up" : "Down"));
+        Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextPos + " direction: " + (toMoveUp ? "Up" : "Down") + " Speed: " + waveSpeed);
       #endif
       
       myservo.write(nextPos, waveSpeed, false);
-      
+      servoReachedDest = false;
+
       // Handle the delay
       if (!isCupMod) {
         // Delay count of moves
