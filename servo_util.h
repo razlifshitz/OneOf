@@ -140,7 +140,7 @@ bool servo_update() {
       
       // First Move
       
-      int posFrom = 1; //CalcRand(minFrom,maxFrom);
+      int posFrom = CalcRand(minFrom,maxFrom);
       int posTo = CalcRand(minTo,maxTo);
       //int waveSpeed = CalcRand(minSpeed,maxSpeed);
       int waveSpeed = sssspeed;
