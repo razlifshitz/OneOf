@@ -27,16 +27,19 @@ void loop() {
   int buttonState = checkButton();
   if (buttonState == 1 || buttonState == 3) {
     active = !active;
-  }
-  
-  int from = 1;
-  int to = 70;
-  int destination;
-  
-  if (active == true) {
-    myservo.write(to, 60, false);
-  } else {
-    myservo.write(from, 60, false);
+    
+    
+    int from = 18;
+    int to = 35;
+    int destination;
+    
+    if (active == true) {
+      myservo.write(to, 200, false);
+    } else {
+      myservo.write(from, 200, false);
+    }
+
+    Serial.println(active  ? to : from);
   }
 
 }
