@@ -128,6 +128,20 @@ int calcNextSpeed(WaveSpeed* waveSpeeds, int arrLength) {
 //  }
 //}
 
+void setMotorSpeed(Encoder* encoder, int dir, int speed) {
+  if (dir) {
+    digitalWrite(DIR1_PWM_PIN, LOW);
+    analogWrite(DIR2_PWM_PIN, speed);
+  }
+  else {
+    digitalWrite(DIR2_PWM_PIN, LOW);
+    analogWrite(DIR1_PWM_PIN, speed);
+  }
+}
+
+void setMotorSpeed(Encoder* encoder, int speed) {
+  setMotorSpeed(encoder,  digitalRead(MOTOR_DIR_PIN), speed);
+}
 
 void motor_start(Encoder* encoder, int dir, int speedd) {
   Serial.println("Starting motor");
@@ -135,22 +149,20 @@ void motor_start(Encoder* encoder, int dir, int speedd) {
   pinMode(DIR2_PWM_PIN, OUTPUT);
   encoder->write(0);
 
-  if (dir) {
-    digitalWrite(DIR1_PWM_PIN, LOW);
-    analogWrite(DIR2_PWM_PIN, speedd);
-  }
-  else {
-    digitalWrite(DIR2_PWM_PIN, LOW);
-    analogWrite(DIR1_PWM_PIN, speedd);
-  }
+  setMotorSpeed(encoder, dir, speedd);
 }
 
-boolean hasServoReachedDestination(int lastServoLoc, int destination, bool toMoveUp) { 
+bool hasServoReachedDestination(int lastServoLoc, int destination, bool toMoveUp) { 
   //Serial.println(String("lastServoLoc: ") + (lastServoLoc) + String(" destination: ") + (destination) + String(" toMoveUp: ") + (toMoveUp ? "TRUE" : "FALSE"));
  
-  return toMoveUp 
+
+ bool result = toMoveUp 
   ? (lastServoLoc) >= destination
-  : (lastServoLoc) <= destination; 
+  : (lastServoLoc) <= destination;
+
+ //Serial.println(result ? "TRUE" : "FALSE");
+
+  return result; 
 }
 
 
