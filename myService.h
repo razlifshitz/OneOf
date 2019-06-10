@@ -128,7 +128,7 @@ int calcNextSpeed(WaveSpeed* waveSpeeds, int arrLength) {
 //  }
 //}
 
-void setMotorSpeed(Encoder* encoder, int dir, int speed) {
+int setMotorSpeed(Encoder* encoder, int dir, int speed) {
   if (dir) {
     digitalWrite(DIR1_PWM_PIN, LOW);
     analogWrite(DIR2_PWM_PIN, speed);
@@ -137,10 +137,12 @@ void setMotorSpeed(Encoder* encoder, int dir, int speed) {
     digitalWrite(DIR2_PWM_PIN, LOW);
     analogWrite(DIR1_PWM_PIN, speed);
   }
+
+  return speed;
 }
 
-void setMotorSpeed(Encoder* encoder, int speed) {
-  setMotorSpeed(encoder,  digitalRead(MOTOR_DIR_PIN), speed);
+int setMotorSpeed(Encoder* encoder, int speed) {
+  return setMotorSpeed(encoder,  digitalRead(MOTOR_DIR_PIN), speed);
 }
 
 void motor_start(Encoder* encoder, int dir, int speedd) {

@@ -104,6 +104,7 @@ void initDataBeforeFirstRun() {
         isServoReachedDestination = true;
         currentQuarter = 0;
         beforeStart = true; // determine whether the state is before the machine is active
+        currentEncoderSpeed = ROTATION_SPEED;
         lastUpdate = millis();
 }
 

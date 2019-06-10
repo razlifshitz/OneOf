@@ -71,6 +71,7 @@ int waveSpeed;
 bool beforeStart; // flag that determine if the making of the plate hasn't started yet
 int numberOfDigging = 4;
 int diggingSpeed = 150;
+int currentEncoderSpeed;
 //-------------------------------------- END DATA SETTING
 
 
@@ -153,9 +154,9 @@ bool servo_update() {
 
       // Stoppin the servo in the wanted locations
       if (!toMoveUp && hasServoReachedDestination(lastServoLoc, servoDistance75, toMoveUp)){
-        setMotorSpeed(&encoder, 0);
+        currentEncoderSpeed = setMotorSpeed(&encoder, 0);
       } else if (toMoveUp && hasServoReachedDestination(lastServoLoc, servoDistance25, toMoveUp)) {
-        setMotorSpeed(&encoder, ROTATION_SPEED);
+        currentEncoderSpeed = setMotorSpeed(&encoder, ROTATION_SPEED);
       }
 
       // TODO: is it necessary? 
@@ -170,7 +171,7 @@ bool servo_update() {
 			
       isServoReachedDestination = false;
       
-      if (!beforeStart && !toMoveUp) {
+      if (!toMoveUp && currentEncoderSpeed == 0) {
         performServoDigging(nextServoLocation);
       }
 
@@ -201,7 +202,7 @@ bool servo_update() {
         printMovement(true);
       #endif
       
-      setMotorSpeed(&encoder, ROTATION_SPEED);
+      currentEncoderSpeed = setMotorSpeed(&encoder, ROTATION_SPEED);
 			myservo.write(nextServoLocation, waveSpeed, false);
 		}
   }
