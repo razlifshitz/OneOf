@@ -68,7 +68,9 @@ int servoDistance25;
 bool isEncoderReachedDestination;
 bool isServoReachedDestination;
 int waveSpeed;
-bool beforeStart;
+bool beforeStart; // flag that determine if the making of the plate hasn't started yet
+int numberOfDigging = 4;
+int diggingSpeed = 150;
 //-------------------------------------- END DATA SETTING
 
 
@@ -117,6 +119,13 @@ void printMovement(bool delayPending) {
   }
 }
 
+void performServoDigging(int location) {
+  for (int i = 1; i <= numberOfDigging; i++) {
+    myservo.write(maxTo, diggingSpeed, true);
+	  myservo.write(location, diggingSpeed, true);
+  }
+}
+
 bool servo_update() {
   // #ifdef DEBUG_SERVO_MOVE_COUNTER 
   //   if (myservo.read() != lastServoLoc) {
@@ -134,12 +143,12 @@ bool servo_update() {
 
   // As Long as Encoder hasn't reached to destination where servo should delay, servo will work.
   if (!isEncoderReachedDestination) {
-		beforeStart = false;
     isEncoderReachedDestination = motor_reachDestination(&encoder, currentQurterActiveServo);
 
     // checking if servo reached destination.
     // doing nothing if servo hasn't reached destination
     if (!isServoReachedDestination) {
+      beforeStart = false;
       isServoReachedDestination = hasServoReachedDestination(lastServoLoc, nextServoLocation, toMoveUp);
 
       // Stoppin the servo in the wanted locations
@@ -161,6 +170,10 @@ bool servo_update() {
 			
       isServoReachedDestination = false;
       
+      if (!beforeStart && !toMoveUp) {
+        performServoDigging(nextServoLocation);
+      }
+
       // calc next servo move
       toMoveUp = !toMoveUp;      
       waveSpeed = getNextServoSpeed();
