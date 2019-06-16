@@ -44,8 +44,8 @@ long lastUpdate;
 // -------------------------------------------- Logic Variables
 
 // DESTINATION
-int minFrom = 1;  // Bottom range - minimum
-int maxFrom = 1; // Bottom range - maximum
+int minFrom = 5;  // Bottom range - minimum
+int maxFrom = 10; // Bottom range - maximum
 int minTo = 40;   // Upper range - minimum
 int maxTo = 70;   // Upper range - maximum
 
@@ -69,8 +69,8 @@ bool isEncoderReachedDestination;
 bool isServoReachedDestination;
 int waveSpeed;
 bool beforeStart; // flag that determine if the making of the plate hasn't started yet
-int numberOfDigging = 4;
-int diggingSpeed = 150;
+int numberOfDigging = 2;
+int diggingSpeed = 230;
 int currentEncoderSpeed;
 //-------------------------------------- END DATA SETTING
 
