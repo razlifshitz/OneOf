@@ -3,7 +3,7 @@
 #define CLICKS_PER_ROUND 67000L
 
 // The Angle that the servo will start working - CUP MODE
-#define SERVO_START_ANGLE 20000L
+long SERVO_START_ANGLE = CLICKS_PER_ROUND - (CLICKS_PER_ROUND * 0.13);
 
 // possible values: 0-255
 #define ROTATION_SPEED 80
@@ -37,5 +37,5 @@ int locationToInit = 0;
 //#define DEBUG_SERVO_DELAY 1
 //#define DEBUG_CALC_NEXT_RAND_VAL 1
 //#define DEBUG_ENCODER 1
-//#define DEBUG_ENCODER_IS_SERVO_SHOULD_START_CUPMMOD 1
+#define DEBUG_ENCODER_IS_SERVO_SHOULD_START_CUPMMOD 1
 //#define STOPPER 1

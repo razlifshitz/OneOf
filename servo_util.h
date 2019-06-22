@@ -11,9 +11,21 @@ VarSpeedServo myservo;
 //////////////////////////////
 //////////CUP MODE////////////
 ////////////////////////////// 
-bool isCupMod = false;
+bool isCupMod = true;
 
 // -------------------------------------------- Properties
+
+/*
+ * MOVEMENT DATA
+ */
+
+// Bottom range
+int minFrom = 40;
+int maxFrom = 55;
+// Upper range
+int minTo = 65;
+int maxTo = 85;
+
 /* 
  * DELAY DATA (The numbers are in Miliseconds)
 */
@@ -30,6 +42,10 @@ int minChangeInNumOfMoves =  -1;
 int maxNumOfCount = -1;
 int minNumOfCount = -1;
 
+/*
+* OTHER DATA
+*/
+
 long lastUpdated = -1;
 long servoActiveDelay = -1;
 long firstTime;
@@ -42,6 +58,10 @@ int servoStartLocation; //todo: implementation is needed
 bool servoReachedDest;
 int nextPos;
 bool firstIteration;
+
+// IKEA parametes
+int firstMovementFrom = 10;
+int firstMovementTo = maxTo;
 
 // -------------------------------------------- Logic Variables
 
@@ -112,20 +132,9 @@ bool servo_update() {
 
   if (millis() - lastUpdated > SERVO_UPDATE_INTERVAL && 
       (firstIteration || (servoReachedDest && !isPerformingDelay()))) {
-      firstIteration = false;
       toMoveUp = !toMoveUp;
       
-      // Bottom range
-      int minFrom = 1;
-      int maxFrom = 15;
 
-      // Upper range
-      int minTo = 20;
-      int maxTo = 50;
-
-      // Speed range
-      int maxSpeed = 110;
-      int minSpeed = 3;
 
       int numOfSpeedCategories = 5;
       WaveSpeed waveSpeeds[numOfSpeedCategories+1];
@@ -135,15 +144,18 @@ bool servo_update() {
       waveSpeeds[4].initData(4, 171, 200);
       waveSpeeds[5].initData(5, 200, 235);
       
-      int sssspeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
-      //Serial.println(String("sssspeed: ") + sssspeed);
+      int waveSpeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
       
-      // First Move
+      // Movmement calculations
       
-      int posFrom = CalcRand(minFrom,maxFrom);
-      int posTo = CalcRand(minTo,maxTo);
-      //int waveSpeed = CalcRand(minSpeed,maxSpeed);
-      int waveSpeed = sssspeed;
+      int posFrom = CalcRand(minFrom, maxFrom);
+      int posTo;
+      if (firstIteration){
+        posTo = firstMovementTo;
+      } else {
+        posTo = CalcRand(minTo, maxTo);
+      }
+
       nextPos = toMoveUp ? posTo : posFrom;
 
       plateCounter++;
@@ -174,6 +186,7 @@ bool servo_update() {
         }
       }
       
+      firstIteration = false;
       lastUpdated = millis();
   }
   

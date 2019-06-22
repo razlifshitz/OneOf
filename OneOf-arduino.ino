@@ -99,6 +99,7 @@ void initDataBeforeFirstRun() {
         firstIteration = true;
 
         servo_start(); 
+        myservo.write(firstMovementFrom, 60, false);
         motor_start(&encoder, digitalRead(MOTOR_DIR_PIN), ROTATION_SPEED);
 }
 
@@ -143,7 +144,7 @@ void loop() {
         if (isCupMod) {
           //Serial.println("startServoInSpecificTime");
           if (isServoShouldStart(&encoder)) {
-            myThread.run();
+            controller.run();
             if (false) {
               active = false;
               changed = true;
