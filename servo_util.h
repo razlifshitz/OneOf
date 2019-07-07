@@ -135,10 +135,6 @@ bool servo_update()
 		int minTo = 40;
 		int maxTo = 70;
 
-		// Speed range
-		int maxSpeed = 110;
-		int minSpeed = 3;
-
 		int numOfSpeedCategories = 5;
 		WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
 		waveSpeeds[1].initData(1, 3, 15);
@@ -179,11 +175,6 @@ bool servo_update()
 													minNumOfCount, maxNumOfCount, minChangeInNumOfMoves, &servoActiveDelay))
 			{
 				return false;
-			}
-
-			if (servoActiveDelay != -1)
-			{
-				return true;
 			}
 		}
 
