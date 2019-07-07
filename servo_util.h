@@ -127,25 +127,17 @@ bool servo_update()
 		firstIteration = false;
 		toMoveUp = !toMoveUp;
 
-		// Bottom range
-		int minFrom = 1;
-		int maxFrom = 15;
-
-		// Upper range
-		int minTo = 40;
-		int maxTo = 70;
-
 		int numOfSpeedCategories = 5;
 		WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
-		waveSpeeds[1].initData(1, 3, 15);
-		waveSpeeds[2].initData(2, 16, 40);
-		waveSpeeds[3].initData(3, 41, 70);
-		waveSpeeds[4].initData(4, 71, 100);
-		waveSpeeds[5].initData(5, 101, 110);
+		waveSpeeds[1].initData(1, 90, 130);
+		waveSpeeds[2].initData(2, 131, 150);
+		waveSpeeds[3].initData(3, 151, 170);
+		waveSpeeds[4].initData(4, 171, 190);
+		waveSpeeds[5].initData(5, 191, 220);
 
 		// Movement properties calculations
-		int posFrom = CalcRand(minFrom, maxFrom);
-		int posTo = CalcRand(minTo, maxTo);
+		int posFrom = 1;
+		int posTo = 40;
 		int waveSpeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
 
 		nextPos = toMoveUp ? posTo : posFrom;
@@ -171,8 +163,8 @@ bool servo_update()
 				Serial.println(String("movesCounter: ") + (movesCounter + String("Next currentCountOfMoves: ") + (currentCountOfMoves)));
 			}
 
-			if (!toMoveUp && !HandleDelayOfMovement(&movesCounter, &currentCountOfMoves, &currentDelay, minDelay, maxDelay, minChangeInDelay,
-													minNumOfCount, maxNumOfCount, minChangeInNumOfMoves, &servoActiveDelay))
+			if (toMoveUp && !HandleDelayOfMovement(&movesCounter, &currentCountOfMoves, &currentDelay, minDelay, maxDelay, minChangeInDelay,
+												   minNumOfCount, maxNumOfCount, minChangeInNumOfMoves, &servoActiveDelay))
 			{
 				return false;
 			}

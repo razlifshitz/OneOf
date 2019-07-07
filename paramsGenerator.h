@@ -1,11 +1,11 @@
 ////////////////////////////////////////// DELAY
 ////////////////////////// Amount
 // Maximum
-int MAX_DELAY_AMOUNT_U = 5000;
-int MAX_DELAY_AMOUNT_L = 1500;
+int MAX_DELAY_AMOUNT_U = 2000;
+int MAX_DELAY_AMOUNT_L = 1000;
 // Minmum
-int MIN_DELAY_AMOUNT_U = 1000;
-int MIN_DELAY_AMOUNT_L = 400;
+int MIN_DELAY_AMOUNT_U = 200;
+int MIN_DELAY_AMOUNT_L = 100;
 // Chnge between Delays Moves
 int CHANGE_IN_DELAY_AMOUNT_U = 300;
 int CHANGE_IN_DELAY_AMOUNT_L = 100;

@@ -101,12 +101,12 @@ bool HandleDelayOfMovement(int *movesCounter, int *currentCountOfMoves, int *cur
 		}
 
 		// Delay number of moves calculation
-		*currentCountOfMoves = CalcNextRandVal(minNumOfCount, maxNumOfCount, minChangeInNumOfMoves, "minChangeInNumOfMoves");
+		// *currentCountOfMoves = CalcNextRandVal(minNumOfCount, maxNumOfCount, minChangeInNumOfMoves, "minChangeInNumOfMoves");
 
-		if (*currentCountOfMoves == -1)
-		{
-			return false;
-		}
+		// if (*currentCountOfMoves == -1)
+		// {
+		// 	return false;
+		// }
 	}
 
 	return true;

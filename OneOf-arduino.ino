@@ -85,16 +85,16 @@ void initDataBeforeFirstRun()
 	maxDelay = CalcRand(MAX_DELAY_AMOUNT_L, MAX_DELAY_AMOUNT_U);
 	minDelay = CalcRand(MIN_DELAY_AMOUNT_L, MIN_DELAY_AMOUNT_U);
 
-	minChangeInNumOfMoves = CalcRand(CHANGE_IN_DELAY_MOVES_L, CHANGE_IN_DELAY_MOVES_U);
-	maxNumOfCount = CalcRand(MAX_DELAY_NUM_OF_MOVES_L, MAX_DELAY_NUM_OF_MOVES_U);
-	minNumOfCount = CalcRand(MIN_DELAY_NUM_OF_MOVES_L, MIN_DELAY_NUM_OF_MOVES_U);
+	// minChangeInNumOfMoves = CalcRand(CHANGE_IN_DELAY_MOVES_L, CHANGE_IN_DELAY_MOVES_U);
+	// maxNumOfCount = CalcRand(MAX_DELAY_NUM_OF_MOVES_L, MAX_DELAY_NUM_OF_MOVES_U);
+	// minNumOfCount = CalcRand(MIN_DELAY_NUM_OF_MOVES_L, MIN_DELAY_NUM_OF_MOVES_U);
 
 	randDelay = CalcRand(minDelay, maxDelay);
 	currentDelay = randDelay;
 	Serial.println(String("------ NEW currentDelay: ") + (currentDelay));
 
-	randCountOfMoves = CalcRand(minNumOfCount, maxNumOfCount);
-	currentCountOfMoves = randCountOfMoves;
+	// randCountOfMoves = CalcRand(minNumOfCount, maxNumOfCount);
+	currentCountOfMoves = 2;
 	Serial.println(String("------ NEW currentCountOfMoves: ") + (currentCountOfMoves));
 
 	servoActiveDelay = -1;
