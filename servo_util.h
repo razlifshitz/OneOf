@@ -111,6 +111,14 @@ bool isPerformingDelay()
 	return inDelayProcess;
 }
 
+// void printMovement(bool delayPending) {
+//   if (delayPending) {
+//     Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextServoLocation + " direction: " + (toMoveUp ? "Up" : "Down") + " Speed: " + waveSpeed + " And Afterwards Delay will Start!");
+//   } else {
+//     Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextServoLocation + " direction: " + (toMoveUp ? "Up" : "Down") + " Speed: " + waveSpeed);
+//   }
+// }
+
 bool servo_update()
 {
 	//Serial.println("servo_update()");
@@ -128,16 +136,12 @@ bool servo_update()
 		toMoveUp = !toMoveUp;
 
 		// Bottom range
-		int minFrom = 1;
-		int maxFrom = 15;
+		int minFrom = 25;
+		int maxFrom = 30;
 
 		// Upper range
-		int minTo = 20;
-		int maxTo = 50;
-
-		// Speed range
-		int maxSpeed = 110;
-		int minSpeed = 3;
+		int minTo = 45;
+		int maxTo = 55;
 
 		int numOfSpeedCategories = 5;
 		WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
@@ -147,15 +151,10 @@ bool servo_update()
 		waveSpeeds[4].initData(4, 171, 200);
 		waveSpeeds[5].initData(5, 200, 235);
 
-		int sssspeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
-		//Serial.println(String("sssspeed: ") + sssspeed);
-
-		// First Move
-
 		int posFrom = CalcRand(minFrom, maxFrom);
 		int posTo = CalcRand(minTo, maxTo);
-		//int waveSpeed = CalcRand(minSpeed,maxSpeed);
-		int waveSpeed = sssspeed;
+		int waveSpeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
+
 		nextPos = toMoveUp ? posTo : posFrom;
 
 		plateCounter++;
@@ -183,11 +182,6 @@ bool servo_update()
 													minNumOfCount, maxNumOfCount, minChangeInNumOfMoves, &servoActiveDelay))
 			{
 				return false;
-			}
-
-			if (servoActiveDelay != -1)
-			{
-				return true;
 			}
 		}
 
