@@ -132,8 +132,8 @@ bool servo_update()
 		int maxFrom = 15;
 
 		// Upper range
-		int minTo = 20;
-		int maxTo = 50;
+		int minTo = 40;
+		int maxTo = 70;
 
 		// Speed range
 		int maxSpeed = 110;
@@ -141,21 +141,17 @@ bool servo_update()
 
 		int numOfSpeedCategories = 5;
 		WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
-		waveSpeeds[1].initData(1, 25, 40);
-		waveSpeeds[2].initData(2, 50, 110);
-		waveSpeeds[3].initData(3, 120, 170);
-		waveSpeeds[4].initData(4, 171, 200);
-		waveSpeeds[5].initData(5, 200, 235);
+		waveSpeeds[1].initData(1, 3, 15);
+		waveSpeeds[2].initData(2, 16, 40);
+		waveSpeeds[3].initData(3, 41, 70);
+		waveSpeeds[4].initData(4, 71, 100);
+		waveSpeeds[5].initData(5, 101, 110);
 
-		int sssspeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
-		//Serial.println(String("sssspeed: ") + sssspeed);
-
-		// First Move
-
+		// Movement properties calculations
 		int posFrom = CalcRand(minFrom, maxFrom);
 		int posTo = CalcRand(minTo, maxTo);
-		//int waveSpeed = CalcRand(minSpeed,maxSpeed);
-		int waveSpeed = sssspeed;
+		int waveSpeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
+
 		nextPos = toMoveUp ? posTo : posFrom;
 
 		plateCounter++;
