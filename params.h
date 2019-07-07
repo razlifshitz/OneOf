@@ -19,7 +19,6 @@
 boolean initServoInLoc = true;
 int locationToInit = 0;
 
-
 // DC pin
 #define ENCODER1_PIN 2
 #define ENCODER2_PIN 3
@@ -33,9 +32,9 @@ int locationToInit = 0;
 
 // Debugger parameters
 
-#define DEBUG_SERVO_MOVE_COUNTER 1
-//#define DEBUG_SERVO_DELAY 1
-//#define DEBUG_CALC_NEXT_RAND_VAL 1
-//#define DEBUG_ENCODER 1
-//#define DEBUG_ENCODER_IS_SERVO_SHOULD_START_CUPMMOD 1
-//#define STOPPER 1
+#define DEBUG_SERVO_MOVE_COUNTER 0
+#define DEBUG_SERVO_DELAY 0
+#define DEBUG_CALC_NEXT_RAND_VAL 0
+#define DEBUG_ENCODER 0
+#define DEBUG_ENCODER_IS_SERVO_SHOULD_START_CUPMMOD 0
+#define STOPPER 0

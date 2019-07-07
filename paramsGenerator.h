@@ -12,10 +12,10 @@ int CHANGE_IN_DELAY_AMOUNT_L = 100;
 
 ////////////////////////// Number of moves
 // Maximum
-int MAX_DELAY_NUM_OF_MOVES_U = 30;//30
-int MAX_DELAY_NUM_OF_MOVES_L = 17;//17
+int MAX_DELAY_NUM_OF_MOVES_U = 30; //30
+int MAX_DELAY_NUM_OF_MOVES_L = 17; //17
 // Minimum
-int MIN_DELAY_NUM_OF_MOVES_U = 7;//7
+int MIN_DELAY_NUM_OF_MOVES_U = 7; //7
 int MIN_DELAY_NUM_OF_MOVES_L = 1;
 // Chnge between Delays Moves
 int CHANGE_IN_DELAY_MOVES_U = 2;
@@ -34,4 +34,3 @@ int CHANGE_IN_DELAY_MOVES_L = 1;
     int CHANGE_IN_SPEED_U = 50;
     int CHANGE_IN_SPEED_L = 1;
 */
-
