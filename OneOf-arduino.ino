@@ -23,8 +23,6 @@ ThreadController controller = ThreadController();
 
 long stopper;
 
-Encoder encoder(ENCODER1_PIN, ENCODER2_PIN);
-
 void ThreadServoUpdate()
 {
 	//Serial.println("ThreadServoUpdate()");
@@ -104,6 +102,7 @@ void initDataBeforeFirstRun()
 	stopper = millis();
 	servoReachedDest = false;
 	firstIteration = true;
+	currentEncoderSpeed = ROTATION_SPEED;
 
 	servo_start();
 	motor_start(&encoder, digitalRead(MOTOR_DIR_PIN), ROTATION_SPEED);

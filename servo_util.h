@@ -6,6 +6,7 @@
 #include "paramsGenerator.h"
 #include "myService.h"
 
+Encoder encoder(ENCODER1_PIN, ENCODER2_PIN);
 VarSpeedServo myservo;
 
 //////////////////////////////
@@ -42,6 +43,7 @@ int servoStartLocation; //todo: implementation is needed
 bool servoReachedDest;
 int nextPos;
 bool firstIteration;
+int currentEncoderSpeed;
 
 // -------------------------------------------- Logic Variables
 
@@ -57,14 +59,14 @@ int currentCountOfMoves = -1;
 
 void servo_start()
 {
-	Serial.println("servo_start()");
-	myservo.attach(SERVO_PIN); // attaches the servo on pin 9 to the servo object
+  Serial.println("servo_start()");
+  myservo.attach(SERVO_PIN); // attaches the servo on pin 9 to the servo object
 }
 
 void servo_stop()
 {
-	Serial.println("servo_stop()");
-	myservo.detach();
+  Serial.println("servo_stop()");
+  myservo.detach();
 }
 
 // todo check if we can remove the 'while'
@@ -84,99 +86,111 @@ void servo_stop()
 //TODO CHANGE LOGIC
 bool isPerformingDelay()
 {
-	if (servoActiveDelay != -1)
-	{
-		if (!inDelayProcess)
-		{
-			firstTime = millis();
-			inDelayProcess = true;
-		}
-		if (millis() - firstTime < servoActiveDelay)
-		{
-			// Executing the delay
+  if (servoActiveDelay != -1)
+  {
+    if (!inDelayProcess)
+    {
+      firstTime = millis();
+      inDelayProcess = true;
+    }
+    if (millis() - firstTime < servoActiveDelay)
+    {
+      // Executing the delay
 
-			if (DEBUG_SERVO_DELAY)
-			{
-				Serial.println((String("The servo has preformed ") + (millis() - firstTime) + String("ms/") + (servoActiveDelay) + String("ms of delay")));
-			}
-		}
-		else
-		{
-			// cancels the active delay
-			servoActiveDelay = -1;
-			inDelayProcess = false;
-		}
-	}
+      if (DEBUG_SERVO_DELAY)
+      {
+        Serial.println((String("The servo has preformed ") + (millis() - firstTime) + String("ms/") + (servoActiveDelay) + String("ms of delay")));
+      }
+    }
+    else
+    {
+      // cancels the active delay
+      servoActiveDelay = -1;
+      inDelayProcess = false;
+    }
+  }
 
-	return inDelayProcess;
+  return inDelayProcess;
 }
 
 void performServoPattern(int toMoveUp)
 {
-	int numOfSpeedCategories = 5;
-	WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
-	waveSpeeds[1].initData(1, 90, 130);
-	waveSpeeds[2].initData(2, 131, 150);
-	waveSpeeds[3].initData(3, 151, 170);
-	waveSpeeds[4].initData(4, 171, 190);
-	waveSpeeds[5].initData(5, 191, 220);
+  int numOfSpeedCategories = 5;
+  WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
+  waveSpeeds[1].initData(1, 90, 130);
+  waveSpeeds[2].initData(2, 131, 150);
+  waveSpeeds[3].initData(3, 151, 170);
+  waveSpeeds[4].initData(4, 171, 190);
+  waveSpeeds[5].initData(5, 191, 220);
 
-	// Movement properties calculations
-	int posFrom = 1;
-	int posTo = 40;
-	int waveSpeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
+  // Movement properties calculations
+  int posFrom = 1;
+  int posTo = 40;
+  int waveSpeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
 
-	nextPos = toMoveUp ? posTo : posFrom;
+  nextPos = toMoveUp ? posTo : posFrom;
 
-	if (DEBUG_SERVO_MOVE_COUNTER)
-	{
-		Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextPos + " direction: " + (toMoveUp ? "Up" : "Down") + " Speed: " + waveSpeed);
-	}
+  if (DEBUG_SERVO_MOVE_COUNTER)
+  {
+    Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextPos + " direction: " + (toMoveUp ? "Up" : "Down") + " Speed: " + waveSpeed);
+  }
 
-	myservo.write(nextPos, waveSpeed, false);
+  myservo.write(nextPos, waveSpeed, false);
 }
 
 bool servo_update()
 {
-	//Serial.println("servo_update()");
-	lastServoLoc = myservo.read();
+  //Serial.println("servo_update()");
+  lastServoLoc = myservo.read();
 
-	if (!firstIteration && lastServoLoc == nextPos)
-	{
-		servoReachedDest = true;
-	}
+  if (!firstIteration && lastServoLoc == nextPos)
+  {
+    servoReachedDest = true;
 
-	if (millis() - lastUpdated > SERVO_UPDATE_INTERVAL &&
-		(firstIteration || (servoReachedDest && !isPerformingDelay())))
-	{
-		firstIteration = false;
-		toMoveUp = !toMoveUp;
-		plateCounter++;
+    // This code block relates to when servo has finished pattern
+    if (toMoveUp)
+    {
+      currentEncoderSpeed = setEncoderSpeed(&encoder, ROTATION_SPEED);
+    }
+  }
 
-		performServoPattern(toMoveUp);
+  if (millis() - lastUpdated > SERVO_UPDATE_INTERVAL &&
+      (firstIteration || (servoReachedDest && !isPerformingDelay())))
+  {
+    firstIteration = false;
+    toMoveUp = !toMoveUp;
+    plateCounter++;
 
-		servoReachedDest = false;
+    // This code block relates to before servo has started pattern
+    if (!toMoveUp)
+    {
+      currentEncoderSpeed = setEncoderSpeed(&encoder, 15);
+    }
 
-		// Handle the delay
-		if (!isCupMod)
-		{
-			// Delay count of moves
-			movesCounter++;
+    performServoPattern(toMoveUp);
 
-			if (DEBUG_SERVO_DELAY)
-			{
-				Serial.println(String("movesCounter: ") + (movesCounter + String("Next currentCountOfMoves: ") + (currentCountOfMoves)));
-			}
+    servoReachedDest = false;
 
-			if (toMoveUp && !HandleDelayOfMovement(&movesCounter, &currentCountOfMoves, &currentDelay, minDelay, maxDelay, minChangeInDelay,
-												   minNumOfCount, maxNumOfCount, minChangeInNumOfMoves, &servoActiveDelay))
-			{
-				return false;
-			}
-		}
+    // Handle the delay
+    if (!isCupMod)
+    {
+      // Delay count of moves
+      movesCounter++;
 
-		lastUpdated = millis();
-	}
+      if (DEBUG_SERVO_DELAY)
+      {
+        Serial.println(String("movesCounter: ") + (movesCounter + String("Next currentCountOfMoves: ") + (currentCountOfMoves)));
+      }
 
-	return true;
+      if (toMoveUp && !HandleDelayOfMovement(&movesCounter, &currentCountOfMoves, &currentDelay, minDelay, maxDelay, minChangeInDelay,
+                                             minNumOfCount, maxNumOfCount, minChangeInNumOfMoves, &servoActiveDelay))
+      {
+        return false;
+      }
+    }
+
+    lastUpdated = millis();
+  }
+
+  return true;
 }

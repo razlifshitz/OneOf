@@ -133,23 +133,35 @@ int calcNextSpeed(WaveSpeed *waveSpeeds, int arrLength)
 //  }
 //}
 
-void motor_start(Encoder *encoder, int dir, int speedd)
+int setEncoderSpeed(Encoder *encoder, int dir, int speed)
+{
+	if (dir)
+	{
+		digitalWrite(DIR1_PWM_PIN, LOW);
+		analogWrite(DIR2_PWM_PIN, speed);
+	}
+	else
+	{
+		digitalWrite(DIR2_PWM_PIN, LOW);
+		analogWrite(DIR1_PWM_PIN, speed);
+	}
+
+	return speed;
+}
+
+int setEncoderSpeed(Encoder *encoder, int speed)
+{
+	return setEncoderSpeed(encoder, digitalRead(MOTOR_DIR_PIN), speed);
+}
+
+void motor_start(Encoder *encoder, int dir, int speed)
 {
 	Serial.println("Starting motor");
 	pinMode(DIR1_PWM_PIN, OUTPUT);
 	pinMode(DIR2_PWM_PIN, OUTPUT);
 	encoder->write(0);
 
-	if (dir)
-	{
-		digitalWrite(DIR1_PWM_PIN, LOW);
-		analogWrite(DIR2_PWM_PIN, speedd);
-	}
-	else
-	{
-		digitalWrite(DIR2_PWM_PIN, LOW);
-		analogWrite(DIR1_PWM_PIN, speedd);
-	}
+	setEncoderSpeed(encoder, dir, speed);
 }
 
 boolean motor_reachedEnd(Encoder *encoder)
