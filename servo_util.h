@@ -111,6 +111,31 @@ bool isPerformingDelay()
 	return inDelayProcess;
 }
 
+void performServoPattern(int toMoveUp)
+{
+	int numOfSpeedCategories = 5;
+	WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
+	waveSpeeds[1].initData(1, 90, 130);
+	waveSpeeds[2].initData(2, 131, 150);
+	waveSpeeds[3].initData(3, 151, 170);
+	waveSpeeds[4].initData(4, 171, 190);
+	waveSpeeds[5].initData(5, 191, 220);
+
+	// Movement properties calculations
+	int posFrom = 1;
+	int posTo = 40;
+	int waveSpeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
+
+	nextPos = toMoveUp ? posTo : posFrom;
+
+	if (DEBUG_SERVO_MOVE_COUNTER)
+	{
+		Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextPos + " direction: " + (toMoveUp ? "Up" : "Down") + " Speed: " + waveSpeed);
+	}
+
+	myservo.write(nextPos, waveSpeed, false);
+}
+
 bool servo_update()
 {
 	//Serial.println("servo_update()");
@@ -126,30 +151,10 @@ bool servo_update()
 	{
 		firstIteration = false;
 		toMoveUp = !toMoveUp;
-
-		int numOfSpeedCategories = 5;
-		WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
-		waveSpeeds[1].initData(1, 90, 130);
-		waveSpeeds[2].initData(2, 131, 150);
-		waveSpeeds[3].initData(3, 151, 170);
-		waveSpeeds[4].initData(4, 171, 190);
-		waveSpeeds[5].initData(5, 191, 220);
-
-		// Movement properties calculations
-		int posFrom = 1;
-		int posTo = 40;
-		int waveSpeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
-
-		nextPos = toMoveUp ? posTo : posFrom;
-
 		plateCounter++;
 
-		if (DEBUG_SERVO_MOVE_COUNTER)
-		{
-			Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextPos + " direction: " + (toMoveUp ? "Up" : "Down") + " Speed: " + waveSpeed);
-		}
+		performServoPattern(toMoveUp);
 
-		myservo.write(nextPos, waveSpeed, false);
 		servoReachedDest = false;
 
 		// Handle the delay
