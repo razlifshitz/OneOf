@@ -103,6 +103,7 @@ void initDataBeforeFirstRun()
 	servoReachedDest = false;
 	firstIteration = true;
 	currentEncoderSpeed = ROTATION_SPEED;
+	doAfterServoFinishPattern = true;
 
 	servo_start();
 	motor_start(&encoder, digitalRead(MOTOR_DIR_PIN), ROTATION_SPEED);

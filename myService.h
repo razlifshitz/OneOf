@@ -146,6 +146,8 @@ int setEncoderSpeed(Encoder *encoder, int dir, int speed)
 		analogWrite(DIR1_PWM_PIN, speed);
 	}
 
+	//Serial.println(String("Encoder Speed: ") + speed);
+
 	return speed;
 }
 
