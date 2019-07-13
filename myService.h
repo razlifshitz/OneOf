@@ -31,13 +31,13 @@ MinMaxCategory::MinMaxCategory(int minS, int maxS)
 	maxSpeed = maxS;
 };
 
-int calcNextSpeed(MinMaxCategory *waveSpeeds, int arrLength)
+int getNextValueFromCategories(MinMaxCategory *categories, int arrLength)
 {
 	int categoryNumber = CalcRand(0, arrLength - 1);
-	Serial.println(String("waveSpeeds[categoryNumber].minSpeed: ") + (waveSpeeds[categoryNumber].minSpeed));
-	Serial.println(String("waveSpeeds[categoryNumber].maxSpeed: ") + (waveSpeeds[categoryNumber].maxSpeed));
+	// Serial.println(String("categories[categoryNumber].minSpeed: ") + (categories[categoryNumber].minSpeed));
+	// Serial.println(String("categories[categoryNumber].maxSpeed: ") + (categories[categoryNumber].maxSpeed));
 
-	return CalcRand(waveSpeeds[categoryNumber].minSpeed, waveSpeeds[categoryNumber].maxSpeed);
+	return CalcRand(categories[categoryNumber].minSpeed, categories[categoryNumber].maxSpeed);
 }
 
 int CalcNextRandVal(int firstParam, int secontParam, int limit, String paramName)
@@ -80,7 +80,7 @@ int CalcNextRandVal(int firstParam, int secontParam, int limit, String paramName
 	return value;
 }
 
-bool HandleDelayOfMovement(int *movesCounter, int *currentCountOfMoves, int *currentDelay, int minDelay, int maxDelay, int minChangeInDelay,
+bool HandleDelayOfMovement(int *movesCounter, int *currentCountOfMoves, int *currentDelay, MinMaxCategory *delayCategories, int numOfDelayCategories,
 						   int minNumOfCount, int maxNumOfCount, int minChangeInNumOfMoves, long *servoActiveDelay)
 {
 	//Serial.println(String("movesCounter: ") + (*movesCounter) + String(" currentCountOfMoves: ") + (*currentCountOfMoves));
@@ -103,7 +103,7 @@ bool HandleDelayOfMovement(int *movesCounter, int *currentCountOfMoves, int *cur
 		*movesCounter = 0;
 
 		// Delay Length calculation
-		*currentDelay = CalcNextRandVal(minDelay, maxDelay, minChangeInDelay, "minChangeInDelay");
+		*currentDelay = getNextValueFromCategories(delayCategories, numOfDelayCategories);
 
 		if (*currentDelay == -1)
 		{
