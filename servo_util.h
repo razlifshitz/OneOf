@@ -15,6 +15,22 @@ VarSpeedServo myservo;
 bool isCupMod = false;
 
 // -------------------------------------------- Properties
+
+/*
+ * SPEED
+ */
+const int numOfSpeedCategories = 5;
+MinMaxCategory waveSpeeds[numOfSpeedCategories] = {
+	MinMaxCategory(90, 130),
+	MinMaxCategory(131, 150),
+	MinMaxCategory(151, 170),
+	MinMaxCategory(171, 190),
+	MinMaxCategory(191, 220)};
+
+// Movement properties calculations
+int posFrom = 1;
+int posTo = 50;
+
 /* 
  * DELAY DATA (The numbers are in Miliseconds)
 */
@@ -116,27 +132,16 @@ bool isPerformingDelay()
 
 void performServoPattern(int toMoveUp)
 {
-	int numOfSpeedCategories = 5;
-	WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
-	waveSpeeds[1].initData(1, 90, 130);
-	waveSpeeds[2].initData(2, 131, 150);
-	waveSpeeds[3].initData(3, 151, 170);
-	waveSpeeds[4].initData(4, 171, 190);
-	waveSpeeds[5].initData(5, 191, 220);
-
-	// Movement properties calculations
-	int posFrom = 1;
-	int posTo = 50;
-	int waveSpeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
+	int speed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
 
 	nextPos = toMoveUp ? posTo : posFrom;
 
 	if (DEBUG_SERVO_MOVE_COUNTER)
 	{
-		Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextPos + " direction: " + (toMoveUp ? "Up" : "Down") + " Speed: " + waveSpeed);
+		Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextPos + " direction: " + (toMoveUp ? "Up" : "Down") + " Speed: " + speed);
 	}
 
-	myservo.write(nextPos, waveSpeed, false);
+	myservo.write(nextPos, speed, false);
 }
 
 bool servo_update()
