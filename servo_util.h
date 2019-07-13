@@ -20,8 +20,8 @@ bool isCupMod = false;
  * SPEED
  */
 const int numOfSpeedCategories = 5;
-MinMaxCategory waveSpeeds[numOfSpeedCategories] = {
-	MinMaxCategory(90, 130),
+MinMaxCategory speedCategories[numOfSpeedCategories] = {
+	MinMaxCategory(110, 130),
 	MinMaxCategory(131, 150),
 	MinMaxCategory(151, 170),
 	MinMaxCategory(171, 190),
@@ -34,6 +34,17 @@ int posTo = 50;
 /* 
  * DELAY DATA (The numbers are in Miliseconds)
 */
+
+const int numOfDelayCategories = 8;
+MinMaxCategory delayCategories[numOfDelayCategories] = {
+	MinMaxCategory(250, 400),
+	MinMaxCategory(401, 600),
+	MinMaxCategory(450, 600),
+	MinMaxCategory(601, 800),
+	MinMaxCategory(601, 1000),
+	MinMaxCategory(801, 1000),
+	MinMaxCategory(1001, 1200),
+	MinMaxCategory(1201, 1700)};
 
 // LENGTH
 int minChangeInDelay = -1;
@@ -114,10 +125,10 @@ bool isPerformingDelay()
 		{
 			// Executing the delay
 
-			if (DEBUG_SERVO_DELAY)
-			{
-				Serial.println((String("The servo has preformed ") + (millis() - firstTime) + String("ms/") + (servoActiveDelay) + String("ms of delay")));
-			}
+			// if (DEBUG_SERVO_DELAY)
+			// {
+			// 	Serial.println((String("The servo has preformed ") + (millis() - firstTime) + String("ms/") + (servoActiveDelay) + String("ms of delay")));
+			// }
 		}
 		else
 		{
@@ -132,7 +143,7 @@ bool isPerformingDelay()
 
 void performServoPattern(int toMoveUp)
 {
-	int speed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
+	int speed = getNextValueFromCategories(speedCategories, numOfSpeedCategories);
 
 	nextPos = toMoveUp ? posTo : posFrom;
 
@@ -190,12 +201,12 @@ bool servo_update()
 			// Delay count of moves
 			movesCounter++;
 
-			if (DEBUG_SERVO_DELAY)
-			{
-				Serial.println(String("movesCounter: ") + (movesCounter + String("Next currentCountOfMoves: ") + (currentCountOfMoves)));
-			}
+			// if (DEBUG_SERVO_DELAY)
+			// {
+			// 	Serial.println(String("movesCounter: ") + (movesCounter + String("Next currentCountOfMoves: ") + (currentCountOfMoves)));
+			// }
 
-			if (toMoveUp && !HandleDelayOfMovement(&movesCounter, &currentCountOfMoves, &currentDelay, minDelay, maxDelay, minChangeInDelay,
+			if (toMoveUp && !HandleDelayOfMovement(&movesCounter, &currentCountOfMoves, &currentDelay, delayCategories, numOfDelayCategories,
 												   minNumOfCount, maxNumOfCount, minChangeInNumOfMoves, &servoActiveDelay))
 			{
 				return false;
