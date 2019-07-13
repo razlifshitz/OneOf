@@ -8,26 +8,36 @@
 #include "params.h"
 #endif
 
+int CalcRand(int nMin, int nMax)
+{
+	return (random() % (nMax - nMin + 1) + nMin);
+}
+
 // todo: move this to the right place
-class WaveSpeed
+class MinMaxCategory
 {
 public:
-	void initData(int category, int minSpeed, int maxSpeed);
-	int category; // speed category
+	MinMaxCategory();
+	MinMaxCategory(int minSpeed, int maxSpeed);
 	int minSpeed; // min speed range
 	int maxSpeed; // max speed range
 };
 
-void WaveSpeed::initData(int cat, int minS, int maxS)
+MinMaxCategory::MinMaxCategory() {}
+
+MinMaxCategory::MinMaxCategory(int minS, int maxS)
 {
-	category = cat;
 	minSpeed = minS;
 	maxSpeed = maxS;
 };
 
-int CalcRand(int nMin, int nMax)
+int calcNextSpeed(MinMaxCategory *waveSpeeds, int arrLength)
 {
-	return (random() % (nMax - nMin + 1) + nMin);
+	int categoryNumber = CalcRand(0, arrLength);
+	// Serial.println(String("waveSpeeds[categoryNumber].minSpeed: ") + (waveSpeeds[categoryNumber].minSpeed));
+	// Serial.println(String("waveSpeeds[categoryNumber].maxSpeed: ") + (waveSpeeds[categoryNumber].maxSpeed));
+
+	return CalcRand(waveSpeeds[categoryNumber].minSpeed, waveSpeeds[categoryNumber].maxSpeed);
 }
 
 int CalcNextRandVal(int firstParam, int secontParam, int limit, String paramName)
@@ -110,16 +120,6 @@ bool HandleDelayOfMovement(int *movesCounter, int *currentCountOfMoves, int *cur
 	}
 
 	return true;
-}
-
-int calcNextSpeed(WaveSpeed *waveSpeeds, int arrLength)
-{
-	int categoryNumber = CalcRand(1, arrLength);
-	// Serial.println(String("categoryNumber: ") + (categoryNumber));
-	// Serial.println(String("waveSpeeds[categoryNumber].minSpeed: ") + (waveSpeeds[categoryNumber].minSpeed));
-	// Serial.println(String("waveSpeeds[categoryNumber].maxSpeed: ") + (waveSpeeds[categoryNumber].maxSpeed));
-
-	return CalcRand(waveSpeeds[categoryNumber].minSpeed, waveSpeeds[categoryNumber].maxSpeed);
 }
 
 //boolean ToInitServoInLoc(VarSpeedServo* myServo, boolean action, int loc, boolean* alreadyHappend) {

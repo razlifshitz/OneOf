@@ -14,6 +14,32 @@ VarSpeedServo myservo;
 bool isCupMod = false;
 
 // -------------------------------------------- Properties
+
+/*
+ * Servo Movement bounderies 
+*/
+// Bottom range
+int minFrom = 1;
+int maxFrom = 15;
+// Upper range
+int minTo = 40;
+int maxTo = 70;
+
+/*
+ * SPEED
+ */
+const int numOfSpeedCategories = 5;
+MinMaxCategory waveSpeeds[numOfSpeedCategories] = {
+	MinMaxCategory(90, 130),
+	MinMaxCategory(131, 150),
+	MinMaxCategory(151, 170),
+	MinMaxCategory(171, 190),
+	MinMaxCategory(191, 220)};
+
+// Movement properties calculations
+int posFrom = 1;
+int posTo = 50;
+
 /* 
  * DELAY DATA (The numbers are in Miliseconds)
 */
@@ -111,6 +137,23 @@ bool isPerformingDelay()
 	return inDelayProcess;
 }
 
+void performServoPattern(int toMoveUp)
+{
+	// Movement properties calculations
+	int posFrom = CalcRand(minFrom, maxFrom);
+	int posTo = CalcRand(minTo, maxTo);
+	int speed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
+
+	nextPos = toMoveUp ? posTo : posFrom;
+
+	if (DEBUG_SERVO_MOVE_COUNTER)
+	{
+		Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextPos + " direction: " + (toMoveUp ? "Up" : "Down") + " Speed: " + speed);
+	}
+
+	myservo.write(nextPos, speed, false);
+}
+
 bool servo_update()
 {
 	//Serial.println("servo_update()");
@@ -126,38 +169,11 @@ bool servo_update()
 	{
 		firstIteration = false;
 		toMoveUp = !toMoveUp;
-
-		// Bottom range
-		int minFrom = 1;
-		int maxFrom = 15;
-
-		// Upper range
-		int minTo = 40;
-		int maxTo = 70;
-
-		int numOfSpeedCategories = 5;
-		WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
-		waveSpeeds[1].initData(1, 3, 15);
-		waveSpeeds[2].initData(2, 16, 40);
-		waveSpeeds[3].initData(3, 41, 70);
-		waveSpeeds[4].initData(4, 71, 100);
-		waveSpeeds[5].initData(5, 101, 110);
-
-		// Movement properties calculations
-		int posFrom = CalcRand(minFrom, maxFrom);
-		int posTo = CalcRand(minTo, maxTo);
-		int waveSpeed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
-
-		nextPos = toMoveUp ? posTo : posFrom;
-
 		plateCounter++;
 
-		if (DEBUG_SERVO_MOVE_COUNTER)
-		{
-			Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextPos + " direction: " + (toMoveUp ? "Up" : "Down") + " Speed: " + waveSpeed);
-		}
+		// Performes servo movement
+		performServoPattern(toMoveUp);
 
-		myservo.write(nextPos, waveSpeed, false);
 		servoReachedDest = false;
 
 		// Handle the delay
