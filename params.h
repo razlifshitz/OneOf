@@ -2,11 +2,13 @@
 // 360 degrees: 50000
 #define CLICKS_PER_ROUND 68000L
 long QUARTER_CLICKS_PER_ROUND = CLICKS_PER_ROUND * 0.25;
-long QUARTER_CLICKS_PER_ROUND_25 = QUARTER_CLICKS_PER_ROUND * 0.25;
-long QUARTER_CLICKS_PER_ROUND_75 = QUARTER_CLICKS_PER_ROUND * 0.75;
+long HALF_QUARTER_CLICKS_PER_ROUND = QUARTER_CLICKS_PER_ROUND / 2;
+
+// long QUARTER_CLICKS_PER_ROUND_25 = QUARTER_CLICKS_PER_ROUND * 0.25;
+// long QUARTER_CLICKS_PER_ROUND_75 = QUARTER_CLICKS_PER_ROUND * 0.75;
 
 // The Angle that the servo will start working - CUP MODE
-#define SERVO_START_ANGLE 20000L
+#define attachServo_ANGLE 20000L
 
 // possible values: 0-255
 #define ROTATION_SPEED 70
@@ -22,7 +24,6 @@ long QUARTER_CLICKS_PER_ROUND_75 = QUARTER_CLICKS_PER_ROUND * 0.75;
 boolean initServoInLoc = true;
 int locationToInit = 0;
 
-
 // DC pin
 #define ENCODER1_PIN 2
 #define ENCODER2_PIN 3
@@ -36,7 +37,7 @@ int locationToInit = 0;
 
 // Debugger parameters
 
-#define DEBUG_SERVO_MOVE_COUNTER 1
+//#define DEBUG_SERVO_MOVE_COUNTER 1
 //#define DEBUG_SERVO_DELAY 1
 //#define DEBUG_CALC_NEXT_RAND_VAL 1
 //#define DEBUG_ENCODER 1
