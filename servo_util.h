@@ -28,23 +28,20 @@ MinMaxCategory speedCategories[numOfSpeedCategories] = {
 	MinMaxCategory(191, 220)};
 
 // Movement properties calculations
-int posFrom = 1;
-int posTo = 50;
+int posFrom = 25;
+int posTo = 55;
 
 /* 
  * DELAY DATA (The numbers are in Miliseconds)
 */
 
-const int numOfDelayCategories = 8;
+const int numOfDelayCategories = 5;
 MinMaxCategory delayCategories[numOfDelayCategories] = {
 	MinMaxCategory(250, 400),
-	MinMaxCategory(401, 600),
 	MinMaxCategory(450, 600),
-	MinMaxCategory(601, 800),
 	MinMaxCategory(601, 1000),
-	MinMaxCategory(801, 1000),
-	MinMaxCategory(1001, 1200),
-	MinMaxCategory(1201, 1700)};
+	MinMaxCategory(1001, 1400),
+	MinMaxCategory(1201, 2000)};
 
 // LENGTH
 int minChangeInDelay = -1;
