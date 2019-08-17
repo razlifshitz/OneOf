@@ -1,5 +1,3 @@
-#include "motors-properties.h"
-
 //
 // GENERAL FUNCTIONS
 //
@@ -25,6 +23,15 @@ int CalcRand(int nMin, int nMax)
 //     Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextServoLocation + " direction: " + (toMoveUp ? "Up" : "Down") + " Speed: " + waveSpeed);
 //   }
 // }
+
+//
+// GENERAL FUNCTIONS
+//
+void initDataBeforeFirstRun()
+{
+  attachServo();
+  attachEncoder(&encoder);
+}
 
 //
 // ENCODER FUNCTIONS

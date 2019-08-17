@@ -21,9 +21,6 @@ long HALF_QUARTER_CLICKS_PER_ROUND = QUARTER_CLICKS_PER_ROUND / 2;
 
 #define SERVO_UPDATE_INTERVAL 100
 
-boolean initServoInLoc = true;
-int locationToInit = 0;
-
 // DC pin
 #define ENCODER1_PIN 2
 #define ENCODER2_PIN 3

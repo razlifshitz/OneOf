@@ -1,5 +1,3 @@
-#include "params.h"
-
 Encoder encoder(ENCODER1_PIN, ENCODER2_PIN);
 VarSpeedServo myservo;
 
@@ -39,4 +37,13 @@ boolean detachEncoder()
     // release motor hold
     pinMode(DIR1_PWM_PIN, INPUT);
     pinMode(DIR2_PWM_PIN, INPUT);
+}
+
+// GENERAL
+
+void finishPain()
+{
+    detachServo();
+    detachEncoder();
+    active = false;
 }
