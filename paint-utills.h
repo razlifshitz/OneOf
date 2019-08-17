@@ -1,13 +1,9 @@
-// -------------------------------------------- Properties
-
 long lastUpdate;
-
-//-------------------------------------- END DATA SETTING
 
 bool doPaint()
 {
   lastUpdate = millis();
-  lastServoLoc = myservo.read();
+  lastServoLoc = myServo.read();
   encoderLocation = abs(encoder.read());
 
   // not continuing unless update update interval passed
@@ -20,37 +16,31 @@ bool doPaint()
   if (state == BEFORE_START)
   {
     initDataBeforeFirstRun();
-    state = ENCODER_MOVING_TO_INITIAL_LOCATION;
   }
-  else if (state == ENCODER_MOVING_TO_INITIAL_LOCATION)
-  {
+  // else if (state == ENCODER_MOVING_TO_INITIAL_LOCATION)
+  // {
 
-    state = DRAWING_MAIN_BRANCH;
-  }
+  //   state = DRAWING_MAIN_BRANCH;
+  // }
   else if (state == DRAWING_MAIN_BRANCH)
   {
-
-    state = CALCULATE_LEAFS_SETTINGS;
+    drawMainBranch();
   }
   else if (state == CALCULATE_LEAFS_SETTINGS)
   {
-
-    state = MOVING_TO_NEXT_LEAF_CREATION_SPOT;
+    calculateLeafsSettings();
   }
   else if (state == MOVING_TO_NEXT_LEAF_CREATION_SPOT)
   {
-
-    state = DRAWING_LEAF_PART_A;
+    moveToNextLeafCreationSpot();
   }
   else if (state == DRAWING_LEAF_PART_A)
   {
-
-    state = DRAWING_LEAF_PART_B;
+    drawLeafPartA();
   }
   else if (state == DRAWING_LEAF_PART_A)
   {
-
-    state = DRAWING_LEAF_PART_B;
+    drawLeafPartB();
   }
   else if (state == FINISH)
   {

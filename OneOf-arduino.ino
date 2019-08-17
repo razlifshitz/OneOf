@@ -11,6 +11,7 @@
 #include "global-variables.h"
 #include "motors-setup.srv.h"
 #include "myService.h"
+#include "paint-service.h"
 #include "paint-utills.h"
 
 //Thread myThread = Thread();
@@ -34,17 +35,26 @@ void setup()
 void loop()
 {
   int buttonState = checkButton();
-  if (/*buttonState == 1 ||*/ buttonState == 3)
+  if (buttonState == 1 || buttonState == 3)
   {
-
     // Button has been clicked
+    Serial.println(String("buttonState set to: ") + (buttonState));
+
+    if (buttonState == 3)
+    {
+      finishPain();
+    }
+
     active = !active;
 
-    Serial.println(String("buttonState set to: ") + (buttonState));
-  }
-
-  if (active)
-  {
-    doPaint();
+    if (active)
+    {
+      doPaint();
+    }
+    else
+    {
+      myServo.stop();
+      pauseEncoder();
+    }
   }
 }

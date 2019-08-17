@@ -1,8 +1,11 @@
 #include <Arduino.h>
 
+//
 // CONSTANTS
 
-// GENERAL
+// KEYWORDS
+const String RIGHT = "right";
+const String LEFT = "left";
 
 // STATE
 const String BEFORE_START = "BEFORE_START";
@@ -14,6 +17,10 @@ const String DRAWING_LEAF_PART_A = "DRAWING_LEAF_PART_A";
 const String DRAWING_LEAF_PART_B = "DRAWING_LEAF_PART_B";
 const String FINISH = "FINISH";
 
+// SERVO
+const int mainBranchLocation = 50;
+
+//
 // VARIABLES
 
 bool active;
@@ -37,12 +44,16 @@ int maxTo = 70;  // Upper range - maximum
 // ENCODER
 //
 long encoderLocation;
+String encoderDirection;
+bool isEncoderMoving;
+int encoderSpeed;
 
 //
 // SERVO
 //
 bool toMoveUp = true;
 int lastServoLoc;
+int servoDestination;
 int servoDistance;
 int servoDistance75;    // needed?
 int servoDistance25;    // needed?

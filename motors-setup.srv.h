@@ -1,18 +1,18 @@
 Encoder encoder(ENCODER1_PIN, ENCODER2_PIN);
-VarSpeedServo myservo;
+VarSpeedServo myServo;
 
 // SERVO
 
 void attachServo()
 {
     Serial.println("attachServo()");
-    myservo.attach(SERVO_PIN); // attaches the servo on pin 9 to the servo object
+    myServo.attach(SERVO_PIN); // attaches the servo on pin 9 to the servo object
 }
 
 void detachServo()
 {
     Serial.println("detachServo()");
-    myservo.detach();
+    myServo.detach();
 }
 
 // ENCODER
@@ -23,6 +23,7 @@ void attachEncoder(Encoder *encoder)
     pinMode(DIR1_PWM_PIN, OUTPUT);
     pinMode(DIR2_PWM_PIN, OUTPUT);
     encoder->write(0);
+    isEncoderMoving = false;
 }
 
 boolean detachEncoder()

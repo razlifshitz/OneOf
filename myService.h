@@ -27,19 +27,14 @@ int CalcRand(int nMin, int nMax)
 //
 // GENERAL FUNCTIONS
 //
-void initDataBeforeFirstRun()
-{
-  attachServo();
-  attachEncoder(&encoder);
-}
 
 //
 // ENCODER FUNCTIONS
 //
 
-int setEncoderDirectionAndSpeed(Encoder *encoder, int dir, int speed)
+int setEncoderDirectionAndSpeed(String dir, int speed)
 {
-  if (dir)
+  if (dir == "right")
   {
     digitalWrite(DIR1_PWM_PIN, LOW);
     analogWrite(DIR2_PWM_PIN, speed);
@@ -50,12 +45,20 @@ int setEncoderDirectionAndSpeed(Encoder *encoder, int dir, int speed)
     analogWrite(DIR1_PWM_PIN, speed);
   }
 
+  isEncoderMoving = true;
+
   return speed;
 }
 
-int setEncoderSpeed(Encoder *encoder, int speed)
+int setEncoderSpeed(int speed)
 {
-  return setEncoderDirectionAndSpeed(encoder, digitalRead(MOTOR_DIR_PIN), speed);
+  return setEncoderDirectionAndSpeed(encoderDirection, speed);
+}
+
+int pauseEncoder()
+{
+  isEncoderMoving = false;
+  return setEncoderSpeed(0);
 }
 
 boolean hasEncoderReachedDestination(long lastEncoderLoc, long destination)
