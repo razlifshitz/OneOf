@@ -2,7 +2,7 @@ void initDataBeforeFirstRun()
 {
     attachServo();
     attachEncoder(&encoder);
-    state = ENCODER_MOVING_TO_INITIAL_LOCATION;
+    state = DRAWING_MAIN_BRANCH; // fixme
     encoderDirection = RIGHT;
     // servoDestination = mainBranchLocation;
 }

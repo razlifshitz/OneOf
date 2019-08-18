@@ -25,6 +25,7 @@ void setup()
   pinMode(MOTOR_DIR_PIN, INPUT_PULLUP);
   active = false;
   state = BEFORE_START;
+  lastUpdate = millis();
 
   //myThread.onRun(onButtonPressed);
 
@@ -46,14 +47,21 @@ void loop()
     }
 
     active = !active;
+  }
 
-    if (active)
-    {
-      doPaint();
-    }
-    else
+  if (active)
+  {
+    doPaint();
+  }
+  else
+  {
+    if (myServo.isMoving())
     {
       myServo.stop();
+    }
+
+    if (isEncoderMoving)
+    {
       pauseEncoder();
     }
   }

@@ -25,6 +25,7 @@ const int mainBranchLocation = 50;
 
 bool active;
 String state;
+long lastUpdate;
 
 //
 // SERVO
@@ -46,7 +47,7 @@ int maxTo = 70;  // Upper range - maximum
 long encoderLocation;
 String encoderDirection;
 bool isEncoderMoving;
-int encoderSpeed;
+// int encoderSpeed;
 
 //
 // SERVO
@@ -55,6 +56,6 @@ bool toMoveUp = true;
 int lastServoLoc;
 int servoDestination;
 int servoDistance;
-int servoDistance75;    // needed?
-int servoDistance25;    // needed?
+int servoDistance75;	// needed?
+int servoDistance25;	// needed?
 int servoStartLocation; //needed?
