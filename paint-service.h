@@ -51,6 +51,37 @@ void drawMainBranch()
 
 void calculateLeafsSettings()
 {
+    upLeafsNumber = CalcRand(MIN_LEAFS, MAX_LEAFS);
+    downLeafsNumber = CalcRand(MIN_LEAFS, MAX_LEAFS);
+
+    int leafsNumber = upLeafsNumber + downLeafsNumber;
+    leafs[leafsNumber];
+
+    for (int i = 0; i < leafsNumber; i++)
+    {
+        String direction;
+        if (i < upLeafsNumber)
+        {
+            direction = UP;
+        }
+        else
+        {
+            direction = DOWN;
+        }
+
+        ServoMovement moveA(direction,
+                            CalcRand(MIN_SERVO_DESTINATION, MAX_SERVO_DESTINATION),
+                            CalcRand(MIN_SERVO_SEEED, MAX_SERVO_SEEED));
+        ServoMovement moveB(direction,
+                            CalcRand(MIN_SERVO_DESTINATION, MAX_SERVO_DESTINATION),
+                            CalcRand(MIN_SERVO_SEEED, MAX_SERVO_SEEED));
+
+        leafs[i].initData(&moveA, &moveB);
+
+        Serial.println(String("movementA.direction: ") + (leafs[i].movementA->direction) + String("movementA.destination: ") + (leafs[i].movementA->destination) + String("movementA.speed: ") + (leafs[i].movementA->speed));
+        Serial.println(String("movementB.direction: ") + (leafs[i].movementB->direction) + String("movementB.destination: ") + (leafs[i].movementB->destination) + String("movementB.speed: ") + (leafs[i].movementB->speed));
+        Serial.println("----------");
+    }
 
     state = MOVING_TO_NEXT_LEAF_CREATION_SPOT;
 }

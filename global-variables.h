@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "leaf.h"
 
 //
 // CONSTANTS
@@ -7,6 +8,8 @@
 // KEYWORDS
 const String RIGHT = "right";
 const String LEFT = "left";
+const String UP = "up";
+const String DOWN = "down";
 
 // STATE
 const String BEFORE_START = "BEFORE_START";
@@ -24,9 +27,13 @@ const int mainBranchLocation = 50;
 // ENCODER
 const int NO_MANS_LAND = 3;
 
-// PAINT
+// LEAFS
 const int MIN_LEAFS = 2;
 const int MAX_LEAFS = 5;
+const int MIN_SERVO_SEEED = 10;
+const int MAX_SERVO_SEEED = 100;
+const int MIN_SERVO_DESTINATION = 40;
+const int MAX_SERVO_DESTINATION = 60;
 
 // GENERAL
 const int DEFAULT_SPEED = 50;
@@ -44,8 +51,10 @@ long lastUpdate;
 bool dataCalculated;
 
 ///
-/// PAINT
-int leafsNumber;
+/// LEAFS
+int upLeafsNumber;
+int downLeafsNumber;
+Leaf *leafs;
 
 //
 // ENCODER
