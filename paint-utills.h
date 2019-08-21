@@ -26,11 +26,11 @@ bool doPaint()
     Serial.println(String("initDataBeforeFirstRun()"));
     initDataBeforeFirstRun();
   }
-  // else if (state == ENCODER_MOVING_TO_INITIAL_LOCATION)
-  // {
-
-  //   state = DRAWING_MAIN_BRANCH;
-  // }
+  else if (state == BEFORE_DRAWING_MAIN_BRANCH)
+  {
+    beforeDrawingMainBranch();
+    state = DRAWING_MAIN_BRANCH;
+  }
   else if (state == DRAWING_MAIN_BRANCH)
   {
     Serial.println(String("drawMainBranch()"));

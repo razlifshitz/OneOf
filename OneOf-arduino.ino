@@ -55,14 +55,6 @@ void loop()
   }
   else
   {
-    if (myServo.isMoving())
-    {
-      myServo.stop();
-    }
-
-    if (isEncoderMoving)
-    {
-      pauseEncoder();
-    }
+    pausePaint();
   }
 }

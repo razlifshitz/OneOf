@@ -25,10 +25,6 @@ int CalcRand(int nMin, int nMax)
 // }
 
 //
-// GENERAL FUNCTIONS
-//
-
-//
 // ENCODER FUNCTIONS
 //
 
@@ -72,21 +68,39 @@ boolean hasEncoderReachedDestination(long lastEncoderLoc, long destination)
   return isStopMotor;
 }
 
+bool moveEncoderEighthRound(long destination)
+{
+  bool reached = false;
+
+  if (not isEncoderMoving)
+  {
+    setEncoderSpeed(70);
+  }
+
+  if (hasEncoderReachedDestination(encoderLocation, destination))
+  {
+    reached = true;
+    pauseEncoder();
+  }
+
+  return reached;
+}
+
 //
 // SERVO FUNCTIONS
 //
 
-int getNextServoDestination(bool toMoveUp, int previousLocation)
-{
-  int newDestination = toMoveUp ? CalcRand(minTo, maxTo) : CalcRand(minFrom, maxFrom);
+// int getNextServoDestination(bool toMoveUp, int previousLocation)
+// {
+//   int newDestination = toMoveUp ? CalcRand(minTo, maxTo) : CalcRand(minFrom, maxFrom);
 
-  // setting new values
-  servoDistance = abs(newDestination - previousLocation);
-  servoDistance75 = servoDistance * 0.75;
-  servoDistance25 = servoDistance * 0.25;
+//   // setting new values
+//   servoDistance = abs(newDestination - previousLocation);
+//   servoDistance75 = servoDistance * 0.75;
+//   servoDistance25 = servoDistance * 0.25;
 
-  return newDestination;
-}
+//   return newDestination;
+// }
 
 bool hasServoReachedDestination(int lastServoLoc, int destination, bool toMoveUp)
 {
@@ -99,4 +113,20 @@ bool hasServoReachedDestination(int lastServoLoc, int destination, bool toMoveUp
   //Serial.println(result ? "TRUE" : "FALSE");
 
   return result;
+}
+
+//
+// GENERAL FUNCTIONS
+//
+void pausePaint()
+{
+  if (myServo.isMoving())
+  {
+    myServo.stop();
+  }
+
+  if (isEncoderMoving)
+  {
+    pauseEncoder();
+  }
 }

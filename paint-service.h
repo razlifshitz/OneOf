@@ -1,45 +1,73 @@
+void onFinishAction()
+{
+    dataCalculated = false;
+}
+
 void initDataBeforeFirstRun()
 {
     attachServo();
     attachEncoder(&encoder);
-    state = DRAWING_MAIN_BRANCH; // fixme
-    encoderDirection = RIGHT;
-    // servoDestination = mainBranchLocation;
+    state = BEFORE_DRAWING_MAIN_BRANCH;
+    dataCalculated = false;
 }
 
-bool drawMainBranch()
+void beforeDrawingMainBranch()
 {
-    if (not isEncoderMoving)
+    if (not dataCalculated)
     {
-        setEncoderSpeed(70);
+        encoderDirection = RIGHT;
+        encoderDestination = encoderLocation + EIGHTH_CLICKS_PER_ROUND;
     }
 
-    if (hasEncoderReachedDestination(encoderLocation, HALF_QUARTER_CLICKS_PER_ROUND))
+    // move servo to main branch location
+    if (lastServoLoc != mainBranchLocation)
     {
-        pauseEncoder();
-        state = CALCULATE_LEAFS_SETTINGS;
+        myServo.write(mainBranchLocation, DEFAULT_SPEED);
+    }
+
+    // moving the encoder 1/8 of plate to skip the part of the waves of the plate
+    if (moveEncoderEighthRound(encoderDestination))
+    {
+        state = DRAWING_MAIN_BRANCH;
+        onFinishAction();
     }
 }
 
-bool calculateLeafsSettings()
+void drawMainBranch()
+{
+    if (not dataCalculated)
+    {
+        encoderDirection = RIGHT;
+        encoderDestination = encoderLocation + EIGHTH_CLICKS_PER_ROUND;
+    }
+
+    // moving the encoder 1/8 of plate to skip the part of the waves of the plate
+    if (moveEncoderEighthRound(encoderDestination))
+    {
+        state = CALCULATE_LEAFS_SETTINGS;
+        onFinishAction();
+    }
+}
+
+void calculateLeafsSettings()
 {
 
     state = MOVING_TO_NEXT_LEAF_CREATION_SPOT;
 }
 
-bool moveToNextLeafCreationSpot()
+void moveToNextLeafCreationSpot()
 {
 
     state = DRAWING_LEAF_PART_A;
 }
 
-bool drawLeafPartA()
+void drawLeafPartA()
 {
 
     state = DRAWING_LEAF_PART_B;
 }
 
-bool drawLeafPartB()
+void drawLeafPartB()
 {
 
     state = FINISH;
