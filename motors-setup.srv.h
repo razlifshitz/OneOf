@@ -44,7 +44,7 @@ boolean detachEncoder()
 
 void finishPain()
 {
+    state = BEFORE_START;
     detachServo();
     detachEncoder();
-    active = false;
 }

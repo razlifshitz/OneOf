@@ -1,8 +1,7 @@
 String lastState = "";
 
-bool doPaint()
+void doPaint()
 {
-  lastServoLoc = myServo.read();
   encoderLocation = abs(encoder.read());
 
   // printind state to monitor
@@ -23,49 +22,36 @@ bool doPaint()
   // entrance point. todo change to switch map<string, function> if possible
   if (state == BEFORE_START)
   {
-    Serial.println(String("initDataBeforeFirstRun()"));
     initDataBeforeFirstRun();
   }
   else if (state == BEFORE_DRAWING_MAIN_BRANCH)
   {
     beforeDrawingMainBranch();
-    state = DRAWING_MAIN_BRANCH;
   }
   else if (state == DRAWING_MAIN_BRANCH)
   {
-    Serial.println(String("drawMainBranch()"));
     drawMainBranch();
   }
   else if (state == CALCULATE_LEAFS_SETTINGS)
   {
-    Serial.println(String("calculateLeafsSettings()"));
     calculateLeafsSettings();
   }
   else if (state == MOVING_TO_NEXT_LEAF_CREATION_SPOT)
   {
-    Serial.println(String("moveToNextLeafCreationSpot()"));
-
     moveToNextLeafCreationSpot();
   }
   else if (state == DRAWING_LEAF_PART_A)
   {
-    Serial.println(String("drawLeafPartA()"));
-
     drawLeafPartA();
   }
   else if (state == DRAWING_LEAF_PART_A)
   {
-    Serial.println(String("drawLeafPartB()"));
-
     drawLeafPartB();
   }
   else if (state == FINISH)
   {
-    Serial.println(String("finishPain()"));
-
     finishPain();
   }
 
   lastUpdate = millis();
-  return true;
 }

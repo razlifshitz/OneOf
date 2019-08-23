@@ -12,18 +12,6 @@ int CalcRand(int nMin, int nMax)
   return (random() % (nMax - nMin + 1) + nMin);
 }
 
-// void printMovement(bool delayPending)
-// {
-//   if (delayPending)
-//   {
-//     Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextServoLocation + " direction: " + (toMoveUp ? "Up" : "Down") + " Speed: " + waveSpeed + " And Afterwards Delay will Start!");
-//   }
-//   else
-//   {
-//     Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextServoLocation + " direction: " + (toMoveUp ? "Up" : "Down") + " Speed: " + waveSpeed);
-//   }
-// }
-
 //
 // ENCODER FUNCTIONS
 //
@@ -68,13 +56,13 @@ boolean hasEncoderReachedDestination(long lastEncoderLoc, long destination)
   return isStopMotor;
 }
 
-bool moveEncoderEighthRound(long destination)
+bool moveEncoder(long destination, String direction)
 {
   bool reached = false;
 
   if (not isEncoderMoving)
   {
-    setEncoderSpeed(70);
+    setEncoderDirectionAndSpeed(direction, 70);
   }
 
   if (hasEncoderReachedDestination(encoderLocation, destination))
@@ -102,9 +90,11 @@ bool moveEncoderEighthRound(long destination)
 //   return newDestination;
 // }
 
-bool hasServoReachedDestination(int lastServoLoc, int destination, bool toMoveUp)
+bool hasServoReachedDestination(int destination, bool toMoveUp)
 {
   //Serial.println(String("lastServoLoc: ") + (lastServoLoc) + String(" destination: ") + (destination) + String(" toMoveUp: ") + (toMoveUp ? "TRUE" : "FALSE"));
+
+  int lastServoLoc = myServo.read();
 
   bool result = toMoveUp
                     ? (lastServoLoc) >= destination
@@ -120,6 +110,8 @@ bool hasServoReachedDestination(int lastServoLoc, int destination, bool toMoveUp
 //
 void pausePaint()
 {
+  active = false;
+
   if (myServo.isMoving())
   {
     myServo.stop();

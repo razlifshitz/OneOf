@@ -5,13 +5,17 @@
 #include <Encoder.h>
 #include <VarSpeedServo.h>
 #include "button_actions.h"
+#include <Arduino.h>
 
 // my libraries
 #include "params.h"
+#include "global-constants.h"
+#include "leaf.h"
 #include "global-variables.h"
 #include "motors-setup.srv.h"
 #include "myService.h"
 #include "paint-service.h"
+#include "paint-actions.h"
 #include "paint-utills.h"
 
 //Thread myThread = Thread();
@@ -45,8 +49,10 @@ void loop()
     {
       finishPain();
     }
-
-    active = !active;
+    else
+    {
+      active = !active;
+    }
   }
 
   if (active)
