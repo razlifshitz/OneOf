@@ -45,12 +45,14 @@ int pauseEncoder()
   return setEncoderSpeed(0);
 }
 
-boolean hasEncoderReachedDestination(long lastEncoderLoc, long destination)
+bool hasEncoderReachedDestination(long destination, bool toMoveRight)
 {
-  boolean isStopMotor = (lastEncoderLoc) > destination;
+  bool isStopMotor = toMoveRight
+                         ? (encoderLocation) >= destination
+                         : (encoderLocation) <= destination;
 
 #ifdef DEBUG_ENCODER
-  Serial.println(String("encoder loc: ") + (lastEncoderLoc) + String(" destination: ") + (destination) + String(" isStopMotor: ") + (isStopMotor ? "TRUE" : "FALSE"));
+  Serial.println(String("encoder loc: ") + (encoderLocation) + String(" destination: ") + (destination) + String(" isStopMotor: ") + (isStopMotor ? "TRUE" : "FALSE"));
 #endif
 
   return isStopMotor;
@@ -65,7 +67,7 @@ bool moveEncoder(long destination, String direction)
     setEncoderDirectionAndSpeed(direction, 70);
   }
 
-  if (hasEncoderReachedDestination(encoderLocation, destination))
+  if (hasEncoderReachedDestination(destination, direction == RIGHT))
   {
     reached = true;
     pauseEncoder();

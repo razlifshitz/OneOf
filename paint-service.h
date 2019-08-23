@@ -51,18 +51,6 @@ bool hasLeafsToDraw(String direction)
     return result;
 }
 
-void onFinishLeaf(String direction)
-{
-    if (direction == UP)
-    {
-        upDrawnLeafs++;
-    }
-    else
-    {
-        downDrawnLeafs++;
-    }
-}
-
 bool drawLeaf(ServoMovement *currentMovement, bool toMoveUp, String encoderDirection)
 {
     bool doneDrawing = false;
