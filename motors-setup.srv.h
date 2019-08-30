@@ -24,6 +24,8 @@ void attachEncoder(Encoder *encoder)
     pinMode(DIR2_PWM_PIN, OUTPUT);
     encoder->write(0);
     isEncoderMoving = false;
+
+    Serial.println(String("encoder loc: ") + (abs(encoder->read())));
 }
 
 boolean detachEncoder()
@@ -44,6 +46,8 @@ boolean detachEncoder()
 
 void finishPain()
 {
+    Serial.println(String("finishPain()"));
+
     state = BEFORE_START;
     detachServo();
     detachEncoder();

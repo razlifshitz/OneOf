@@ -12,9 +12,9 @@ int upLeafsCount;
 int upDrawnLeafs;
 int downLeafsCount;
 int downDrawnLeafs;
-Leaf *upLeafs;
-Leaf *downLeafs;
-Leaf leafToDraw;
+Leaf upLeafs[5]; //todo try replace it with constant
+Leaf downLeafs[5];
+Leaf *leafToDraw;
 
 //
 // ENCODER
@@ -36,6 +36,6 @@ int maxTo = 70;  // Upper range - maximum
 bool toMoveUp = true;
 int servoDestination;
 int servoDistance;
-int servoDistance75;    // needed?
-int servoDistance25;    // needed?
+int servoDistance75;	// needed?
+int servoDistance25;	// needed?
 int servoStartLocation; //needed?

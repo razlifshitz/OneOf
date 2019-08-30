@@ -29,7 +29,10 @@ int setEncoderDirectionAndSpeed(String dir, int speed)
     analogWrite(DIR1_PWM_PIN, speed);
   }
 
-  isEncoderMoving = true;
+  if (speed != 0)
+  {
+    isEncoderMoving = true;
+  }
 
   return speed;
 }
@@ -47,13 +50,19 @@ int pauseEncoder()
 
 bool hasEncoderReachedDestination(long destination, bool toMoveRight)
 {
-  bool isStopMotor = toMoveRight
-                         ? (encoderLocation) >= destination
-                         : (encoderLocation) <= destination;
+  //fixme
+  long encLoc = abs(encoder.read());
+  bool isStopMotor = encLoc >= destination;
 
-#ifdef DEBUG_ENCODER
-  Serial.println(String("encoder loc: ") + (encoderLocation) + String(" destination: ") + (destination) + String(" isStopMotor: ") + (isStopMotor ? "TRUE" : "FALSE"));
-#endif
+  Serial.println(String("----------------------------"));
+  Serial.println(String("encoder loc: ") + (encLoc));
+  Serial.println(String(" toMoveRight: ") + (toMoveRight));
+  Serial.println(String(" destination: ") + (destination));
+  Serial.println(String(" isStopMotor: ") + (isStopMotor ? "TRUE" : "FALSE"));
+
+  // #ifdef DEBUG_ENCODER
+  //   Serial.println(String("encoder loc: ") + (encoderLocation) + String(" destination: ") + (destination) + String(" isStopMotor: ") + (isStopMotor ? "TRUE" : "FALSE"));
+  // #endif
 
   return isStopMotor;
 }
@@ -64,10 +73,11 @@ bool moveEncoder(long destination, String direction)
 
   if (not isEncoderMoving)
   {
-    setEncoderDirectionAndSpeed(direction, 70);
+    setEncoderDirectionAndSpeed(direction, 60);
   }
 
-  if (hasEncoderReachedDestination(destination, direction == RIGHT))
+  bool isRight = direction == "right";
+  if (hasEncoderReachedDestination(destination, isRight))
   {
     reached = true;
     pauseEncoder();

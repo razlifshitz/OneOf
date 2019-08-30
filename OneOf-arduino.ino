@@ -49,10 +49,8 @@ void loop()
     {
       finishPain();
     }
-    else
-    {
-      active = !active;
-    }
+
+    active = !active;
   }
 
   if (active)
