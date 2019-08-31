@@ -48,17 +48,22 @@ int pauseEncoder()
   return setEncoderSpeed(0);
 }
 
+long getEncdoerLocation()
+{
+  return abs(encoder.read());
+}
+
 bool hasEncoderReachedDestination(long destination, bool toMoveRight)
 {
   //fixme
-  long encLoc = abs(encoder.read());
+  long encLoc = getEncdoerLocation();
   bool isStopMotor = encLoc >= destination;
 
-  Serial.println(String("----------------------------"));
-  Serial.println(String("encoder loc: ") + (encLoc));
-  Serial.println(String(" toMoveRight: ") + (toMoveRight));
-  Serial.println(String(" destination: ") + (destination));
-  Serial.println(String(" isStopMotor: ") + (isStopMotor ? "TRUE" : "FALSE"));
+  // Serial.println(String("----------------------------"));
+  // Serial.println(String("encoder loc: ") + (encLoc));
+  // Serial.println(String("toMoveRight: ") + (toMoveRight));
+  // Serial.println(String("destination: ") + (destination));
+  // Serial.println(String("isStopMotor: ") + (isStopMotor ? "TRUE" : "FALSE"));
 
   // #ifdef DEBUG_ENCODER
   //   Serial.println(String("encoder loc: ") + (encoderLocation) + String(" destination: ") + (destination) + String(" isStopMotor: ") + (isStopMotor ? "TRUE" : "FALSE"));
@@ -104,13 +109,15 @@ bool moveEncoder(long destination, String direction)
 
 bool hasServoReachedDestination(int destination, bool toMoveUp)
 {
-  //Serial.println(String("lastServoLoc: ") + (lastServoLoc) + String(" destination: ") + (destination) + String(" toMoveUp: ") + (toMoveUp ? "TRUE" : "FALSE"));
-
   int lastServoLoc = myServo.read();
 
   bool result = toMoveUp
                     ? (lastServoLoc) >= destination
                     : (lastServoLoc) <= destination;
+
+  Serial.println(String("lastServoLoc: ") + (lastServoLoc) + String(" destination: ") + (destination) + String(" toMoveUp: ") + (toMoveUp ? "TRUE" : "FALSE"));
+  Serial.println(String("hasServoReachedDestination: ") + (result));
+  Serial.println(String("----------------------------------"));
 
   //Serial.println(result ? "TRUE" : "FALSE");
 

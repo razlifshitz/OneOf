@@ -2,6 +2,7 @@
 // GENERAL
 
 bool active;
+bool buttonPressed;
 String state;
 long lastUpdate;
 bool dataCalculated;

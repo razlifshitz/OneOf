@@ -2,7 +2,7 @@ String lastState = "";
 
 void doPaint()
 {
-  encoderLocation = abs(encoder.read());
+  //encoderLocation = abs(encoder.read());
 
   // printind state to monitor
   if (lastState != state)

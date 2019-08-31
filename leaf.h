@@ -2,33 +2,46 @@ class ServoMovement
 {
 public:
     ServoMovement();
-    ServoMovement(ServoMovement *movement);
-    // ServoMovement(String dir, int dest, int speed);
+    //ServoMovement(ServoMovement *movement);
+    void initData(String dir /*,int dest, int speed*/);
     int destination;
     int speed;
 };
 
-ServoMovement::ServoMovement()
+ServoMovement::ServoMovement(){
+    // destination = (random() % (MAX_SERVO_DESTINATION - MIN_SERVO_DESTINATION + 1) + MIN_SERVO_DESTINATION);
+    // speed = (random() % (MAX_SERVO_SEEED - MIN_SERVO_SEEED + 1) + MIN_SERVO_SEEED);
+
+    // Serial.println(String("ServoMovement: destination: ") + (destination));
+    // Serial.println(String("ServoMovement: speed: ") + (speed));
+};
+
+void ServoMovement::initData(String dir /*, int dest, int speed*/)
 {
-    destination = (random() % (MAX_SERVO_DESTINATION - MIN_SERVO_DESTINATION + 1) + MIN_SERVO_DESTINATION);
+    if (dir == UP)
+    {
+        destination = (random() % (MAX_SERVO_DESTINATION_UP - MIN_SERVO_DESTINATION_UP + 1) + MIN_SERVO_DESTINATION_UP);
+    }
+    else
+    {
+        destination = (random() % (MAX_SERVO_DESTINATION_DOWN - MIN_SERVO_DESTINATION_DOWN + 1) + MIN_SERVO_DESTINATION_DOWN);
+    }
+
     speed = (random() % (MAX_SERVO_SEEED - MIN_SERVO_SEEED + 1) + MIN_SERVO_SEEED);
 
     Serial.println(String("ServoMovement: destination: ") + (destination));
     Serial.println(String("ServoMovement: speed: ") + (speed));
+
+    // direction = dir;
+    // destination = dest;
+    // speed = speed;
 };
 
-// ServoMovement::ServoMovement(String dir, int dest, int speed)
+// ServoMovement::ServoMovement(ServoMovement *movement)
 // {
-//     direction = dir;
-//     destination = dest;
-//     speed = speed;
+//     destination = movement->destination;
+//     speed = movement->speed;
 // };
-
-ServoMovement::ServoMovement(ServoMovement *movement)
-{
-    destination = movement->destination;
-    speed = movement->speed;
-};
 
 class Leaf
 {
@@ -54,6 +67,7 @@ void Leaf::initData(String dir /*, ServoMovement *a*/)
     //Serial.println(String("LEAF: movement.destination: ") + (a->destination) + String(" movement.speed: ") + (a->speed));
 
     direction = dir;
+    movementA.initData(dir);
     // movementA = a;
     // movementB = b;
 };
