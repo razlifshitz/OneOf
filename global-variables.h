@@ -9,6 +9,7 @@ bool dataCalculated;
 
 ///
 /// LEAFS
+int numberOfDrawnBranches;
 int upLeafsCount;
 int upDrawnLeafs;
 int downLeafsCount;

@@ -30,7 +30,9 @@ void setup()
   active = false;
   state = BEFORE_START;
   lastUpdate = millis();
-  buttonPressed = true;
+  buttonPressed = false;
+  numberOfDrawnBranches = 0;
+
   //myThread.onRun(onButtonPressed);
 
   // Now, put bunch of Threads inside it, FEED it!
@@ -58,7 +60,7 @@ void loop()
     active = true;
   }
 
-  if (active || buttonPressed)
+  if (active /*|| buttonPressed*/)
   {
     buttonPressed = false;
     doPaint();

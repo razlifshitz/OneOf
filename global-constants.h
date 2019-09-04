@@ -15,20 +15,23 @@ const String DRAWING_LEAF_PART_B = "DRAWING_LEAF_PART_B";
 const String FINISH = "FINISH";
 
 // SERVO
-const int MAIN_BRANCH_LOCATION = 50;
+const int MAIN_BRANCH_LOCATION = 90;
 
 // ENCODER
 const long NO_MANS_LAND = 150;
+const long EDGE_LEAF_NO_MANS_LAND = 800;
+const int MIN_ENCODER_SEEED = 60;
+const int MAX_ENCODER_SEEED = 80;
 
 // LEAFS
 const int MIN_LEAFS = 2;
 const int MAX_LEAFS = 5;
-const int MIN_SERVO_SEEED = 10;
-const int MAX_SERVO_SEEED = 50;
-const int MIN_SERVO_DESTINATION_UP = 58;
-const int MAX_SERVO_DESTINATION_UP = 68;
-const int MIN_SERVO_DESTINATION_DOWN = 32;
-const int MAX_SERVO_DESTINATION_DOWN = 42;
+const int MIN_SERVO_SEEED = 4;
+const int MAX_SERVO_SEEED = 10;
+const int MIN_SERVO_DESTINATION_UP = 92;
+const int MAX_SERVO_DESTINATION_UP = 95;
+const int MIN_SERVO_DESTINATION_DOWN = 85;
+const int MAX_SERVO_DESTINATION_DOWN = 88;
 
 // GENERAL
-const int DEFAULT_SPEED = 50;
+const int DEFAULT_SPEED = 60;

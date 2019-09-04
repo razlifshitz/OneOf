@@ -78,7 +78,7 @@ bool moveEncoder(long destination, String direction)
 
   if (not isEncoderMoving)
   {
-    setEncoderDirectionAndSpeed(direction, 60);
+    setEncoderDirectionAndSpeed(direction, DEFAULT_SPEED);
   }
 
   bool isRight = direction == "right";
@@ -115,9 +115,9 @@ bool hasServoReachedDestination(int destination, bool toMoveUp)
                     ? (lastServoLoc) >= destination
                     : (lastServoLoc) <= destination;
 
-  Serial.println(String("lastServoLoc: ") + (lastServoLoc) + String(" destination: ") + (destination) + String(" toMoveUp: ") + (toMoveUp ? "TRUE" : "FALSE"));
-  Serial.println(String("hasServoReachedDestination: ") + (result));
-  Serial.println(String("----------------------------------"));
+  // Serial.println(String("lastServoLoc: ") + (lastServoLoc) + String(" destination: ") + (destination) + String(" toMoveUp: ") + (toMoveUp ? "TRUE" : "FALSE"));
+  // Serial.println(String("hasServoReachedDestination: ") + (result));
+  // Serial.println(String("----------------------------------"));
 
   //Serial.println(result ? "TRUE" : "FALSE");
 

@@ -44,13 +44,13 @@ void doPaint()
   {
     drawLeafPartA();
   }
-  else if (state == DRAWING_LEAF_PART_A)
+  else if (state == DRAWING_LEAF_PART_B)
   {
     drawLeafPartB();
   }
   else if (state == FINISH)
   {
-    finishPain();
+    finishPaint();
   }
 
   lastUpdate = millis();

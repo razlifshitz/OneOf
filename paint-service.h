@@ -13,7 +13,24 @@ void calcLeafCreationLocations(Leaf leafs[], int leafsCount)
 
     for (int i = 0; i < leafsCount; i++)
     {
-        leafs[i].creationLocation = CalcRand(minZone + NO_MANS_LAND, maxZone - NO_MANS_LAND);
+        long loc;
+        // edge leaf (start)
+        if (i == 0)
+        {
+            loc = CalcRand(minZone + EDGE_LEAF_NO_MANS_LAND, maxZone - NO_MANS_LAND);
+        }
+        // edge leaf (end)
+        else if (i == leafsCount)
+        {
+            loc = CalcRand(minZone + NO_MANS_LAND, maxZone - EDGE_LEAF_NO_MANS_LAND);
+        }
+        // regular leaf
+        else
+        {
+            loc = CalcRand(minZone + NO_MANS_LAND, maxZone - NO_MANS_LAND);
+        }
+
+        leafs[i].creationLocation = loc;
         minZone += zone;
         maxZone += zone;
 
@@ -34,15 +51,15 @@ void generateLeafs(Leaf leafs[], int leafsCount, String direction)
 
         leafs[i].initData(direction);
 
-        Serial.println(String("direction: ") + (leafs[i].direction));
-        Serial.println(String("movementA.destination:"));
-        Serial.println(leafs[i].movementA.destination);
-        Serial.println(String("movementA.speed:"));
-        Serial.println(leafs[i].movementA.speed);
+        // Serial.println(String("direction: ") + (leafs[i].direction));
+        // Serial.println(String("movementA.destination:"));
+        // Serial.println(leafs[i].movementA.destination);
+        // Serial.println(String("movementA.speed:"));
+        // Serial.println(leafs[i].movementA.speed);
 
         //Serial.println(String("movementA.destination: ") + (leafs[i].movementA.destination) + String(" movementA.speed: ") + (leafs[i].movementA.speed));
         //Serial.println(String("movementB.destination: ") + (leafs[i].movementB->destination) + String("movementB.speed: ") + (leafs[i].movementB->speed));
-        Serial.println("-------------");
+        // Serial.println("-------------");
     }
 
     calcLeafCreationLocations(leafs, leafsCount);
@@ -66,38 +83,37 @@ bool hasLeafsToDraw(String direction)
 
 bool drawLeaf(ServoMovement currentMovement, bool toMoveUp, String encoderDirection)
 {
-    Serial.println("--------");
-    Serial.println("drawLeaf");
-    Serial.println("--------");
-    Serial.println(String("drawLeaf: direction: ") + (encoderDirection));
-    Serial.println(String("drawLeaf: destination: ") + (currentMovement.destination));
-    Serial.println(String("drawLeaf: speed: ") + (currentMovement.speed));
-    Serial.println(String("drawLeaf: isMoving: ") + (!myServo.isMoving() ? "TRUE" : "FALSE"));
-    Serial.println("------------------");
+    //     Serial.println("--------");
+    //     Serial.println("drawLeaf");
+    //     Serial.println("--------");
+    //     Serial.println(String("drawLeaf: direction: ") + (encoderDirection));
+    //     Serial.println(String("drawLeaf: destination: ") + (currentMovement.destination));
+    //     Serial.println(String("drawLeaf: speed: ") + (currentMovement.speed));
+    //     Serial.println(String("drawLeaf: isMoving: ") + (myServo.isMoving() ? "TRUE" : "FALSE"));
+    //     Serial.println("------------------");
 
     bool doneDrawing = false;
 
-    if (!myServo.isMoving())
-    {
-        myServo.write(currentMovement.destination, currentMovement.speed);
-    }
-
-    if (hasServoReachedDestination(currentMovement.destination, toMoveUp))
-    {
-        Serial.println("drawLeaf: done drawing.");
-        pauseEncoder();
-        doneDrawing = true;
-    }
-    else
+    if (!hasServoReachedDestination(currentMovement.destination, toMoveUp))
     {
         if (not isEncoderMoving)
         {
-            Serial.println("drawLeaf: start Encoder");
-            setEncoderDirectionAndSpeed(encoderDirection, 60);
+            int speed = CalcRand(MIN_ENCODER_SEEED, MAX_ENCODER_SEEED);
+            //Serial.println("drawLeaf: start Encoder");
+            setEncoderDirectionAndSpeed(encoderDirection, speed);
         }
+
+        //Serial.println("start moving");
+        myServo.write(currentMovement.destination, currentMovement.speed);
+
+        return false;
+    }
+    else
+    {
+        //Serial.println("drawLeaf: done drawing.");
+        pauseEncoder();
+        return true;
     }
 
-    Serial.println(String("doneDrawing: ") + (doneDrawing));
-
-    return downLeafs;
+    // return false;
 }

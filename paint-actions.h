@@ -13,7 +13,7 @@ void beforeDrawingMainBranch()
     {
         dataCalculated = true;
         // length of waves to skip
-        encoderDestination = getEncdoerLocation() + EIGHTH_CLICKS_PER_ROUND;
+        encoderDestination = (numberOfDrawnBranches == 0) ? (getEncdoerLocation() + EIGHTH_CLICKS_PER_ROUND) : (getEncdoerLocation() + QUARTER_CLICKS_PER_ROUND);
     }
 
     // move servo to main branch location
@@ -32,7 +32,7 @@ void beforeDrawingMainBranch()
         pausePaint();
         onFinishAction();
         delay(SERVO_UPDATE_INTERVAL);
-        buttonPressed = true;
+        // buttonPressed = true;
     }
 }
 
@@ -55,20 +55,6 @@ void drawMainBranch()
     }
 }
 
-bool temp = true;
-
-void killMeNow()
-{
-    // for (int i = 0; i < upLeafsCount; i++)
-    // {
-    //     Serial.println("-------killMeNow-------------");
-    //     Serial.println(String("i: ") + i);
-    //     Serial.println(String("direction: ") + (upLeafs[i].direction));
-    //     Serial.println(String("movementA.destination: ") + (upLeafs[i].movementA->destination));
-    //     Serial.println(String("movementA.speed: ") + (upLeafs[i].movementA->speed));
-    // }
-}
-
 void calculateLeafsSettings()
 {
     // leafs count
@@ -80,19 +66,14 @@ void calculateLeafsSettings()
 
     // generatings leafs data
     generateLeafs(upLeafs, upLeafsCount, UP);
-    //generateLeafs(downLeafs, downLeafsCount, DOWN);
+    generateLeafs(downLeafs, downLeafsCount, DOWN);
 
     state = MOVING_TO_NEXT_LEAF_CREATION_SPOT;
-
-    temp = false;
-    // Serial.println("1");
-    // killMeNow();
 }
 
 void moveToNextLeafCreationSpot()
 {
-    // Serial.println("2");
-    // killMeNow();
+    long encoderLoc = getEncdoerLocation();
 
     if (not dataCalculated)
     {
@@ -105,14 +86,15 @@ void moveToNextLeafCreationSpot()
         // moving back to to head of the main branch,
         // painting leafs on the way.
         encoderDestination = getEncdoerLocation() + EIGHTH_CLICKS_PER_ROUND;
+
+        Serial.println(String("encoderLocation: ") + (encoderLoc));
+        Serial.println(String("encoderDestination: ") + (encoderDestination));
     }
 
-    // Serial.println("3");
-    // killMeNow();
-
-    long encoderLoc = getEncdoerLocation();
     if (moveEncoder(encoderDestination, LEFT))
     {
+        Serial.println(String("encoderLocation: ") + (encoderLoc));
+
         // encoder reached head of main branch
         state = FINISH;
         onFinishAction();
@@ -120,25 +102,20 @@ void moveToNextLeafCreationSpot()
     // encoder reached location to draw leaf (UP)
     else if (hasLeafsToDraw(UP) && encoderLoc >= upLeafs[upDrawnLeafs].creationLocation)
     {
-        Serial.println("--------");
-        Serial.println("hasLeafsToDraw");
-        Serial.println("--------");
+        // Serial.println("--------");
+        // Serial.println("hasLeafsToDraw");
+        // Serial.println("--------");
         Serial.println(String("upDrawnLeafs: ") + (upDrawnLeafs));
         Serial.println(String("hasLeafsToDraw: ") + (hasLeafsToDraw(UP) ? "TRUE" : "FALSE"));
         Serial.println(String("encoderLocation: ") + (encoderLoc));
         Serial.println(String("creationLocation: ") + (upLeafs[upDrawnLeafs].creationLocation));
-        Serial.println("--------");
+        // Serial.println("--------");
 
-        Serial.println("Reached start of leaf");
+        Serial.println("Reached start of UP leaf number " + String(upDrawnLeafs));
+        Serial.println("Servo loc: " + String(myServo.read()));
+
         pauseEncoder();
-        delay(SERVO_UPDATE_INTERVAL);
-        // Serial.println("4");
-        // killMeNow();
-        // Serial.println(String("encoder reached location: creationLocation: ") + (upLeafs[upDrawnLeafs].creationLocation));
-        // Serial.println(String("encoder reached location: destination: ") + String(upLeafs[upDrawnLeafs].movementA->destination));
-        // Serial.println(String("encoder reached location: speed: ") + String(upLeafs[upDrawnLeafs].movementA->speed));
-        //leafToDraw.initData(&upLeafs[upDrawnLeafs]);
-        //leafToDraw.initData(upLeafs[upDrawnLeafs].direction, upLeafs[upDrawnLeafs].movementA);
+        delay(500);
 
         leafToDraw = &upLeafs[upDrawnLeafs];
 
@@ -147,19 +124,30 @@ void moveToNextLeafCreationSpot()
         state = DRAWING_LEAF_PART_A;
     }
     // encoder reached location to draw leaf (DOWN)
-    // else if (hasLeafsToDraw(DOWN) && encoderLocation >= downLeafs[downDrawnLeafs].creationLocation)
-    // {
-    //     Serial.println("Reached start of leaf");
-    //     pauseEncoder();
-    //     leafToDraw = downLeafs[downDrawnLeafs];
-    //     state = DRAWING_LEAF_PART_A;
-    // }
+    else if (hasLeafsToDraw(DOWN) && encoderLoc >= downLeafs[downDrawnLeafs].creationLocation)
+    {
+        Serial.println("Reached start of DOWN leaf number " + String(downDrawnLeafs));
+        Serial.println("Servo loc: " + String(myServo.read()));
+
+        pauseEncoder();
+
+        delay(500);
+
+        leafToDraw = &downLeafs[downDrawnLeafs];
+
+        state = DRAWING_LEAF_PART_A;
+    }
 }
 
 void drawLeafPartA()
 {
-    if (drawLeaf((leafToDraw->movementA), ((leafToDraw->direction) == UP), RIGHT))
+    bool doneDrawing = drawLeaf((leafToDraw->movementA), ((leafToDraw->direction) == UP), RIGHT);
+    //Serial.println(String("doneDrawing move A: ") + (doneDrawing ? "TRUE" : "FALSE"));
+
+    if (doneDrawing)
     {
+        Serial.println("Servo loc: " + String(myServo.read()));
+
         // Done leaf part A
         state = DRAWING_LEAF_PART_B;
     }
@@ -167,13 +155,32 @@ void drawLeafPartA()
 
 void drawLeafPartB()
 {
-    if (drawLeaf((leafToDraw->movementB), leafToDraw->direction == DOWN, LEFT))
+    bool doneDrawing = drawLeaf((leafToDraw->movementB), ((leafToDraw->direction) == DOWN), LEFT);
+    //Serial.println(String("doneDrawing move B: ") + (doneDrawing ? "TRUE" : "FALSE"));
+
+    if (doneDrawing)
     {
         // Done leaf part B
+
+        Serial.println("Servo loc: " + String(myServo.read()));
 
         // updating the drawn leaf value
         leafToDraw->direction == UP ? upDrawnLeafs++ : downDrawnLeafs++;
 
+        // fixme - remove when opposite direction movements will decrement encoder location value.
+        encoder.write(leafToDraw->creationLocation);
+
+        delay(500);
+
         state = MOVING_TO_NEXT_LEAF_CREATION_SPOT;
     }
+}
+
+void finishPaint()
+{
+    numberOfDrawnBranches = (numberOfDrawnBranches + 1) % 4;
+
+    pausePaint();
+
+    finishPain();
 }
