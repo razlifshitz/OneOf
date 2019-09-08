@@ -4,7 +4,7 @@ public:
     ServoMovement();
     //ServoMovement(ServoMovement *movement);
     void initFirstMoveData(String dir /*,int dest, int speed*/);
-    void initSecondMoveData();
+    void initSecondMoveData(String dir);
     int destination;
     int speed;
 };
@@ -38,9 +38,10 @@ void ServoMovement::initFirstMoveData(String dir /*, int dest, int speed*/)
     // speed = speed;
 };
 
-void ServoMovement::initSecondMoveData()
+void ServoMovement::initSecondMoveData(String dir)
 {
     destination = MAIN_BRANCH_LOCATION;
+
     speed = (random() % (MAX_SERVO_SEEED - MIN_SERVO_SEEED + 1) + MIN_SERVO_SEEED);
 
     Serial.println(String("ServoMovement: destination: ") + (destination));
@@ -82,7 +83,7 @@ void Leaf::initData(String dir /*, ServoMovement *a*/)
 
     direction = dir;
     movementA.initFirstMoveData(dir);
-    movementB.initSecondMoveData();
+    movementB.initSecondMoveData(dir);
     // movementA = a;
     // movementB = b;
 };

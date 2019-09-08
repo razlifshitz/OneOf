@@ -14,6 +14,9 @@ void beforeDrawingMainBranch()
         dataCalculated = true;
         // length of waves to skip
         encoderDestination = (numberOfDrawnBranches == 0) ? (getEncdoerLocation() + EIGHTH_CLICKS_PER_ROUND) : (getEncdoerLocation() + QUARTER_CLICKS_PER_ROUND);
+
+        // Serial.println(String("encoderLocation: ") + (encoderLoc));
+        // Serial.println(String("encoderDestination: ") + (encoderDestination));
     }
 
     // move servo to main branch location
@@ -44,6 +47,9 @@ void drawMainBranch()
 
         // main branch length
         encoderDestination = getEncdoerLocation() + EIGHTH_CLICKS_PER_ROUND;
+
+        // Serial.println(String("encoderLocation: ") + (encoderLoc));
+        // Serial.println(String("encoderDestination: ") + (encoderDestination));
     }
 
     // painting the main branch by moving the encoder.
@@ -59,14 +65,14 @@ void calculateLeafsSettings()
 {
     // leafs count
     upLeafsCount = CalcRand(MIN_LEAFS, MAX_LEAFS);
-    downLeafsCount = CalcRand(MIN_LEAFS, MAX_LEAFS);
+    downLeafsCount = 0; //CalcRand(MIN_LEAFS, MAX_LEAFS);
 
     Serial.println(String("upLeafsCount:") + upLeafsCount);
     Serial.println(String("downLeafsCount: ") + downLeafsCount);
 
     // generatings leafs data
     generateLeafs(upLeafs, upLeafsCount, UP);
-    generateLeafs(downLeafs, downLeafsCount, DOWN);
+    //generateLeafs(downLeafs, downLeafsCount, DOWN);
 
     state = MOVING_TO_NEXT_LEAF_CREATION_SPOT;
 }
@@ -148,6 +154,9 @@ void drawLeafPartA()
     {
         Serial.println("Servo loc: " + String(myServo.read()));
 
+        // fixme - remove when opposite direction movements will decrement encoder location value.
+        encoder.write(leafToDraw->creationLocation - (abs(getEncdoerLocation() - leafToDraw->creationLocation)));
+
         // Done leaf part A
         state = DRAWING_LEAF_PART_B;
     }
@@ -166,9 +175,6 @@ void drawLeafPartB()
 
         // updating the drawn leaf value
         leafToDraw->direction == UP ? upDrawnLeafs++ : downDrawnLeafs++;
-
-        // fixme - remove when opposite direction movements will decrement encoder location value.
-        encoder.write(leafToDraw->creationLocation);
 
         delay(500);
 
