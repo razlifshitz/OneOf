@@ -23,50 +23,51 @@
 
 void setup()
 {
-  Serial.begin(115200);
-  randomSeed(analogRead(0));
-  pinMode(PUSHBUTTON_PIN, INPUT_PULLUP);
-  pinMode(MOTOR_DIR_PIN, INPUT_PULLUP);
-  active = false;
-  state = BEFORE_START;
-  lastUpdate = millis();
-  buttonPressed = false;
-  numberOfDrawnBranches = 0;
+	Serial.begin(115200);
+	randomSeed(analogRead(0));
+	pinMode(PUSHBUTTON_PIN, INPUT_PULLUP);
+	pinMode(MOTOR_DIR_PIN, INPUT_PULLUP);
+	active = false;
+	state = BEFORE_START;
+	lastUpdate = millis();
+	buttonPressed = false;
+	numberOfDrawnBranches = 0;
 
-  //myThread.onRun(onButtonPressed);
+	//myThread.onRun(onButtonPressed);
 
-  // Now, put bunch of Threads inside it, FEED it!
-  //controller.add(&myThread); // Notice the '&' sign before the thread, IF it's not instantied as a pointer.
+	// Now, put bunch of Threads inside it, FEED it!
+	//controller.add(&myThread); // Notice the '&' sign before the thread, IF it's not instantied as a pointer.
 }
 
 void loop()
 {
-  int buttonState = checkButton();
-  if (buttonState == 1 || buttonState == 3)
-  {
-    // Button has been clicked
-    Serial.println(String("buttonState set to: ") + (buttonState));
+	int buttonState = checkButton();
+	if (buttonState == 1 || buttonState == 3)
+	{
+		// Button has been clicked
+		Serial.println(String("buttonState set to: ") + (buttonState));
 
-    if (buttonState == 3)
-    {
-      finishPain();
-    }
+		if (buttonState == 3)
+		{
+			finishPain();
+			numberOfDrawnBranches = 0;
+		}
 
-    active = !active;
-  }
+		active = !active;
+	}
 
-  if (buttonPressed)
-  {
-    active = true;
-  }
+	if (buttonPressed)
+	{
+		active = true;
+	}
 
-  if (active /*|| buttonPressed*/)
-  {
-    buttonPressed = false;
-    doPaint();
-  }
-  else
-  {
-    pausePaint();
-  }
+	if (active /*|| buttonPressed*/)
+	{
+		buttonPressed = false;
+		doPaint();
+	}
+	else
+	{
+		pausePaint();
+	}
 }

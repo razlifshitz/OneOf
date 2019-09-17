@@ -91,7 +91,7 @@ void moveToNextLeafCreationSpot()
 
         // moving back to to head of the main branch,
         // painting leafs on the way.
-        encoderDestination = getEncdoerLocation() + EIGHTH_CLICKS_PER_ROUND;
+        encoderDestination = getEncdoerLocation() - EIGHTH_CLICKS_PER_ROUND;
 
         Serial.println(String("encoderLocation: ") + (encoderLoc));
         Serial.println(String("encoderDestination: ") + (encoderDestination));
@@ -106,7 +106,7 @@ void moveToNextLeafCreationSpot()
         onFinishAction();
     }
     // encoder reached location to draw leaf (UP)
-    else if (hasLeafsToDraw(UP) && encoderLoc >= upLeafs[upDrawnLeafs].creationLocation)
+    else if (hasLeafsToDraw(UP) && encoderLoc <= upLeafs[upDrawnLeafs].creationLocation)
     {
         // Serial.println("--------");
         // Serial.println("hasLeafsToDraw");
@@ -130,7 +130,7 @@ void moveToNextLeafCreationSpot()
         state = DRAWING_LEAF_PART_A;
     }
     // encoder reached location to draw leaf (DOWN)
-    else if (hasLeafsToDraw(DOWN) && encoderLoc >= downLeafs[downDrawnLeafs].creationLocation)
+    else if (hasLeafsToDraw(DOWN) && encoderLoc <= downLeafs[downDrawnLeafs].creationLocation)
     {
         Serial.println("Reached start of DOWN leaf number " + String(downDrawnLeafs));
         Serial.println("Servo loc: " + String(myServo.read()));
@@ -153,9 +153,6 @@ void drawLeafPartA()
     if (doneDrawing)
     {
         Serial.println("Servo loc: " + String(myServo.read()));
-
-        // fixme - remove when opposite direction movements will decrement encoder location value.
-        encoder.write(leafToDraw->creationLocation - (abs(getEncdoerLocation() - leafToDraw->creationLocation)));
 
         // Done leaf part A
         state = DRAWING_LEAF_PART_B;

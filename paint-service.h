@@ -8,8 +8,8 @@ void calcLeafCreationLocations(Leaf leafs[], int leafsCount)
     long encoderLoc = getEncdoerLocation();
 
     long zone = EIGHTH_CLICKS_PER_ROUND / leafsCount;
-    long minZone = encoderLoc;
-    long maxZone = encoderLoc + zone;
+    long minZone = encoderLoc - zone;
+    long maxZone = encoderLoc;
 
     for (int i = 0; i < leafsCount; i++)
     {
@@ -17,12 +17,12 @@ void calcLeafCreationLocations(Leaf leafs[], int leafsCount)
         // edge leaf (start)
         if (i == 0)
         {
-            loc = CalcRand(minZone + EDGE_LEAF_NO_MANS_LAND, maxZone - NO_MANS_LAND);
+            loc = CalcRand(minZone + NO_MANS_LAND, maxZone - EDGE_LEAF_NO_MANS_LAND);
         }
         // edge leaf (end)
         else if (i == leafsCount)
         {
-            loc = CalcRand(minZone + NO_MANS_LAND, maxZone - EDGE_LEAF_NO_MANS_LAND);
+            loc = CalcRand(minZone + EDGE_LEAF_NO_MANS_LAND, maxZone - NO_MANS_LAND);
         }
         // regular leaf
         else
@@ -31,8 +31,8 @@ void calcLeafCreationLocations(Leaf leafs[], int leafsCount)
         }
 
         leafs[i].creationLocation = loc;
-        minZone += zone;
-        maxZone += zone;
+        minZone -= zone;
+        maxZone -= zone;
 
         Serial.println(String("i: ") + i);
         Serial.println(String("creationLocation: ") + (leafs[i].creationLocation));
