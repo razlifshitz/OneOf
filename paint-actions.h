@@ -65,14 +65,14 @@ void calculateLeafsSettings()
 {
     // leafs count
     upLeafsCount = CalcRand(MIN_LEAFS, MAX_LEAFS);
-    downLeafsCount = 0; //CalcRand(MIN_LEAFS, MAX_LEAFS);
+    downLeafsCount = CalcRand(MIN_LEAFS, MAX_LEAFS);
 
     Serial.println(String("upLeafsCount:") + upLeafsCount);
     Serial.println(String("downLeafsCount: ") + downLeafsCount);
 
     // generatings leafs data
     generateLeafs(upLeafs, upLeafsCount, UP);
-    //generateLeafs(downLeafs, downLeafsCount, DOWN);
+    generateLeafs(downLeafs, downLeafsCount, DOWN);
 
     state = MOVING_TO_NEXT_LEAF_CREATION_SPOT;
 }
