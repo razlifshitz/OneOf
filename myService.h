@@ -18,26 +18,26 @@ class MinMaxCategory
 {
 public:
 	MinMaxCategory();
-	MinMaxCategory(int minSpeed, int maxSpeed);
-	int minSpeed; // min speed range
-	int maxSpeed; // max speed range
+	MinMaxCategory(int minValue, int maxValue);
+	int min;
+	int max;
 };
 
 MinMaxCategory::MinMaxCategory() {}
 
-MinMaxCategory::MinMaxCategory(int minS, int maxS)
+MinMaxCategory::MinMaxCategory(int minValue, int maxValue)
 {
-	minSpeed = minS;
-	maxSpeed = maxS;
+	min = minValue;
+	max = maxValue;
 };
 
-int calcNextSpeed(MinMaxCategory *waveSpeeds, int arrLength)
+int getNextCategoryValue(MinMaxCategory *categories, int arrLength)
 {
-	int categoryNumber = CalcRand(0, arrLength);
-	// Serial.println(String("waveSpeeds[categoryNumber].minSpeed: ") + (waveSpeeds[categoryNumber].minSpeed));
-	// Serial.println(String("waveSpeeds[categoryNumber].maxSpeed: ") + (waveSpeeds[categoryNumber].maxSpeed));
+	int categoryNumber = CalcRand(0, arrLength - 1);
+	Serial.println(String("categories[categoryNumber].min: ") + (categories[categoryNumber].min));
+	Serial.println(String("categories[categoryNumber].max: ") + (categories[categoryNumber].max));
 
-	return CalcRand(waveSpeeds[categoryNumber].minSpeed, waveSpeeds[categoryNumber].maxSpeed);
+	return CalcRand(categories[categoryNumber].min, categories[categoryNumber].max);
 }
 
 int CalcNextRandVal(int firstParam, int secontParam, int limit, String paramName)

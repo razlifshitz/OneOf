@@ -18,27 +18,34 @@ bool isCupMod = false;
 /*
  * Servo Movement bounderies 
 */
-// Bottom range
-int minFrom = 1;
-int maxFrom = 15;
-// Upper range
-int minTo = 40;
-int maxTo = 70;
+// // Bottom range
+// int minFrom = 40;
+// int maxFrom = 50;
+// // Upper range
+// int minTo = 60;
+// int maxTo = 80;
+
+int minDest = 50;
+int maxDest = 115;
+
+const int numOfDestinaitonCategories = 5;
+MinMaxCategory destinationCategories[numOfDestinaitonCategories] = {
+	MinMaxCategory(1, 5),
+	MinMaxCategory(6, 15),
+	MinMaxCategory(16, 30),
+	MinMaxCategory(31, 45),
+	MinMaxCategory(46, 65)};
 
 /*
  * SPEED
  */
 const int numOfSpeedCategories = 5;
 MinMaxCategory waveSpeeds[numOfSpeedCategories] = {
-	MinMaxCategory(90, 130),
-	MinMaxCategory(131, 150),
-	MinMaxCategory(151, 170),
-	MinMaxCategory(171, 190),
-	MinMaxCategory(191, 220)};
-
-// Movement properties calculations
-int posFrom = 1;
-int posTo = 50;
+	MinMaxCategory(20, 40),
+	MinMaxCategory(41, 70),
+	MinMaxCategory(71, 110),
+	MinMaxCategory(111, 150),
+	MinMaxCategory(151, 200)};
 
 /* 
  * DELAY DATA (The numbers are in Miliseconds)
@@ -140,11 +147,23 @@ bool isPerformingDelay()
 void performServoPattern(int toMoveUp)
 {
 	// Movement properties calculations
-	int posFrom = CalcRand(minFrom, maxFrom);
-	int posTo = CalcRand(minTo, maxTo);
-	int speed = calcNextSpeed(waveSpeeds, numOfSpeedCategories);
+	// int posFrom = CalcRand(minFrom, maxFrom);
+	// int posTo = CalcRand(minTo, maxTo);
+	Serial.println("Selected destination category:");
+	int difference = getNextCategoryValue(destinationCategories, numOfDestinaitonCategories);
+	Serial.println("Selected speed category:");
+	int speed = getNextCategoryValue(waveSpeeds, numOfSpeedCategories);
 
-	nextPos = toMoveUp ? posTo : posFrom;
+	//nextPos = toMoveUp ? posTo : posFrom;
+	if (toMoveUp)
+	{
+		nextPos = (lastServoLoc + difference > maxDest) ? maxDest : (lastServoLoc + difference);
+	}
+	else
+	{
+		//nextPos = (lastServoLoc - difference < minDest) ? minDest : (lastServoLoc - difference);
+		nextPos = minDest;
+	}
 
 	if (DEBUG_SERVO_MOVE_COUNTER)
 	{
@@ -165,7 +184,7 @@ bool servo_update()
 	}
 
 	if (millis() - lastUpdated > SERVO_UPDATE_INTERVAL &&
-		(firstIteration || (servoReachedDest && !isPerformingDelay())))
+		(firstIteration || (servoReachedDest /*&& !isPerformingDelay()*/)))
 	{
 		firstIteration = false;
 		toMoveUp = !toMoveUp;
