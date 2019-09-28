@@ -14,7 +14,7 @@
 // direction can be 0 or 1
 #define ROTATION_DIRECTION 1
 
-#define SERVO_UPDATE_INTERVAL 150
+#define SERVO_UPDATE_INTERVAL 25
 
 boolean initServoInLoc = true;
 int locationToInit = 0;
@@ -33,7 +33,7 @@ int locationToInit = 0;
 // Debugger parameters
 
 #define DEBUG_SERVO_MOVE_COUNTER 0
-#define DEBUG_SERVO_DELAY 0
+#define DEBUG_SERVO_DELAY 1
 #define DEBUG_CALC_NEXT_RAND_VAL 0
 #define DEBUG_ENCODER 0
 #define DEBUG_ENCODER_IS_SERVO_SHOULD_START_CUPMMOD 0

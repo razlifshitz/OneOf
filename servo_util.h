@@ -35,13 +35,12 @@ int posTo = 65;
  * DELAY DATA (The numbers are in Miliseconds)
 */
 
-const int numOfDelayCategories = 5;
+const int numOfDelayCategories = 4;
 MinMaxCategory delayCategories[numOfDelayCategories] = {
-	MinMaxCategory(250, 400),
-	MinMaxCategory(450, 600),
-	MinMaxCategory(601, 1000),
-	MinMaxCategory(1001, 1400),
-	MinMaxCategory(1201, 2000)};
+	MinMaxCategory(150, 200),
+	MinMaxCategory(201, 800),
+	MinMaxCategory(801, 1500),
+	MinMaxCategory(1700, 2500)};
 
 // LENGTH
 int minChangeInDelay = -1;
@@ -122,10 +121,10 @@ bool isPerformingDelay()
 		{
 			// Executing the delay
 
-			// if (DEBUG_SERVO_DELAY)
-			// {
-			// 	Serial.println((String("The servo has preformed ") + (millis() - firstTime) + String("ms/") + (servoActiveDelay) + String("ms of delay")));
-			// }
+			if (DEBUG_SERVO_DELAY)
+			{
+				Serial.println((String("The servo has preformed ") + (millis() - firstTime) + String("ms/") + (servoActiveDelay) + String("ms of delay")));
+			}
 		}
 		else
 		{
