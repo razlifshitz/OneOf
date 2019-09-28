@@ -161,8 +161,7 @@ void performServoPattern(int toMoveUp)
 	}
 	else
 	{
-		//nextPos = (lastServoLoc - difference < minDest) ? minDest : (lastServoLoc - difference);
-		nextPos = minDest;
+		nextPos = (lastServoLoc - difference < minDest) ? minDest : (lastServoLoc - difference);
 	}
 
 	if (DEBUG_SERVO_MOVE_COUNTER)
