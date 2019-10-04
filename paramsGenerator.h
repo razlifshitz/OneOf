@@ -1,7 +1,7 @@
 ////////////////////////////////////////// DELAY
 ////////////////////////// Amount
 // Maximum
-int MAX_DELAY_AMOUNT_U = 5000;
+int MAX_DELAY_AMOUNT_U = 3000;
 int MAX_DELAY_AMOUNT_L = 1500;
 // Minmum
 int MIN_DELAY_AMOUNT_U = 1000;

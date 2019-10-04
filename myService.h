@@ -33,9 +33,9 @@ MinMaxCategory::MinMaxCategory(int minS, int maxS)
 
 int calcNextSpeed(MinMaxCategory *waveSpeeds, int arrLength)
 {
-	int categoryNumber = CalcRand(0, arrLength);
-	// Serial.println(String("waveSpeeds[categoryNumber].minSpeed: ") + (waveSpeeds[categoryNumber].minSpeed));
-	// Serial.println(String("waveSpeeds[categoryNumber].maxSpeed: ") + (waveSpeeds[categoryNumber].maxSpeed));
+	int categoryNumber = CalcRand(0, arrLength - 1);
+	Serial.println(String("waveSpeeds[categoryNumber].minSpeed: ") + (waveSpeeds[categoryNumber].minSpeed));
+	Serial.println(String("waveSpeeds[categoryNumber].maxSpeed: ") + (waveSpeeds[categoryNumber].maxSpeed));
 
 	return CalcRand(waveSpeeds[categoryNumber].minSpeed, waveSpeeds[categoryNumber].maxSpeed);
 }

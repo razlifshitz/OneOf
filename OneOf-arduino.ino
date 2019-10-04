@@ -66,7 +66,6 @@ void ThreadEncoderUpdate()
 void setup()
 {
 	Serial.begin(115200);
-	randomSeed(analogRead(0));
 	pinMode(PUSHBUTTON_PIN, INPUT_PULLUP);
 	pinMode(MOTOR_DIR_PIN, INPUT_PULLUP);
 	active = false;
@@ -81,6 +80,7 @@ void setup()
 
 void initDataBeforeFirstRun()
 {
+	randomSeed(analogRead(0) ^ millis() ^ random());
 	minChangeInDelay = CalcRand(CHANGE_IN_DELAY_AMOUNT_L, CHANGE_IN_DELAY_AMOUNT_U);
 	maxDelay = CalcRand(MAX_DELAY_AMOUNT_L, MAX_DELAY_AMOUNT_U);
 	minDelay = CalcRand(MIN_DELAY_AMOUNT_L, MIN_DELAY_AMOUNT_U);
