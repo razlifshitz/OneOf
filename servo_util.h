@@ -23,7 +23,7 @@ int minFrom = 85;
 int maxFrom = 95;
 // Upper range
 int minTo = 95;
-int maxTo = 103;
+int maxTo = 105;
 
 /*
  * SPEED
@@ -36,18 +36,14 @@ MinMaxCategory speedCategories[numOfSpeedCategories] = {
 	MinMaxCategory(10, 20),
 	MinMaxCategory(5, 40)};
 
-// Movement properties calculations
-int posFrom = 1;
-int posTo = 50;
-
 /* 
  * DELAY DATA (The numbers are in Miliseconds)
 */
 
-const int numOfDelayCategories = 8;
+const int numOfDelayCategories = 6;
 MinMaxCategory delayCategories[numOfDelayCategories] = {
-	MinMaxCategory(250, 400),
-	MinMaxCategory(401, 600),
+	// MinMaxCategory(250, 400),
+	// MinMaxCategory(401, 600),
 	MinMaxCategory(450, 600),
 	MinMaxCategory(601, 800),
 	MinMaxCategory(601, 1000),
@@ -151,6 +147,10 @@ bool isPerformingDelay()
 void performServoPattern(int toMoveUp)
 {
 	int speed = getNextValueFromCategories(speedCategories, numOfSpeedCategories);
+
+	// Movement properties calculations
+	int posFrom = CalcRand(minFrom, maxFrom);
+	int posTo = CalcRand(minTo, maxTo);
 
 	nextPos = toMoveUp ? posTo : posFrom;
 

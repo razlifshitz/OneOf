@@ -33,7 +33,7 @@ int locationToInit = 0;
 // Debugger parameters
 
 #define DEBUG_SERVO_MOVE_COUNTER 1
-#define DEBUG_SERVO_DELAY 0
+#define DEBUG_SERVO_DELAY 1
 #define DEBUG_CALC_NEXT_RAND_VAL 0
 #define DEBUG_ENCODER 0
 #define DEBUG_ENCODER_IS_SERVO_SHOULD_START_CUPMMOD 0
