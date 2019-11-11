@@ -44,10 +44,10 @@ long lastUpdate;
 // -------------------------------------------- Logic Variables
 
 // DESTINATION
-int minFrom = 70; // Bottom range - minimum
-int maxFrom = 75; // Bottom range - maximum
-int minTo = 105;  // Upper range - minimum
-int maxTo = 135;  // Upper range - maximum
+int minFrom = 50; // Bottom range - minimum
+int maxFrom = 55; // Bottom range - maximum
+int minTo = 75;  // Upper range - minimum
+int maxTo = 65;  // Upper range - maximum
 
 // Delay length
 int randDelay = -1;
@@ -176,11 +176,10 @@ bool servo_update()
 			isServoReachedDestination = hasServoReachedDestination(lastServoLoc, currentServoDestination, toMoveUp);
 
 			// Stoppin the servo in the wanted locations
-			if (!toMoveUp && hasServoReachedDestination(servoDistancePast, servoDistance75, toMoveUp))
-			{
+            if (!toMoveUp && servoDistancePast > servoDistance75)			{
 				currentEncoderSpeed = setMotorSpeed(&encoder, 0);
 			}
-			else if (toMoveUp && hasServoReachedDestination(servoDistancePast, servoDistance25, toMoveUp))
+			else if (toMoveUp && servoDistancePast > servoDistance25)
 			{
 				currentEncoderSpeed = setMotorSpeed(&encoder, ROTATION_SPEED);
 			}
@@ -206,7 +205,7 @@ bool servo_update()
 			// calc next servo move
 			toMoveUp = !toMoveUp;
 			waveSpeed = getNextServoSpeed();
-			previousServoDestination = currentServoDestination;
+			previousServoDestination = lastServoLoc;
 			currentServoDestination = getNextServoDestination(toMoveUp, previousServoDestination);
 
 			// write to monitor
@@ -225,7 +224,7 @@ bool servo_update()
 	{
 		waveSpeed = CalcRand(30, 70);
 		currentServoDestination = getNextServoDestination(false, currentServoDestination);
-		isServoReachedDestination = hasServoReachedDestination(lastServoLoc, currentServoDestination, false);
+		isServoReachedDestination = hasServoReachedDestination(lastServoLoc, currentServoDestination, true);
 
 		if (!isServoReachedDestination)
 		{
@@ -246,6 +245,7 @@ bool servo_update()
 		{
 			// start next quarter
 			isEncoderReachedDestination = false;
+			previousServoDestination = lastServoLoc;
 			calcNextLengthOfServoAction();
 		}
 	}
