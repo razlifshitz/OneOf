@@ -32,9 +32,9 @@ const int numOfSpeedCategories = 5;
 MinMaxCategory speedCategories[numOfSpeedCategories] = {
 	MinMaxCategory(1, 5),
 	MinMaxCategory(5, 10),
-	MinMaxCategory(5, 10),
-	MinMaxCategory(10, 20),
-	MinMaxCategory(5, 40)};
+	MinMaxCategory(5, 20),
+	MinMaxCategory(20, 40),
+	MinMaxCategory(10, 40)};
 
 /* 
  * DELAY DATA (The numbers are in Miliseconds)
@@ -44,7 +44,7 @@ const int numOfDelayCategories = 6;
 MinMaxCategory delayCategories[numOfDelayCategories] = {
 	// MinMaxCategory(250, 400),
 	// MinMaxCategory(401, 600),
-	MinMaxCategory(450, 600),
+	MinMaxCategory(400, 600),
 	MinMaxCategory(601, 800),
 	MinMaxCategory(601, 1000),
 	MinMaxCategory(801, 1000),
