@@ -44,10 +44,10 @@ long lastUpdate;
 // -------------------------------------------- Logic Variables
 
 // DESTINATION
-int minFrom = 50; // Bottom range - minimum
-int maxFrom = 55; // Bottom range - maximum
-int minTo = 75;  // Upper range - minimum
-int maxTo = 65;  // Upper range - maximum
+int minFrom = 30; // Bottom range - minimum
+int maxFrom = 36; // Bottom range - maximum
+int minTo = 49;  // Upper range - minimum
+int maxTo = 58;  // Upper range - maximum
 
 // Delay length
 int randDelay = -1;
@@ -105,8 +105,8 @@ int getNextServoSpeed()
 	// FIXME: move to properties section when possible
 	int numOfSpeedCategories = 4;
 	WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
-	waveSpeeds[1].initData(1, 30, 50);   // category 1
-	waveSpeeds[2].initData(2, 51, 80);   // category 2
+	waveSpeeds[1].initData(1, 10, 30);   // category 1
+	waveSpeeds[2].initData(2, 50, 80);   // category 2
 	waveSpeeds[3].initData(3, 81, 100);  // category 3
 	waveSpeeds[4].initData(4, 101, 120); // category 4
 
@@ -223,8 +223,8 @@ bool servo_update()
 	else if (!beforeStart && encoderLocation <= currentQuarter * QUARTER_CLICKS_PER_ROUND)
 	{
 		waveSpeed = CalcRand(30, 70);
-		currentServoDestination = getNextServoDestination(false, currentServoDestination);
-		isServoReachedDestination = hasServoReachedDestination(lastServoLoc, currentServoDestination, true);
+		currentServoDestination = getNextServoDestination(true, currentServoDestination);
+		isServoReachedDestination =  hasServoReachedDestination(lastServoLoc, currentServoDestination, true);
 
 		if (!isServoReachedDestination)
 		{
