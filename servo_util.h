@@ -28,8 +28,8 @@ MinMaxCategory speedCategories[numOfSpeedCategories] = {
 	MinMaxCategory(191, 220)};
 
 // Movement properties calculations
-int posFrom = 15;
-int posTo = 45;
+int posFrom = 100;
+int posTo = 130;
 
 /* 
  * DELAY DATA (The numbers are in Miliseconds)
