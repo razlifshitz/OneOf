@@ -40,18 +40,6 @@ void doPaint()
   {
     drawSecondWave();
   }
-  // else if (state == MOVING_TO_NEXT_LEAF_CREATION_SPOT)
-  // {
-  //   moveToNextLeafCreationSpot();
-  // }
-  // else if (state == DRAWING_LEAF_PART_A)
-  // {
-  //   drawLeafPartA();
-  // }
-  // else if (state == DRAWING_LEAF_PART_B)
-  // {
-  //   drawLeafPartB();
-  // }
   else if (state == FINISH)
   {
     finishPaint();
