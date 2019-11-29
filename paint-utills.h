@@ -28,26 +28,30 @@ void doPaint()
   {
     beforeDrawingMainBranch();
   }
-  else if (state == DRAWING_MAIN_BRANCH)
-  {
-    drawMainBranch();
-  }
   else if (state == CALCULATE_LEAFS_SETTINGS)
   {
-    calculateLeafsSettings();
+    calculateMovementsSettings();
   }
-  else if (state == MOVING_TO_NEXT_LEAF_CREATION_SPOT)
+  else if (state == DRAWING_FIRST_WAVE)
   {
-    moveToNextLeafCreationSpot();
+    drawFirstWave();
   }
-  else if (state == DRAWING_LEAF_PART_A)
+  else if (state == DRAWING_SECOND_WAVE)
   {
-    drawLeafPartA();
+    drawSecondWave();
   }
-  else if (state == DRAWING_LEAF_PART_B)
-  {
-    drawLeafPartB();
-  }
+  // else if (state == MOVING_TO_NEXT_LEAF_CREATION_SPOT)
+  // {
+  //   moveToNextLeafCreationSpot();
+  // }
+  // else if (state == DRAWING_LEAF_PART_A)
+  // {
+  //   drawLeafPartA();
+  // }
+  // else if (state == DRAWING_LEAF_PART_B)
+  // {
+  //   drawLeafPartB();
+  // }
   else if (state == FINISH)
   {
     finishPaint();

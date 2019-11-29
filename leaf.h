@@ -3,10 +3,12 @@ class ServoMovement
 public:
     ServoMovement();
     //ServoMovement(ServoMovement *movement);
-    void initFirstMoveData(String dir /*,int dest, int speed*/);
+    void init(int minDest, int maxDest, int minSpeed, int maxSpeed, bool toMoveUp);
+    void initFirstMoveData(String dir);
     void initSecondMoveData(String dir);
     int destination;
     int speed;
+    bool moveUp;
 };
 
 ServoMovement::ServoMovement(){
@@ -17,21 +19,27 @@ ServoMovement::ServoMovement(){
     // Serial.println(String("ServoMovement: speed: ") + (speed));
 };
 
-void ServoMovement::initFirstMoveData(String dir /*, int dest, int speed*/)
+void ServoMovement::init(int minDest, int maxDest, int minSpeed, int maxSpeed, bool toMoveUp)
 {
-    if (dir == UP)
-    {
-        destination = (random() % (MAX_SERVO_DESTINATION_UP - MIN_SERVO_DESTINATION_UP + 1) + MIN_SERVO_DESTINATION_UP);
-    }
-    else
-    {
-        destination = (random() % (MAX_SERVO_DESTINATION_DOWN - MIN_SERVO_DESTINATION_DOWN + 1) + MIN_SERVO_DESTINATION_DOWN);
-    }
-
-    speed = (random() % (MAX_SERVO_SEEED - MIN_SERVO_SEEED + 1) + MIN_SERVO_SEEED);
+    destination = (random() % (maxDest - minDest + 1) + minDest);
+    speed = (random() % (maxSpeed - minSpeed + 1) + minSpeed);
+    moveUp = toMoveUp;
 
     Serial.println(String("ServoMovement: destination: ") + (destination));
     Serial.println(String("ServoMovement: speed: ") + (speed));
+    Serial.println(String("ServoMovement: moveUp: ") + (moveUp));
+
+    // direction = dir;
+    // destination = dest;
+    // speed = speed;
+};
+
+void ServoMovement::initFirstMoveData(String dir){
+    // destination = (random() % (maxDest - minDest + 1) + minDest);
+    // speed = (random() % (maxSpeed - minSpeed + 1) + minSpeed);
+
+    // Serial.println(String("ServoMovement: destination: ") + (destination));
+    // Serial.println(String("ServoMovement: speed: ") + (speed));
 
     // direction = dir;
     // destination = dest;
