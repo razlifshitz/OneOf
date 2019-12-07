@@ -115,7 +115,7 @@ int getNextServoSpeed()
 
 void calcNextLengthOfServoAction()
 {
-  currentQurterActiveServo = encoderLocation + CalcRand(QUARTER_CLICKS_PER_ROUND_25, QUARTER_CLICKS_PER_ROUND_75);
+  currentQurterActiveServo = encoderLocation + CalcRand(QUARTER_CLICKS_PER_ROUND_25, QUARTER_CLICKS_PER_ROUND_50);
 }
 
 void printMovement(bool delayPending)
