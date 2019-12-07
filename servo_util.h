@@ -39,6 +39,8 @@ int movesCounter = -1; // Number of moves in the current wave
 bool toMoveUp = true;
 long lastServoLoc = myservo.read();
 int servoStartLocation; //todo: implementation is needed
+
+// Range of servo while performing delay
 int minServoDelayDest = 51;
 int maxServoDelayDest = 60;
 // -------------------------------------------- Logic Variables
