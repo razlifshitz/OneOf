@@ -115,7 +115,10 @@ int getNextServoSpeed()
 
 void calcNextLengthOfServoAction()
 {
-  currentQurterActiveServo = encoderLocation + CalcRand(QUARTER_CLICKS_PER_ROUND_25, QUARTER_CLICKS_PER_ROUND_50);
+  // activate code when want random length of waves
+  // currentQurterActiveServo = encoderLocation + CalcRand(EIGHTH_CLICKS_PER_ROUND_75, EIGHTH_CLICKS_PER_ROUND);
+
+  currentQurterActiveServo = encoderLocation + EIGHTH_CLICKS_PER_ROUND;
 }
 
 void printMovement(bool delayPending)
