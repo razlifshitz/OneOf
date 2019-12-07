@@ -12,12 +12,12 @@ void doPaint()
   }
 
   // not continuing unless update update interval passed
-  if (millis() - lastUpdate < SERVO_UPDATE_INTERVAL)
-  {
-    //Serial.println(String("millis() ") + (millis()) + String(" lastUpdate ") + (lastUpdate) + String(" = ") + (millis() - lastUpdate));
+  // if (millis() - lastUpdate < SERVO_UPDATE_INTERVAL)
+  // {
+  //   //Serial.println(String("millis() ") + (millis()) + String(" lastUpdate ") + (lastUpdate) + String(" = ") + (millis() - lastUpdate));
 
-    return true;
-  }
+  //   return true;
+  // }
 
   // entrance point. todo change to switch map<string, function> if possible
   if (state == BEFORE_START)

@@ -13,10 +13,10 @@ void beforeDrawingMainBranch()
     {
         dataCalculated = true;
         // length of waves to skip
-        encoderDestination = (numberOfDrawnBranches == 0) ? (getEncdoerLocation() + EIGHTH_CLICKS_PER_ROUND) : (getEncdoerLocation() + QUARTER_CLICKS_PER_ROUND);
+        encoderDestination = (numberOfDrawnBranches == 0) ? (getEncdoerLocation() + EIGHTH_CLICKS_PER_ROUND + NOT_PAINTING_AREA) : (getEncdoerLocation() + QUARTER_CLICKS_PER_ROUND);
 
-        // Serial.println(String("encoderLocation: ") + (encoderLoc));
-        // Serial.println(String("encoderDestination: ") + (encoderDestination));
+        Serial.println(String("b----------------------encoderLocation: ") + (getEncdoerLocation()));
+        Serial.println(String("b----------------------encoderDestination: ") + (encoderDestination));
     }
 
     // move servo to main branch location
@@ -46,10 +46,10 @@ void drawMainBranch()
         dataCalculated = true;
 
         // main branch length
-        encoderDestination = getEncdoerLocation() + EIGHTH_CLICKS_PER_ROUND;
+        encoderDestination = getEncdoerLocation() + EIGHTH_CLICKS_PER_ROUND - (NOT_PAINTING_AREA * 2);
 
-        // Serial.println(String("encoderLocation: ") + (encoderLoc));
-        // Serial.println(String("encoderDestination: ") + (encoderDestination));
+        Serial.println(String("----------------------encoderLocation: ") + (getEncdoerLocation()));
+        Serial.println(String("----------------------encoderDestination: ") + (encoderDestination));
     }
 
     // painting the main branch by moving the encoder.
@@ -91,7 +91,7 @@ void moveToNextLeafCreationSpot()
 
         // moving back to to head of the main branch,
         // painting leafs on the way.
-        encoderDestination = getEncdoerLocation() - EIGHTH_CLICKS_PER_ROUND;
+        encoderDestination = getEncdoerLocation() - EIGHTH_CLICKS_PER_ROUND + (NOT_PAINTING_AREA * 2);
 
         Serial.println(String("encoderLocation: ") + (encoderLoc));
         Serial.println(String("encoderDestination: ") + (encoderDestination));
@@ -185,5 +185,14 @@ void finishPaint()
 
     pausePaint();
 
-    finishPain();
+    // finishing paint after drawing 4 branches
+    if (numberOfDrawnBranches == 0)
+    {
+        finishPain();
+    }
+    // changing state to prepare next branch
+    else
+    {
+        state = BEFORE_DRAWING_MAIN_BRANCH;
+    }
 }
