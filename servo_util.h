@@ -19,10 +19,10 @@ bool isCupMod = false;
  * Servo Movement bounderies 
 */
 // Bottom range
-int minFrom = 85;
-int maxFrom = 95;
+int minFrom = 92;
+int maxFrom = 96;
 // Upper range
-int minTo = 95;
+int minTo = 96;
 int maxTo = 105;
 
 /*
@@ -30,11 +30,11 @@ int maxTo = 105;
  */
 const int numOfSpeedCategories = 5;
 MinMaxCategory speedCategories[numOfSpeedCategories] = {
-	MinMaxCategory(1, 5),
-	MinMaxCategory(5, 10),
-	MinMaxCategory(5, 20),
-	MinMaxCategory(20, 40),
-	MinMaxCategory(10, 40)};
+    MinMaxCategory(1, 5),
+    MinMaxCategory(5, 10),
+    MinMaxCategory(5, 20),
+    MinMaxCategory(20, 40),
+    MinMaxCategory(10, 40)};
 
 /* 
  * DELAY DATA (The numbers are in Miliseconds)
@@ -42,14 +42,14 @@ MinMaxCategory speedCategories[numOfSpeedCategories] = {
 
 const int numOfDelayCategories = 6;
 MinMaxCategory delayCategories[numOfDelayCategories] = {
-	// MinMaxCategory(250, 400),
-	// MinMaxCategory(401, 600),
-	MinMaxCategory(400, 600),
-	MinMaxCategory(601, 800),
-	MinMaxCategory(601, 1000),
-	MinMaxCategory(801, 1000),
-	MinMaxCategory(1001, 1200),
-	MinMaxCategory(1201, 1700)};
+    // MinMaxCategory(250, 400),
+    // MinMaxCategory(401, 600),
+    MinMaxCategory(400, 600),
+    MinMaxCategory(601, 800),
+    MinMaxCategory(601, 1000),
+    MinMaxCategory(801, 1000),
+    MinMaxCategory(1001, 1200),
+    MinMaxCategory(1201, 1700)};
 
 // LENGTH
 int minChangeInDelay = -1;
@@ -90,14 +90,14 @@ int currentCountOfMoves = -1;
 
 void servo_start()
 {
-	Serial.println("servo_start()");
-	myservo.attach(SERVO_PIN); // attaches the servo on pin 9 to the servo object
+  Serial.println("servo_start()");
+  myservo.attach(SERVO_PIN); // attaches the servo on pin 9 to the servo object
 }
 
 void servo_stop()
 {
-	Serial.println("servo_stop()");
-	myservo.detach();
+  Serial.println("servo_stop()");
+  myservo.detach();
 }
 
 // todo check if we can remove the 'while'
@@ -117,93 +117,93 @@ void servo_stop()
 //TODO CHANGE LOGIC
 bool isPerformingDelay()
 {
-	if (servoActiveDelay != -1)
-	{
-		if (!inDelayProcess)
-		{
-			firstTime = millis();
-			inDelayProcess = true;
-		}
-		if (millis() - firstTime < servoActiveDelay)
-		{
-			// Executing the delay
+  if (servoActiveDelay != -1)
+  {
+    if (!inDelayProcess)
+    {
+      firstTime = millis();
+      inDelayProcess = true;
+    }
+    if (millis() - firstTime < servoActiveDelay)
+    {
+      // Executing the delay
 
-			// if (DEBUG_SERVO_DELAY)
-			// {
-			// 	Serial.println((String("The servo has preformed ") + (millis() - firstTime) + String("ms/") + (servoActiveDelay) + String("ms of delay")));
-			// }
-		}
-		else
-		{
-			// cancels the active delay
-			servoActiveDelay = -1;
-			inDelayProcess = false;
-		}
-	}
+      // if (DEBUG_SERVO_DELAY)
+      // {
+      // 	Serial.println((String("The servo has preformed ") + (millis() - firstTime) + String("ms/") + (servoActiveDelay) + String("ms of delay")));
+      // }
+    }
+    else
+    {
+      // cancels the active delay
+      servoActiveDelay = -1;
+      inDelayProcess = false;
+    }
+  }
 
-	return inDelayProcess;
+  return inDelayProcess;
 }
 
 void performServoPattern(int toMoveUp)
 {
-	int speed = getNextValueFromCategories(speedCategories, numOfSpeedCategories);
+  int speed = getNextValueFromCategories(speedCategories, numOfSpeedCategories);
 
-	// Movement properties calculations
-	int posFrom = CalcRand(minFrom, maxFrom);
-	int posTo = CalcRand(minTo, maxTo);
+  // Movement properties calculations
+  int posFrom = CalcRand(minFrom, maxFrom);
+  int posTo = CalcRand(minTo, maxTo);
 
-	nextPos = toMoveUp ? posTo : posFrom;
+  nextPos = toMoveUp ? posTo : posFrom;
 
-	if (DEBUG_SERVO_MOVE_COUNTER)
-	{
-		Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextPos + " direction: " + (toMoveUp ? "Up" : "Down") + " Speed: " + speed);
-	}
+  if (DEBUG_SERVO_MOVE_COUNTER)
+  {
+    Serial.println(String("move No. ") + plateCounter + String(" From: ") + lastServoLoc + String(" To: ") + nextPos + " direction: " + (toMoveUp ? "Up" : "Down") + " Speed: " + speed);
+  }
 
-	myservo.write(nextPos, speed, false);
+  myservo.write(nextPos, speed, false);
 }
 
 bool servo_update()
 {
-	//Serial.println("servo_update()");
-	lastServoLoc = myservo.read();
+  //Serial.println("servo_update()");
+  lastServoLoc = myservo.read();
 
-	if (!firstIteration && lastServoLoc == nextPos)
-	{
-		servoReachedDest = true;
-	}
+  if (!firstIteration && lastServoLoc == nextPos)
+  {
+    servoReachedDest = true;
+  }
 
-	if (millis() - lastUpdated > SERVO_UPDATE_INTERVAL &&
-		(firstIteration || (servoReachedDest && !isPerformingDelay())))
-	{
-		firstIteration = false;
-		toMoveUp = !toMoveUp;
-		plateCounter++;
+  if (millis() - lastUpdated > SERVO_UPDATE_INTERVAL &&
+      (firstIteration || (servoReachedDest && !isPerformingDelay())))
+  {
+    firstIteration = false;
+    toMoveUp = !toMoveUp;
+    plateCounter++;
 
-		// Performes servo movement
-		performServoPattern(toMoveUp);
+    // Performes servo movement
+    performServoPattern(toMoveUp);
 
-		servoReachedDest = false;
+    servoReachedDest = false;
 
-		// Handle the delay
-		if (!isCupMod)
-		{
-			// Delay count of moves
-			movesCounter++;
+    // Handle the delay
+    if (!isCupMod)
+    {
+      // Delay count of moves
+      movesCounter++;
 
-			// if (DEBUG_SERVO_DELAY)
-			// {
-			// 	Serial.println(String("movesCounter: ") + (movesCounter + String("Next currentCountOfMoves: ") + (currentCountOfMoves)));
-			// }
+      // if (DEBUG_SERVO_DELAY)
+      // {
+      // 	Serial.println(String("movesCounter: ") + (movesCounter + String("Next currentCountOfMoves: ") + (currentCountOfMoves)));
+      // }
 
-			if (toMoveUp && !HandleDelayOfMovement(&movesCounter, &currentCountOfMoves, &currentDelay, delayCategories, numOfDelayCategories,
-												   minNumOfCount, maxNumOfCount, minChangeInNumOfMoves, &servoActiveDelay))
-			{
-				return false;
-			}
-		}
+      if (toMoveUp && !HandleDelayOfMovement(&movesCounter, &currentCountOfMoves, &currentDelay, delayCategories, numOfDelayCategories,
+                                             minNumOfCount, maxNumOfCount, minChangeInNumOfMoves, &servoActiveDelay))
+      {
+        return false;
+      }
+    }
 
-		lastUpdated = millis();
-	}
+    lastUpdated = millis();
+  }
 
-	return true;
+  return true;
 }
