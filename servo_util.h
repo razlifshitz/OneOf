@@ -35,12 +35,17 @@ int posTo = 130;
  * DELAY DATA (The numbers are in Miliseconds)
 */
 
-const int numOfDelayCategories = 4;
+const int numOfDelayCategories = 9;
 MinMaxCategory delayCategories[numOfDelayCategories] = {
 	MinMaxCategory(150, 200),
-	MinMaxCategory(201, 800),
-	MinMaxCategory(801, 1500),
-	MinMaxCategory(1700, 2500)};
+	MinMaxCategory(400, 600),
+	MinMaxCategory(801, 1300),
+	MinMaxCategory(1800, 2650),
+	MinMaxCategory(150, 200),
+	MinMaxCategory(400, 600),
+	MinMaxCategory(801, 1300),
+	MinMaxCategory(1800, 2650),
+	MinMaxCategory(3500, 4500)};
 
 // LENGTH
 int minChangeInDelay = -1;
