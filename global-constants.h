@@ -12,15 +12,14 @@ const String SERVO_DRAW = "SERVO_DRAW";
 const String FINISH = "FINISH";
 
 // SERVO
-const int MAIN_BRANCH_LOCATION = 91;
 
 // ENCODER
 const int ENCODER_SPEED = 30;
 
 // LEAFS
-const int SERVO_SPEED = 4;
-const int SERVO_MIN_DEST = 84;
-const int SERVO_MAX_DEST = 98;
+const int SERVO_SPEED = 2;
+const int SERVO_MIN_DEST = 83;
+const int SERVO_MAX_DEST = 97;
 
 // GENERAL
 const int DEFAULT_SPEED = 60;

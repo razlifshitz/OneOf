@@ -2,8 +2,6 @@ String lastState = "";
 
 void doPaint()
 {
-  //encoderLocation = abs(encoder.read());
-
   // printind state to monitor
   if (lastState != state)
   {
@@ -18,7 +16,7 @@ void doPaint()
   }
   else if (state == BEFORE_DRAWING)
   {
-    beforeDrawingMainBranch();
+    beforeDraw();
   }
   else if (state == ENCODER_DRAW)
   {
@@ -32,6 +30,4 @@ void doPaint()
   {
     finishPaint();
   }
-
-  lastUpdate = millis();
 }

@@ -28,9 +28,7 @@ void setup()
 	pinMode(MOTOR_DIR_PIN, INPUT_PULLUP);
 	active = false;
 	state = BEFORE_START;
-	lastUpdate = millis();
 	buttonPressed = false;
-	numberOfDrawnBranches = 0;
 
 	//myThread.onRun(onButtonPressed);
 
@@ -50,23 +48,24 @@ void loop()
 		{
 			pausePaint();
 		}
+		else if (buttonState == 2)
+		{
+			state = FINISH;
+		}
 		else if (buttonState == 1)
 		{
-			if (state == ENCODER_DRAW)
+			// not changing state if paint has been paused
+			if (active && state == ENCODER_DRAW)
 			{
 				state = SERVO_DRAW;
 			}
 
-			active = !active;
+			active = true;
 		}
 	}
 
 	if (active)
 	{
 		doPaint();
-	}
-	else
-	{
-		pausePaint();
 	}
 }

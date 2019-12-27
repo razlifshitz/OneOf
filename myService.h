@@ -2,12 +2,12 @@
 // GENERAL FUNCTIONS
 //
 
-long CalcRand(long nMin, long nMax)
+long calcRand(long nMin, long nMax)
 {
   return (random() % (nMax - nMin + 1) + nMin);
 }
 
-int CalcRand(int nMin, int nMax)
+int calcRand(int nMin, int nMax)
 {
   return (random() % (nMax - nMin + 1) + nMin);
 }
@@ -84,7 +84,7 @@ bool moveEncoder(long destination, String direction)
     setEncoderDirectionAndSpeed(direction, ENCODER_SPEED);
   }
 
-  bool isRight = direction == "right";
+  bool isRight = direction == RIGHT;
   if (hasEncoderReachedDestination(destination, isRight))
   {
     reached = true;
@@ -97,35 +97,6 @@ bool moveEncoder(long destination, String direction)
 //
 // SERVO FUNCTIONS
 //
-
-// int getNextServoDestination(bool toMoveUp, int previousLocation)
-// {
-//   int newDestination = toMoveUp ? CalcRand(minTo, maxTo) : CalcRand(minFrom, maxFrom);
-
-//   // setting new values
-//   servoDistance = abs(newDestination - previousLocation);
-//   servoDistance75 = servoDistance * 0.75;
-//   servoDistance25 = servoDistance * 0.25;
-
-//   return newDestination;
-// }
-
-bool hasServoReachedDestination(int destination, bool toMoveUp)
-{
-  int lastServoLoc = myServo.read();
-
-  bool result = toMoveUp
-                    ? (lastServoLoc) >= destination
-                    : (lastServoLoc) <= destination;
-
-  // Serial.println(String("lastServoLoc: ") + (lastServoLoc) + String(" destination: ") + (destination) + String(" toMoveUp: ") + (toMoveUp ? "TRUE" : "FALSE"));
-  // Serial.println(String("hasServoReachedDestination: ") + (result));
-  // Serial.println(String("----------------------------------"));
-
-  //Serial.println(result ? "TRUE" : "FALSE");
-
-  return result;
-}
 
 //
 // GENERAL FUNCTIONS

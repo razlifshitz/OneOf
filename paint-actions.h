@@ -4,16 +4,11 @@ void initDataBeforeFirstRun()
     attachServo();
 
     state = BEFORE_DRAWING;
-    dataCalculated = false;
 }
 
-void beforeDrawingMainBranch()
+void beforeDraw()
 {
-    // move servo to main branch location
-    if (myServo.read() != MAIN_BRANCH_LOCATION)
-    {
-        myServo.write(MAIN_BRANCH_LOCATION, DEFAULT_SPEED);
-    }
+    myServo.write(calcRand(SERVO_MIN_DEST, SERVO_MAX_DEST), DEFAULT_SPEED);
 
     state = ENCODER_DRAW;
 
@@ -30,7 +25,9 @@ void encoderDraw()
 
 void servoDraw()
 {
-    myServo.write(CalcRand(SERVO_MIN_DEST, SERVO_MAX_DEST), SERVO_SPEED, true);
+    pauseEncoder();
+    delay(300);
+    myServo.write(calcRand(SERVO_MIN_DEST, SERVO_MAX_DEST), SERVO_SPEED, true);
     delay(300);
     state = ENCODER_DRAW;
 }
