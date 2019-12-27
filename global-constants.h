@@ -14,12 +14,13 @@ const String FINISH = "FINISH";
 // SERVO
 
 // ENCODER
-const int ENCODER_SPEED = 30;
+const int ENCODER_SPEED = 20;
 
 // LEAFS
-const int SERVO_SPEED = 2;
-const int SERVO_MIN_DEST = 83;
-const int SERVO_MAX_DEST = 97;
+const int SERVO_SPEED = 10;
+const int SERVO_MIN_DEST = 88;
+const int SERVO_MAX_DEST = 92;
 
 // GENERAL
 const int DEFAULT_SPEED = 60;
+const int DEFAULT_LOCATION = 90;

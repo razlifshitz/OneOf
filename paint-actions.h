@@ -8,7 +8,7 @@ void initDataBeforeFirstRun()
 
 void beforeDraw()
 {
-    myServo.write(calcRand(SERVO_MIN_DEST, SERVO_MAX_DEST), DEFAULT_SPEED);
+    myServo.write(DEFAULT_LOCATION, DEFAULT_SPEED);
 
     state = ENCODER_DRAW;
 
