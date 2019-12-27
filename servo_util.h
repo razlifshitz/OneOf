@@ -44,8 +44,8 @@ long lastUpdate;
 // -------------------------------------------- Logic Variables
 
 // DESTINATION
-int minFrom = 33; // Bottom range - minimum
-int maxFrom = 37; // Bottom range - maximum
+int minFrom = 30; // Bottom range - minimum
+int maxFrom = 34; // Bottom range - maximum
 int minTo = 47;   // Upper range - minimum
 int maxTo = 55;   // Upper range - maximum
 
