@@ -26,10 +26,19 @@ void encoderDraw()
 void servoDraw()
 {
     pauseEncoder();
-    delay(300);
-    myServo.write(calcRand(SERVO_MIN_DEST, SERVO_MAX_DEST), SERVO_SPEED, true);
-    delay(300);
-    state = ENCODER_DRAW;
+    delay(DELAY_FROM_ENCODER_TO_SERVO);
+    int servoDestination = calcNextRandVal(SERVO_MIN_DEST, SERVO_MAX_DEST, SERVO_DESTINATION_MIN_CHANGE, "servoDestination");
+
+    if (servoDestination != ERROR)
+    {
+        myServo.write(servoDestination, SERVO_SPEED, true);
+        delay(DELAY_FROM_SERVO_TO_ENCODER);
+        state = ENCODER_DRAW;
+    }
+    else
+    {
+        state = FINISH;
+    }
 }
 
 void finishPaint()

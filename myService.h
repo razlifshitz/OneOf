@@ -12,6 +12,45 @@ int calcRand(int nMin, int nMax)
   return (random() % (nMax - nMin + 1) + nMin);
 }
 
+int calcNextRandVal(int firstParam, int secontParam, int limit, String paramName)
+{
+  int attemptNumber = 0;
+  int value = calcRand(firstParam, secontParam);
+
+  if (DEBUG_CALC_NEXT_RAND_VAL)
+  {
+    Serial.println(String("next value: ") + (value) + String(" lowEnd: ") + (firstParam));
+    Serial.println(String("highEnd: ") + (secontParam) + String(" minimum Change: ") + (limit));
+  }
+
+  while (abs(firstParam - secontParam) < limit)
+  {
+    attemptNumber++;
+    if (attemptNumber < 1000)
+    {
+      value = calcRand(firstParam, secontParam);
+
+      if (DEBUG_CALC_NEXT_RAND_VAL)
+      {
+        Serial.println(String("next value: ") + (value) + String(" lowEnd: ") + (firstParam));
+        Serial.println(String("highEnd: ") + (secontParam) + String(" minimum Change: ") + (limit));
+      }
+    }
+    else
+    {
+      Serial.println(String("EndLess Loop in param: " + paramName));
+      return ERROR;
+    }
+  }
+
+  if (DEBUG_CALC_NEXT_RAND_VAL)
+  {
+    Serial.println(String("value " + paramName + " = ") + value);
+  }
+
+  return value;
+}
+
 //
 // ENCODER FUNCTIONS
 //
