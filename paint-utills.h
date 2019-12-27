@@ -11,42 +11,22 @@ void doPaint()
     lastState = state;
   }
 
-  // not continuing unless update update interval passed
-  // if (millis() - lastUpdate < SERVO_UPDATE_INTERVAL)
-  // {
-  //   //Serial.println(String("millis() ") + (millis()) + String(" lastUpdate ") + (lastUpdate) + String(" = ") + (millis() - lastUpdate));
-
-  //   return true;
-  // }
-
   // entrance point. todo change to switch map<string, function> if possible
   if (state == BEFORE_START)
   {
     initDataBeforeFirstRun();
   }
-  else if (state == BEFORE_DRAWING_MAIN_BRANCH)
+  else if (state == BEFORE_DRAWING)
   {
     beforeDrawingMainBranch();
   }
-  else if (state == DRAWING_MAIN_BRANCH)
+  else if (state == ENCODER_DRAW)
   {
-    drawMainBranch();
+    encoderDraw();
   }
-  else if (state == CALCULATE_LEAFS_SETTINGS)
+  else if (state == SERVO_DRAW)
   {
-    calculateLeafsSettings();
-  }
-  else if (state == MOVING_TO_NEXT_LEAF_CREATION_SPOT)
-  {
-    moveToNextLeafCreationSpot();
-  }
-  else if (state == DRAWING_LEAF_PART_A)
-  {
-    drawLeafPartA();
-  }
-  else if (state == DRAWING_LEAF_PART_B)
-  {
-    drawLeafPartB();
+    servoDraw();
   }
   else if (state == FINISH)
   {

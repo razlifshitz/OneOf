@@ -10,7 +10,6 @@
 // my libraries
 #include "params.h"
 #include "global-constants.h"
-#include "leaf.h"
 #include "global-variables.h"
 #include "motors-setup.srv.h"
 #include "myService.h"
@@ -49,21 +48,21 @@ void loop()
 
 		if (buttonState == 3)
 		{
-			finishPain();
-			numberOfDrawnBranches = 0;
+			pausePaint();
 		}
+		else if (buttonState == 1)
+		{
+			if (state == ENCODER_DRAW)
+			{
+				state = SERVO_DRAW;
+			}
 
-		active = !active;
+			active = !active;
+		}
 	}
 
-	if (buttonPressed)
+	if (active)
 	{
-		active = true;
-	}
-
-	if (active /*|| buttonPressed*/)
-	{
-		buttonPressed = false;
 		doPaint();
 	}
 	else

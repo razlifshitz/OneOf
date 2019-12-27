@@ -81,7 +81,7 @@ bool moveEncoder(long destination, String direction)
 
   if (not isEncoderMoving)
   {
-    setEncoderDirectionAndSpeed(direction, DEFAULT_SPEED);
+    setEncoderDirectionAndSpeed(direction, ENCODER_SPEED);
   }
 
   bool isRight = direction == "right";
