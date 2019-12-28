@@ -26,11 +26,11 @@ const int MAX_ENCODER_SEEED = 80;
 // LEAFS
 const int MIN_LEAFS = 2;
 const int MAX_LEAFS = 5;
-const int MIN_SERVO_SEEED = 1;
-const int MAX_SERVO_SEEED = 13;
+const int MIN_SERVO_SEEED = 2;
+const int MAX_SERVO_SEEED = 11;
 const int MIN_SERVO_DESTINATION_UP = 92;
-const int MAX_SERVO_DESTINATION_UP = 97;
-const int MIN_SERVO_DESTINATION_DOWN = 83;
+const int MAX_SERVO_DESTINATION_UP = 94;
+const int MIN_SERVO_DESTINATION_DOWN = 84;
 const int MAX_SERVO_DESTINATION_DOWN = 88;
 
 // GENERAL
