@@ -12,7 +12,7 @@ int calcRand(int nMin, int nMax)
   return (random() % (nMax - nMin + 1) + nMin);
 }
 
-int calcNextRandVal(int firstParam, int secontParam, int limit, String paramName)
+int calcNextRandVal(int previousValue, int firstParam, int secontParam, int limit, String paramName)
 {
   int attemptNumber = 0;
   int value = calcRand(firstParam, secontParam);
@@ -23,7 +23,7 @@ int calcNextRandVal(int firstParam, int secontParam, int limit, String paramName
     Serial.println(String("highEnd: ") + (secontParam) + String(" minimum Change: ") + (limit));
   }
 
-  while (abs(firstParam - secontParam) < limit)
+  while (abs(value - previousValue) < limit)
   {
     attemptNumber++;
     if (attemptNumber < 1000)

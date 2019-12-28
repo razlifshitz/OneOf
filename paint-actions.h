@@ -8,8 +8,7 @@ void initDataBeforeFirstRun()
 
 void beforeDraw()
 {
-    myServo.write(DEFAULT_LOCATION, DEFAULT_SPEED);
-
+    myServo.write(DEFAULT_LOCATION, DEFAULT_SPEED, true);
     state = ENCODER_DRAW;
 
     pausePaint();
@@ -27,7 +26,7 @@ void servoDraw()
 {
     pauseEncoder();
     delay(DELAY_FROM_ENCODER_TO_SERVO);
-    int servoDestination = calcNextRandVal(SERVO_MIN_DEST, SERVO_MAX_DEST, SERVO_DESTINATION_MIN_CHANGE, "servoDestination");
+    int servoDestination = calcNextRandVal(myServo.read(), SERVO_MIN_DEST, SERVO_MAX_DEST, SERVO_DESTINATION_MIN_CHANGE, "servoDestination");
 
     if (servoDestination != ERROR)
     {
