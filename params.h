@@ -30,5 +30,5 @@
 
 // Debugger parameters
 
-#define DEBUG_CALC_NEXT_RAND_VAL 0
+#define DEBUG_CALC_NEXT_RAND_VAL 1
 #define DEBUG_ENCODER 0

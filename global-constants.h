@@ -19,7 +19,7 @@ const int ENCODER_SPEED = 20;
 const int SERVO_SPEED = 10;
 const int SERVO_MIN_DEST = 88;
 const int SERVO_MAX_DEST = 92;
-const int SERVO_DESTINATION_MIN_CHANGE = 2;
+const int SERVO_DESTINATION_MIN_CHANGE = 1;
 
 // DELAY
 const int DELAY_FROM_ENCODER_TO_SERVO = 350;
