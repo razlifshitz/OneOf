@@ -23,14 +23,14 @@ int minFrom = 80;
 int maxFrom = 90;
 // Upper range
 int minTo = 90;
-int maxTo = 105;
+int maxTo = 103;
 
 /*
  * SPEED
  */
 const int numOfSpeedCategories = 5;
 MinMaxCategory waveSpeeds[numOfSpeedCategories] = {
-	MinMaxCategory(5, 10),
+	MinMaxCategory(2, 7),
 	MinMaxCategory(10, 20),
 	MinMaxCategory(10, 30),
 	MinMaxCategory(20, 40),
