@@ -19,22 +19,22 @@ bool isCupMod = false;
  * Servo Movement bounderies 
 */
 // Bottom range
-int minFrom = 80;
-int maxFrom = 90;
+int minFrom = 59;
+int maxFrom = 75;
 // Upper range
-int minTo = 90;
-int maxTo = 103;
+int minTo = 100;
+int maxTo = 120;
 
 /*
  * SPEED
  */
 const int numOfSpeedCategories = 5;
 MinMaxCategory waveSpeeds[numOfSpeedCategories] = {
-	MinMaxCategory(2, 7),
-	MinMaxCategory(10, 20),
-	MinMaxCategory(10, 30),
-	MinMaxCategory(20, 40),
-	MinMaxCategory(40, 60)};
+	MinMaxCategory(5, 20),
+	MinMaxCategory(30, 50),
+	MinMaxCategory(70, 100),
+	MinMaxCategory(140, 190),
+	MinMaxCategory(190, 220)};
 
 /* 
  * DELAY DATA (The numbers are in Miliseconds)
