@@ -167,96 +167,95 @@ bool servo_update()
   }
 
   // As Long as Encoder hasn't reached to destination where servo should delay, servo will work.
-  if (!isEncoderReachedDestination)
+  // if (!isEncoderReachedDestination)
+  // {
+  // isEncoderReachedDestination = motor_reachDestination(&encoder, currentQurterActiveServo);
+
+  // checking if servo reached destination.
+  // doing nothing if servo hasn't reached destination
+  if (!isServoReachedDestination)
   {
-    isEncoderReachedDestination = motor_reachDestination(&encoder, currentQurterActiveServo);
+    isServoReachedDestination = hasServoReachedDestination(lastServoLoc, currentServoDestination, toMoveUp);
 
-    // checking if servo reached destination.
-    // doing nothing if servo hasn't reached destination
-    if (!isServoReachedDestination)
+    // Stoppin the servo in the wanted locations
+    if (!toMoveUp && servoDistancePast > servoDistance75)
     {
-      beforeStart = false;
-      isServoReachedDestination = hasServoReachedDestination(lastServoLoc, currentServoDestination, toMoveUp);
-
-      // Stoppin the servo in the wanted locations
-      if (!toMoveUp && servoDistancePast > servoDistance75)
-      {
-        currentEncoderSpeed = setMotorSpeed(&encoder, 0);
-      }
-      else if (toMoveUp && servoDistancePast > servoDistance25)
-      {
-        currentEncoderSpeed = setMotorSpeed(&encoder, ROTATION_SPEED);
-      }
-
-      // TODO: is it necessary?
-      // continuing the movement to the current destination
-      myservo.write(currentServoDestination, waveSpeed, false);
+      currentEncoderSpeed = setMotorSpeed(&encoder, 0);
     }
-
-    // servo reached destination, calc next servo move
-    else
+    else if (toMoveUp && servoDistancePast > servoDistance25)
     {
-      // todo: think about it
-      //delay(300);
-
-      isServoReachedDestination = false;
-
-      if (!toMoveUp && currentEncoderSpeed == 0)
-      {
-        performServoDigging(currentServoDestination);
-      }
-
-      // calc next servo move
-      toMoveUp = !toMoveUp;
-      waveSpeed = getNextServoSpeed();
-      previousServoDestination = lastServoLoc;
-      currentServoDestination = getNextServoDestination(toMoveUp, previousServoDestination);
-
-      // write to monitor
-      plateCounter++;
-#ifdef DEBUG_SERVO_MOVE_COUNTER
-      printMovement(false);
-#endif
-
-      // start new servo move
-      myservo.write(currentServoDestination, waveSpeed, false);
-    }
-  }
-  // The Encoder has reached to destination where servo should delay, tell servo to go to low
-  // location and delay.
-  else if (!beforeStart && encoderLocation <= currentQuarter * QUARTER_CLICKS_PER_ROUND)
-  {
-    waveSpeed = CalcRand(30, 70);
-    currentServoDestination = minTo;
-    isServoReachedDestination = hasServoReachedDestination(lastServoLoc, currentServoDestination, true);
-
-    if (!inDelayProcess)
-    {
-      inDelayProcess = true;
-
-#ifdef DEBUG_SERVO_MOVE_COUNTER
-      printMovement(true);
-#endif
-
       currentEncoderSpeed = setMotorSpeed(&encoder, ROTATION_SPEED);
-      myservo.write(currentServoDestination, waveSpeed, false);
     }
+
+    // TODO: is it necessary?
+    // continuing the movement to the current destination
+    myservo.write(currentServoDestination, waveSpeed, false);
   }
-  // prepares next movement parameters
+
+  // servo reached destination, calc next servo move
   else
   {
-    // initialize inDelayProcess value
-    inDelayProcess = false;
-    currentQuarter++;
+    // todo: think about it
+    //delay(300);
 
-    if (currentQuarter <= 4)
+    isServoReachedDestination = false;
+
+    if (!toMoveUp && currentEncoderSpeed == 0)
     {
-      // start next quarter
-      isEncoderReachedDestination = false;
-      previousServoDestination = lastServoLoc;
-      calcNextLengthOfServoAction();
+      performServoDigging(currentServoDestination);
     }
+
+    // calc next servo move
+    toMoveUp = !toMoveUp;
+    waveSpeed = getNextServoSpeed();
+    previousServoDestination = lastServoLoc;
+    currentServoDestination = getNextServoDestination(toMoveUp, previousServoDestination);
+
+    // write to monitor
+    plateCounter++;
+#ifdef DEBUG_SERVO_MOVE_COUNTER
+    printMovement(false);
+#endif
+
+    // start new servo move
+    myservo.write(currentServoDestination, waveSpeed, false);
   }
+  // }
+  // The Encoder has reached to destination where servo should delay, tell servo to go to low
+  // location and delay.
+  //   else if (!beforeStart && encoderLocation <= currentQuarter * QUARTER_CLICKS_PER_ROUND)
+  //   {
+  //     waveSpeed = CalcRand(30, 70);
+  //     currentServoDestination = minTo;
+  //     isServoReachedDestination = hasServoReachedDestination(lastServoLoc, currentServoDestination, true);
+
+  //     if (!inDelayProcess)
+  //     {
+  //       inDelayProcess = true;
+
+  // #ifdef DEBUG_SERVO_MOVE_COUNTER
+  //       printMovement(true);
+  // #endif
+
+  //       currentEncoderSpeed = setMotorSpeed(&encoder, ROTATION_SPEED);
+  //       myservo.write(currentServoDestination, waveSpeed, false);
+  //     }
+  //   }
+  // prepares next movement parameters
+  // else
+  // {
+  //   // initialize inDelayProcess value
+  //   inDelayProcess = false;
+  //   currentQuarter++;
+
+  //   if (currentQuarter <= 4)
+  //   {
+  //     // start next quarter
+  //     isEncoderReachedDestination = false;
+  //     previousServoDestination = lastServoLoc;
+  //     calcNextLengthOfServoAction();
+  //   }
+  // }
 
   lastUpdate = millis();
   return true;
