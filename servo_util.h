@@ -44,10 +44,10 @@ long lastUpdate;
 // -------------------------------------------- Logic Variables
 
 // DESTINATION
-int minFrom = 30; // Bottom range - minimum
-int maxFrom = 34; // Bottom range - maximum
-int minTo = 47;   // Upper range - minimum
-int maxTo = 55;   // Upper range - maximum
+int minFrom = 60; // Bottom range - minimum
+int maxFrom = 64; // Bottom range - maximum
+int minTo = 86;   // Upper range - minimum
+int maxTo = 110;  // Upper range - maximum
 
 // Delay length
 int randDelay = -1;
@@ -105,10 +105,10 @@ int getNextServoSpeed()
   // FIXME: move to properties section when possible
   int numOfSpeedCategories = 4;
   WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
-  waveSpeeds[1].initData(1, 10, 30);   // category 1
-  waveSpeeds[2].initData(2, 50, 80);   // category 2
+  waveSpeeds[1].initData(1, 5, 20);    // category 1
+  waveSpeeds[2].initData(2, 40, 70);   // category 2
   waveSpeeds[3].initData(3, 81, 100);  // category 3
-  waveSpeeds[4].initData(4, 101, 120); // category 4
+  waveSpeeds[4].initData(4, 110, 130); // category 4
 
   return calcNextSpeed(waveSpeeds, numOfSpeedCategories);
 }
@@ -137,7 +137,9 @@ void performServoDigging(int location)
 {
   for (int i = 1; i <= numberOfDigging; i++)
   {
+    // Serial.println(String("FIRST: maxTo ") + maxTo + String(" diggingSpeed: ") + diggingSpeed + String(" location: ") + location);
     myservo.write(maxTo, diggingSpeed, true);
+    // Serial.println(String("SECOND: maxTo ") + maxTo + String(" diggingSpeed: ") + diggingSpeed + String(" location: ") + location);
     myservo.write(location, diggingSpeed, true);
   }
 }
@@ -201,10 +203,11 @@ bool servo_update()
 
       isServoReachedDestination = false;
 
-      if (!toMoveUp && currentEncoderSpeed == 0)
-      {
-        performServoDigging(currentServoDestination);
-      }
+      // if (!toMoveUp && currentEncoderSpeed == 0)
+      // {
+      //   performServoDigging(currentServoDestination);
+      //   onUpdate();
+      // }
 
       // calc next servo move
       toMoveUp = !toMoveUp;
@@ -215,47 +218,53 @@ bool servo_update()
       // write to monitor
       plateCounter++;
 #ifdef DEBUG_SERVO_MOVE_COUNTER
+      Serial.println(String("isServoMoving: ") + myservo.isMoving());
+
       printMovement(false);
 #endif
 
       // start new servo move
       myservo.write(currentServoDestination, waveSpeed, false);
+      Serial.println(String("isServoMoving: ") + myservo.isMoving());
     }
   }
   // The Encoder has reached to destination where servo should delay, tell servo to go to low
   // location and delay.
-  else if (!beforeStart && encoderLocation <= currentQuarter * QUARTER_CLICKS_PER_ROUND)
-  {
-    waveSpeed = CalcRand(30, 70);
-    currentServoDestination = minTo;
-    isServoReachedDestination = hasServoReachedDestination(lastServoLoc, currentServoDestination, true);
+  //   else if (!beforeStart && encoderLocation <= currentQuarter * QUARTER_CLICKS_PER_ROUND)
+  //   {
+  //     waveSpeed = CalcRand(30, 70);
+  //     currentServoDestination = minTo;
+  //     isServoReachedDestination = hasServoReachedDestination(lastServoLoc, currentServoDestination, true);
 
-    if (!inDelayProcess)
-    {
-      inDelayProcess = true;
+  //     if (!inDelayProcess)
+  //     {
+  //       inDelayProcess = true;
 
-#ifdef DEBUG_SERVO_MOVE_COUNTER
-      printMovement(true);
-#endif
+  // #ifdef DEBUG_SERVO_MOVE_COUNTER
+  //       printMovement(true);
+  // #endif
 
-      currentEncoderSpeed = setMotorSpeed(&encoder, ROTATION_SPEED);
-      myservo.write(currentServoDestination, waveSpeed, false);
-    }
-  }
+  //       currentEncoderSpeed = setMotorSpeed(&encoder, ROTATION_SPEED);
+  //       myservo.write(currentServoDestination, waveSpeed, false);
+  //     }
+  //   }
   // prepares next movement parameters
   else
   {
     // initialize inDelayProcess value
-    inDelayProcess = false;
-    currentQuarter++;
+    // inDelayProcess = false;
+    // currentQuarter++;
 
-    if (currentQuarter <= 4)
-    {
-      // start next quarter
-      isEncoderReachedDestination = false;
-      previousServoDestination = lastServoLoc;
-      calcNextLengthOfServoAction();
-    }
+    // if (currentQuarter <= 4)
+    // {
+    //   // start next quarter
+    //   isEncoderReachedDestination = false;
+    //   previousServoDestination = lastServoLoc;
+    //   calcNextLengthOfServoAction();
+    // }
+    isEncoderReachedDestination = false;
+    previousServoDestination = lastServoLoc;
+    calcNextLengthOfServoAction();
   }
 
   lastUpdate = millis();
