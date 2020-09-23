@@ -105,9 +105,9 @@ int getNextServoSpeed()
   // FIXME: move to properties section when possible
   int numOfSpeedCategories = 4;
   WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
-  waveSpeeds[1].initData(1, 5, 20);    // category 1
-  waveSpeeds[2].initData(2, 40, 70);   // category 2
-  waveSpeeds[3].initData(3, 81, 100);  // category 3
+  waveSpeeds[1].initData(1, 8, 20);    // category 1
+  waveSpeeds[2].initData(2, 25, 70);   // category 2
+  waveSpeeds[3].initData(3, 70, 100);  // category 3
   waveSpeeds[4].initData(4, 110, 130); // category 4
 
   return calcNextSpeed(waveSpeeds, numOfSpeedCategories);
@@ -146,10 +146,14 @@ void performServoDigging(int location)
 
 void onUpdate()
 {
-  lastServoLoc = myservo.read();
-  encoderLocation = abs(encoder.read());
+  if (lastServoLoc != myservo.read())
+  {
+    lastServoLoc = myservo.read();
+    encoderLocation = abs(encoder.read());
 
-  servoDistancePast = abs(previousServoDestination - lastServoLoc);
+    Serial.println(String("previousServoDestination: ") + previousServoDestination + String(" lastServoLoc: ") + lastServoLoc + String(" servoDistancePast: ") + servoDistancePast);
+    servoDistancePast = abs(previousServoDestination - lastServoLoc);
+  }
 }
 
 bool servo_update()
@@ -160,74 +164,80 @@ bool servo_update()
   //   }
   // #endif
 
-  onUpdate();
-
   // not continuing unless update update interval passed
   if (millis() - lastUpdate < SERVO_UPDATE_INTERVAL)
   {
     return true;
   }
 
+  onUpdate();
+
   // As Long as Encoder hasn't reached to destination where servo should delay, servo will work.
-  if (!isEncoderReachedDestination)
+  //if (!isEncoderReachedDestination)
+  //{
+  //  isEncoderReachedDestination = motor_reachDestination(&encoder, currentQurterActiveServo);
+
+  // checking if servo reached destination.
+  // doing nothing if servo hasn't reached destination
+  if (!isServoReachedDestination)
   {
-    isEncoderReachedDestination = motor_reachDestination(&encoder, currentQurterActiveServo);
+    beforeStart = false;
+    isServoReachedDestination = hasServoReachedDestination(lastServoLoc, currentServoDestination, toMoveUp);
 
-    // checking if servo reached destination.
-    // doing nothing if servo hasn't reached destination
-    if (!isServoReachedDestination)
+    Serial.println(String("servoDistancePast: ") + servoDistancePast + String(" servoDistance75: ") + servoDistance75 + String(" servoDistance25: ") + servoDistance25);
+    // Stoppin the servo in the wanted locations
+    if (!toMoveUp && servoDistancePast > servoDistance75)
     {
-      beforeStart = false;
-      isServoReachedDestination = hasServoReachedDestination(lastServoLoc, currentServoDestination, toMoveUp);
-
-      // Stoppin the servo in the wanted locations
-      if (!toMoveUp && servoDistancePast > servoDistance75)
-      {
-        currentEncoderSpeed = setMotorSpeed(&encoder, 0);
-      }
-      else if (toMoveUp && servoDistancePast > servoDistance25)
-      {
-        currentEncoderSpeed = setMotorSpeed(&encoder, ROTATION_SPEED);
-      }
-
-      // TODO: is it necessary?
-      // continuing the movement to the current destination
-      myservo.write(currentServoDestination, waveSpeed, false);
+      Serial.println("STOPPING DC");
+      currentEncoderSpeed = setMotorSpeed(&encoder, 0);
+    }
+    else if (toMoveUp && servoDistancePast > servoDistance25)
+    {
+      Serial.println("RESUMING DC");
+      currentEncoderSpeed = setMotorSpeed(&encoder, ROTATION_SPEED);
     }
 
-    // servo reached destination, calc next servo move
-    else
+    // TODO: is it necessary?
+    // continuing the movement to the current destination
+    myservo.write(currentServoDestination, waveSpeed, false);
+  }
+
+  // servo reached destination, calc next servo move
+  else
+  {
+    // todo: think about it
+    //delay(300);
+
+    isServoReachedDestination = false;
+
+    // if (!toMoveUp && currentEncoderSpeed == 0)
+    // {
+    //   performServoDigging(currentServoDestination);
+    //   onUpdate();
+    // }
+
+    // calc next servo move
+    toMoveUp = !toMoveUp;
+    if (!toMoveUp)
     {
-      // todo: think about it
-      //delay(300);
-
-      isServoReachedDestination = false;
-
-      // if (!toMoveUp && currentEncoderSpeed == 0)
-      // {
-      //   performServoDigging(currentServoDestination);
-      //   onUpdate();
-      // }
-
-      // calc next servo move
-      toMoveUp = !toMoveUp;
       waveSpeed = getNextServoSpeed();
-      previousServoDestination = lastServoLoc;
-      currentServoDestination = getNextServoDestination(toMoveUp, previousServoDestination);
+    }
+    previousServoDestination = lastServoLoc;
+    currentServoDestination = getNextServoDestination(toMoveUp, previousServoDestination);
 
-      // write to monitor
-      plateCounter++;
+    // write to monitor
+    plateCounter++;
 #ifdef DEBUG_SERVO_MOVE_COUNTER
-      Serial.println(String("isServoMoving: ") + myservo.isMoving());
+    Serial.println(String("isServoMoving: ") + myservo.isMoving());
 
-      printMovement(false);
+    printMovement(false);
 #endif
 
-      // start new servo move
-      myservo.write(currentServoDestination, waveSpeed, false);
-      Serial.println(String("isServoMoving: ") + myservo.isMoving());
-    }
+    // start new servo move
+    myservo.write(currentServoDestination, waveSpeed, false);
+    Serial.println(String("isServoMoving: ") + myservo.isMoving());
   }
+  //}
   // The Encoder has reached to destination where servo should delay, tell servo to go to low
   // location and delay.
   //   else if (!beforeStart && encoderLocation <= currentQuarter * QUARTER_CLICKS_PER_ROUND)
@@ -249,23 +259,20 @@ bool servo_update()
   //     }
   //   }
   // prepares next movement parameters
-  else
-  {
-    // initialize inDelayProcess value
-    // inDelayProcess = false;
-    // currentQuarter++;
+  // else
+  // {
+  //   initialize inDelayProcess value
+  //   inDelayProcess = false;
+  //   currentQuarter++;
 
-    // if (currentQuarter <= 4)
-    // {
-    //   // start next quarter
-    //   isEncoderReachedDestination = false;
-    //   previousServoDestination = lastServoLoc;
-    //   calcNextLengthOfServoAction();
-    // }
-    isEncoderReachedDestination = false;
-    previousServoDestination = lastServoLoc;
-    calcNextLengthOfServoAction();
-  }
+  //   if (currentQuarter <= 4)
+  //   {
+  //     // start next quarter
+  //     isEncoderReachedDestination = false;
+  //     previousServoDestination = lastServoLoc;
+  //     calcNextLengthOfServoAction();
+  //   }
+  // }
 
   lastUpdate = millis();
   return true;
