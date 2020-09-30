@@ -23,7 +23,7 @@ int minFrom = 92;
 int maxFrom = 96;
 // Upper range
 int minTo = 96;
-int maxTo = 105;
+int maxTo = 103;
 
 /*
  * SPEED
