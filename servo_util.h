@@ -75,7 +75,7 @@ bool beforeStart; // flag that determine if the making of the plate hasn't start
 int diggingSpeed = 135;
 int currentEncoderSpeed;
 bool isShpitzing;
-int shpitzOdds = 4;
+int shpitzOdds = 5;
 //-------------------------------------- END DATA SETTING
 
 void servo_start()
@@ -211,12 +211,12 @@ bool servo_update()
     // }
 
     // Stoppin the servo in the wanted locations
-    if (!toMoveUp && servoDistancePast > servoDistance75)
+    if (!isShpitzing && !toMoveUp && servoDistancePast > servoDistance75)
     {
       // Serial.println("STOPPING DC");
       currentEncoderSpeed = setMotorSpeed(&encoder, 0);
     }
-    else if (toMoveUp && servoDistancePast > servoDistance25)
+    else if (!isShpitzing && toMoveUp && servoDistancePast > servoDistance25)
     {
       // Serial.println("STARTING DC");
       currentEncoderSpeed = setMotorSpeed(&encoder, ROTATION_SPEED);
@@ -244,6 +244,9 @@ bool servo_update()
     // calc next servo move
     toMoveUp = !toMoveUp;
 
+    int numTest = CalcRand(1, shpitzOdds);
+    Serial.println(String("numTest: ") + numTest + String(" direction: ") + (toMoveUp ? "Up" : "Down"));
+
     // if in middle of shpitz movement
     if (isShpitzing && !toMoveUp)
     {
@@ -257,7 +260,7 @@ bool servo_update()
       currentServoDestination = minFrom;
     }
     // check if should perform shpitz
-    else if (CalcRand(1, shpitzOdds) == 1 && toMoveUp)
+    else if (numTest == 1 && toMoveUp)
     {
       Serial.println("SHPITZ - FIRST MOVE");
       isShpitzing = true;
@@ -270,7 +273,18 @@ bool servo_update()
     }
     else
     {
-      toMoveUp ? Serial.println("REGULAR MOVE - FIRST MOVE") : Serial.println("REGULAR MOVE - FIRST MOVE");
+      isShpitzing = false;
+
+      if (toMoveUp)
+      {
+        // stopping DC as in regular move when servo is in low zone
+        setMotorSpeed(&encoder, 0);
+        Serial.println("REGULAR MOVE - FIRST MOVE")
+      }
+      else
+      {
+        Serial.println("REGULAR MOVE - FIRST MOVE");
+      }
 
       waveSpeed = getNextServoSpeed();
       currentServoDestination = getNextServoDestination(toMoveUp, previousServoDestination);
