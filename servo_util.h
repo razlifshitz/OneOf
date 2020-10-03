@@ -201,24 +201,24 @@ bool servo_update()
   {
     isServoReachedDestination = hasServoReachedDestination(lastServoLoc, currentServoDestination, toMoveUp);
 
-    if (!toMoveUp)
-    {
-      Serial.println(String("servoDistancePast: ") + servoDistancePast + String(" servoDistance75: ") + servoDistance75);
-    }
-    else
-    {
-      Serial.println(String("servoDistancePast: ") + servoDistancePast + String(" servoDistance25: ") + servoDistance25);
-    }
+    // if (!toMoveUp)
+    // {
+    //   Serial.println(String("servoDistancePast: ") + servoDistancePast + String(" servoDistance75: ") + servoDistance75);
+    // }
+    // else
+    // {
+    //   Serial.println(String("servoDistancePast: ") + servoDistancePast + String(" servoDistance25: ") + servoDistance25);
+    // }
 
     // Stoppin the servo in the wanted locations
     if (!isShpitzing && !toMoveUp && servoDistancePast > servoDistance75)
     {
-      Serial.println("STOPPING DC");
+      // Serial.println("STOPPING DC");
       currentEncoderSpeed = setMotorSpeed(&encoder, 0);
     }
     else if (!isShpitzing && toMoveUp && servoDistancePast > servoDistance25)
     {
-      Serial.println("STARTING DC");
+      // Serial.println("STARTING DC");
       currentEncoderSpeed = setMotorSpeed(&encoder, ROTATION_SPEED);
     }
 
