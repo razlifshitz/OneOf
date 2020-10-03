@@ -252,10 +252,6 @@ bool servo_update()
     {
       Serial.println("SHPITZ - SECOND MOVE");
 
-      setMotorSpeed(&encoder, 0);
-      delay(500);
-      setMotorSpeed(&encoder, 30);
-
       waveSpeed = getNextShpitzSpeed();
       currentServoDestination = minFrom;
     }
@@ -269,7 +265,7 @@ bool servo_update()
       setMotorSpeed(&encoder, 30);
 
       waveSpeed = getNextShpitzSpeed();
-      currentServoDestination = maxTo + 20;
+      currentServoDestination = CalcRand(minFrom + 10, maxTo + 10);
     }
     else
     {
