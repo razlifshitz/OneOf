@@ -71,7 +71,7 @@ bool isEncoderReachedDestination;
 bool isServoReachedDestination;
 int waveSpeed;
 bool beforeStart; // flag that determine if the making of the plate hasn't started yet
-int numberOfDigging = 2;
+// int numberOfDigging = 1;
 int diggingSpeed = 135;
 int currentEncoderSpeed;
 //-------------------------------------- END DATA SETTING
@@ -105,7 +105,7 @@ int getNextServoSpeed()
   // FIXME: move to properties section when possible
   int numOfSpeedCategories = 4;
   WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
-  waveSpeeds[1].initData(1, 10, 30);   // category 1
+  waveSpeeds[1].initData(1, 3, 15);    // category 1
   waveSpeeds[2].initData(2, 50, 80);   // category 2
   waveSpeeds[3].initData(3, 81, 100);  // category 3
   waveSpeeds[4].initData(4, 101, 120); // category 4
@@ -133,21 +133,30 @@ void printMovement(bool delayPending)
   }
 }
 
-void performServoDigging(int location)
-{
-  for (int i = 1; i <= numberOfDigging; i++)
-  {
-    myservo.write(maxTo, diggingSpeed, true);
-    myservo.write(location, diggingSpeed, true);
-  }
-}
+// void performServoDigging(int location)
+// {
+//   Serial.println("Digging");
+//   delay(300);
+//   for (int i = 1; i <= numberOfDigging; i++)
+//   {
+//     myservo.write(maxTo + 25, diggingSpeed, true);
+//     myservo.write(location + 1, diggingSpeed, true);
+//   }
+//   delay(300);
+// }
 
 void onUpdate()
 {
+  // if (lastServoLoc != myservo.read())
+  // {
+  // Serial.println(String("1onUpdate--------previousServoDestination: ") + previousServoDestination + String(" lastServoLoc: ") + lastServoLoc + String("  myservo.read(): ") + myservo.read());
+
   lastServoLoc = myservo.read();
   encoderLocation = abs(encoder.read());
-
   servoDistancePast = abs(previousServoDestination - lastServoLoc);
+
+  //   Serial.println(String("1onUpdate--------previousServoDestination: ") + previousServoDestination + String(" lastServoLoc: ") + lastServoLoc + String("  myservo.read(): ") + myservo.read());
+  // }
 }
 
 bool servo_update()
@@ -161,10 +170,10 @@ bool servo_update()
   onUpdate();
 
   // not continuing unless update update interval passed
-  if (millis() - lastUpdate < SERVO_UPDATE_INTERVAL)
-  {
-    return true;
-  }
+  // if (millis() - lastUpdate < SERVO_UPDATE_INTERVAL)
+  // {
+  //   return true;
+  // }
 
   // As Long as Encoder hasn't reached to destination where servo should delay, servo will work.
   // if (!isEncoderReachedDestination)
@@ -177,19 +186,30 @@ bool servo_update()
   {
     isServoReachedDestination = hasServoReachedDestination(lastServoLoc, currentServoDestination, toMoveUp);
 
+    // if (!toMoveUp)
+    // {
+    //   Serial.println(String("servoDistancePast: ") + servoDistancePast + String(" servoDistance75: ") + servoDistance75);
+    // }
+    // else
+    // {
+    //   Serial.println(String("servoDistancePast: ") + servoDistancePast + String(" servoDistance25: ") + servoDistance25);
+    // }
+
     // Stoppin the servo in the wanted locations
     if (!toMoveUp && servoDistancePast > servoDistance75)
     {
+      // Serial.println("STOPPING DC");
       currentEncoderSpeed = setMotorSpeed(&encoder, 0);
     }
     else if (toMoveUp && servoDistancePast > servoDistance25)
     {
+      // Serial.println("STARTING DC");
       currentEncoderSpeed = setMotorSpeed(&encoder, ROTATION_SPEED);
     }
 
     // TODO: is it necessary?
     // continuing the movement to the current destination
-    myservo.write(currentServoDestination, waveSpeed, false);
+    // myservo.write(currentServoDestination, waveSpeed, false);
   }
 
   // servo reached destination, calc next servo move
@@ -197,13 +217,14 @@ bool servo_update()
   {
     // todo: think about it
     //delay(300);
-
     isServoReachedDestination = false;
 
-    if (!toMoveUp && currentEncoderSpeed == 0)
-    {
-      performServoDigging(currentServoDestination);
-    }
+    // if (!toMoveUp /*&& currentEncoderSpeed == 0*/)
+    // {
+    //   performServoDigging(currentServoDestination);
+    //   lastServoLoc = myservo.read();
+    //   Serial.println(String("LOC AFTER DIGGING lastServoLoc: ") + lastServoLoc);
+    // }
 
     // calc next servo move
     toMoveUp = !toMoveUp;
