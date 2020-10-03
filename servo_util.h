@@ -74,6 +74,8 @@ bool beforeStart; // flag that determine if the making of the plate hasn't start
 // int numberOfDigging = 1;
 int diggingSpeed = 135;
 int currentEncoderSpeed;
+bool isShpitzing;
+int shpitzOdds = 4;
 //-------------------------------------- END DATA SETTING
 
 void servo_start()
@@ -111,6 +113,19 @@ int getNextServoSpeed()
   waveSpeeds[4].initData(4, 101, 120); // category 4
 
   return calcNextSpeed(waveSpeeds, numOfSpeedCategories);
+}
+
+int getNextShpitzSpeed()
+{
+  // FIXME: move to properties section when possible
+  int numOfSpeedCategories = 4;
+  WaveSpeed shpitzSpeeds[numOfSpeedCategories + 1];
+  shpitzSpeeds[1].initData(1, 131, 150); // category 1
+  shpitzSpeeds[2].initData(2, 151, 170); // category 2
+  shpitzSpeeds[3].initData(3, 171, 190); // category 3
+  shpitzSpeeds[4].initData(4, 191, 220); // category 4
+
+  return calcNextSpeed(shpitzSpeeds, numOfSpeedCategories);
 }
 
 void calcNextLengthOfServoAction()
@@ -170,10 +185,10 @@ bool servo_update()
   onUpdate();
 
   // not continuing unless update update interval passed
-  // if (millis() - lastUpdate < SERVO_UPDATE_INTERVAL)
-  // {
-  //   return true;
-  // }
+  if (millis() - lastUpdate < SERVO_UPDATE_INTERVAL)
+  {
+    return true;
+  }
 
   // As Long as Encoder hasn't reached to destination where servo should delay, servo will work.
   // if (!isEncoderReachedDestination)
@@ -228,9 +243,40 @@ bool servo_update()
 
     // calc next servo move
     toMoveUp = !toMoveUp;
-    waveSpeed = getNextServoSpeed();
+
+    // if in middle of shpitz movement
+    if (isShpitzing && !toMoveUp)
+    {
+      Serial.println("SHPITZ - SECOND MOVE");
+
+      setMotorSpeed(&encoder, 0);
+      delay(500);
+      setMotorSpeed(&encoder, 30);
+
+      waveSpeed = getNextShpitzSpeed();
+      currentServoDestination = minFrom;
+    }
+    // check if should perform shpitz
+    else if (CalcRand(1, shpitzOdds) == 1 && toMoveUp)
+    {
+      Serial.println("SHPITZ - FIRST MOVE");
+      isShpitzing = true;
+      setMotorSpeed(&encoder, 0);
+      delay(500);
+      setMotorSpeed(&encoder, 30);
+
+      waveSpeed = getNextShpitzSpeed();
+      currentServoDestination = maxTo + 20;
+    }
+    else
+    {
+      toMoveUp ? Serial.println("REGULAR MOVE - FIRST MOVE") : Serial.println("REGULAR MOVE - FIRST MOVE");
+
+      waveSpeed = getNextServoSpeed();
+      currentServoDestination = getNextServoDestination(toMoveUp, previousServoDestination);
+    }
+
     previousServoDestination = lastServoLoc;
-    currentServoDestination = getNextServoDestination(toMoveUp, previousServoDestination);
 
     // write to monitor
     plateCounter++;

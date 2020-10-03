@@ -23,39 +23,44 @@ ThreadController controller = ThreadController();
 
 long stopper;
 
-void ThreadServoUpdate() {
+void ThreadServoUpdate()
+{
   //Serial.println("ThreadServoUpdate()");
-  if (!servo_update()) {
-      Serial.println("--------SERVO THREAD-----------------------------");
-      
-      #ifdef STOPPER
-        Serial.println(String("TIME: ") + (millis() - stopper));
-      #endif
-      
-      servo_stop();
-      motor_stop();
-      changed = false;
-      active = false;
-    } 
+  if (!servo_update())
+  {
+    Serial.println("--------SERVO THREAD-----------------------------");
+
+#ifdef STOPPER
+    Serial.println(String("TIME: ") + (millis() - stopper));
+#endif
+
+    servo_stop();
+    motor_stop();
+    changed = false;
+    active = false;
+  }
 }
 
-void ThreadEncoderUpdate() {
+void ThreadEncoderUpdate()
+{
   //Serial.println("ThreadEncoderUpdate()");
-  if (motor_reachedEnd(&encoder)) {
-      Serial.println("-----ENCODER THREAD-------------------------");
+  if (motor_reachedEnd(&encoder))
+  {
+    Serial.println("-----ENCODER THREAD-------------------------");
 
-      #ifdef STOPPER
-        Serial.println(String("TIME: ") + (millis() - stopper));
-      #endif
-      
-      servo_stop();
-      motor_stop();
-      changed = false;
-      active = false;
-    } 
+#ifdef STOPPER
+    Serial.println(String("TIME: ") + (millis() - stopper));
+#endif
+
+    servo_stop();
+    motor_stop();
+    changed = false;
+    active = false;
+  }
 }
 
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   randomSeed(analogRead(0));
   pinMode(PUSHBUTTON_PIN, INPUT_PULLUP);
@@ -70,106 +75,123 @@ void setup() {
   controller.add(&myEncoderThread);
 }
 
-void initDataBeforeFirstRun() {
-        minChangeInDelay = CalcRand(CHANGE_IN_DELAY_AMOUNT_L,CHANGE_IN_DELAY_AMOUNT_U);
-        maxDelay = CalcRand(MAX_DELAY_AMOUNT_L,MAX_DELAY_AMOUNT_U);
-        minDelay = CalcRand(MIN_DELAY_AMOUNT_L,MIN_DELAY_AMOUNT_U);
-       
-        minChangeInNumOfMoves = CalcRand(CHANGE_IN_DELAY_MOVES_L,CHANGE_IN_DELAY_MOVES_U);
-        maxNumOfCount = CalcRand(MAX_DELAY_NUM_OF_MOVES_L,MAX_DELAY_NUM_OF_MOVES_U);
-        minNumOfCount = CalcRand(MIN_DELAY_NUM_OF_MOVES_L,MIN_DELAY_NUM_OF_MOVES_U);
+void initDataBeforeFirstRun()
+{
+  minChangeInDelay = CalcRand(CHANGE_IN_DELAY_AMOUNT_L, CHANGE_IN_DELAY_AMOUNT_U);
+  maxDelay = CalcRand(MAX_DELAY_AMOUNT_L, MAX_DELAY_AMOUNT_U);
+  minDelay = CalcRand(MIN_DELAY_AMOUNT_L, MIN_DELAY_AMOUNT_U);
 
-        randDelay = CalcRand(minDelay,maxDelay);
-        currentDelay = randDelay;
-        //Serial.println(String("------ NEW currentDelay: ") + (currentDelay));
+  minChangeInNumOfMoves = CalcRand(CHANGE_IN_DELAY_MOVES_L, CHANGE_IN_DELAY_MOVES_U);
+  maxNumOfCount = CalcRand(MAX_DELAY_NUM_OF_MOVES_L, MAX_DELAY_NUM_OF_MOVES_U);
+  minNumOfCount = CalcRand(MIN_DELAY_NUM_OF_MOVES_L, MIN_DELAY_NUM_OF_MOVES_U);
 
-        
-        randCountOfMoves = CalcRand(minNumOfCount,maxNumOfCount);
-        currentCountOfMoves = randCountOfMoves;
-        //Serial.println(String("------ NEW currentCountOfMoves: ") + (currentCountOfMoves));
+  randDelay = CalcRand(minDelay, maxDelay);
+  currentDelay = randDelay;
+  //Serial.println(String("------ NEW currentDelay: ") + (currentDelay));
 
-        servoActiveDelay = -1;
-        inDelayProcess = false;
-        movesCounter=0;
-        plateCounter=0;
-        stopper = millis();
-        
-        servo_start(); 
-        motor_start(&encoder, digitalRead(MOTOR_DIR_PIN), ROTATION_SPEED);
+  randCountOfMoves = CalcRand(minNumOfCount, maxNumOfCount);
+  currentCountOfMoves = randCountOfMoves;
+  //Serial.println(String("------ NEW currentCountOfMoves: ") + (currentCountOfMoves));
 
-        toMoveUp = true;
+  servoActiveDelay = -1;
+  inDelayProcess = false;
+  movesCounter = 0;
+  plateCounter = 0;
+  stopper = millis();
 
-        // villroy and boch
-        isEncoderReachedDestination = true;
-        isServoReachedDestination = true;
-        currentQuarter = 0;
-        beforeStart = true; // determine whether the state is before the machine is active
-        currentEncoderSpeed = ROTATION_SPEED;
-        lastUpdate = millis();
+  servo_start();
+  motor_start(&encoder, digitalRead(MOTOR_DIR_PIN), ROTATION_SPEED);
+
+  toMoveUp = true;
+
+  // villroy and boch
+  isEncoderReachedDestination = true;
+  isServoReachedDestination = true;
+  currentQuarter = 0;
+  beforeStart = true; // determine whether the state is before the machine is active
+  currentEncoderSpeed = ROTATION_SPEED;
+  lastUpdate = millis();
+  isShpitzing = false;
 }
 
-void loop() {
+void loop()
+{
   int buttonState = checkButton();
-    if (buttonState == 1 || buttonState == 3) {
+  if (buttonState == 1 || buttonState == 3)
+  {
     active = !active;
     changed = true;
-    
+
     Serial.println(String("buttonState set to: ") + (buttonState));
-    
-    if (buttonState == 3) {
+
+    if (buttonState == 3)
+    {
       isLongPressed = true;
     }
-    else {
+    else
+    {
       isLongPressed = false;
     }
   }
 
-  if (active) {
-    if(changed) {
-  	  if (isLongPressed) {
-  		  motor_start(&encoder, digitalRead(MOTOR_DIR_PIN), LONG_PRESSED_ROTATION_SPEED);
+  if (active)
+  {
+    if (changed)
+    {
+      if (isLongPressed)
+      {
+        motor_start(&encoder, digitalRead(MOTOR_DIR_PIN), LONG_PRESSED_ROTATION_SPEED);
         changed = false;
-  	  }
-      else {
+      }
+      else
+      {
         initDataBeforeFirstRun();
         changed = false;
       }
-  }
-    else {
-      if (isLongPressed) {
-        if(checkButton() != 0) {
+    }
+    else
+    {
+      if (isLongPressed)
+      {
+        if (checkButton() != 0)
+        {
           active = false;
           changed = true;
-	        isLongPressed = false;
+          isLongPressed = false;
         }
       }
-      else {
+      else
+      {
         // Checks if the motor reached the point when the servo should start running
-        if (isCupMod) {
+        if (isCupMod)
+        {
           //Serial.println("startServoInSpecificTime");
-          if (isServoShouldStart(&encoder)) {
+          if (isServoShouldStart(&encoder))
+          {
             myThread.run();
-            if (false) {
+            if (false)
+            {
               active = false;
               changed = true;
             }
           }
         }
         // Normal Behavior
-        else {
+        else
+        {
           //Serial.println("Normal Behavior");
           controller.run();
         }
       }
     }
   }
-  else {
-    if(changed) {
+  else
+  {
+    if (changed)
+    {
       motor_stop();
       servo_stop();
       changed = false;
     }
   }
 }
-
-
