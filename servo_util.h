@@ -46,8 +46,8 @@ long lastUpdate;
 // DESTINATION
 int minFrom = 60; // Bottom range - minimum
 int maxFrom = 64; // Bottom range - maximum
-int minTo = 77;   // Upper range - minimum
-int maxTo = 85;   // Upper range - maximum
+int minTo = 74;   // Upper range - minimum
+int maxTo = 80;   // Upper range - maximum
 
 // Delay length
 int randDelay = -1;
