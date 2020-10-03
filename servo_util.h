@@ -201,24 +201,24 @@ bool servo_update()
   {
     isServoReachedDestination = hasServoReachedDestination(lastServoLoc, currentServoDestination, toMoveUp);
 
-    // if (!toMoveUp)
-    // {
-    //   Serial.println(String("servoDistancePast: ") + servoDistancePast + String(" servoDistance75: ") + servoDistance75);
-    // }
-    // else
-    // {
-    //   Serial.println(String("servoDistancePast: ") + servoDistancePast + String(" servoDistance25: ") + servoDistance25);
-    // }
+    if (!toMoveUp)
+    {
+      Serial.println(String("servoDistancePast: ") + servoDistancePast + String(" servoDistance75: ") + servoDistance75);
+    }
+    else
+    {
+      Serial.println(String("servoDistancePast: ") + servoDistancePast + String(" servoDistance25: ") + servoDistance25);
+    }
 
     // Stoppin the servo in the wanted locations
     if (!isShpitzing && !toMoveUp && servoDistancePast > servoDistance75)
     {
-      // Serial.println("STOPPING DC");
+      Serial.println("STOPPING DC");
       currentEncoderSpeed = setMotorSpeed(&encoder, 0);
     }
     else if (!isShpitzing && toMoveUp && servoDistancePast > servoDistance25)
     {
-      // Serial.println("STARTING DC");
+      Serial.println("STARTING DC");
       currentEncoderSpeed = setMotorSpeed(&encoder, ROTATION_SPEED);
     }
 
@@ -279,18 +279,17 @@ bool servo_update()
       {
         // stopping DC as in regular move when servo is in low zone
         setMotorSpeed(&encoder, 0);
-        Serial.println("REGULAR MOVE - FIRST MOVE")
+        Serial.println("REGULAR MOVE - FIRST MOVE");
       }
       else
       {
         Serial.println("REGULAR MOVE - FIRST MOVE");
       }
 
+      previousServoDestination = lastServoLoc;
       waveSpeed = getNextServoSpeed();
       currentServoDestination = getNextServoDestination(toMoveUp, previousServoDestination);
     }
-
-    previousServoDestination = lastServoLoc;
 
     // write to monitor
     plateCounter++;
