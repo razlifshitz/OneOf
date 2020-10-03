@@ -133,11 +133,11 @@ int getNextShpitzDest()
   // FIXME: move to properties section when possible
   int numOfSpeedCategories = 5;
   WaveSpeed shpitzDests[numOfSpeedCategories + 1];
-  shpitzDests[1].initData(1, minFrom + 3, minFrom + 6);   // category 1
-  shpitzDests[2].initData(2, minFrom + 3, minFrom + 6);   // category 2
-  shpitzDests[3].initData(3, minFrom + 10, minFrom + 14); // category 3
-  shpitzDests[4].initData(4, minFrom + 20, minFrom + 25); // category 4
-  shpitzDests[5].initData(5, minFrom + 20, minFrom + 25); // category 5
+  shpitzDests[1].initData(1, minFrom + 1, minFrom + 6);   // category 1
+  shpitzDests[2].initData(2, minFrom + 1, minFrom + 6);   // category 2
+  shpitzDests[3].initData(3, minFrom + 15, minFrom + 25); // category 3
+  shpitzDests[4].initData(4, minFrom + 30, minFrom + 40); // category 4
+  shpitzDests[5].initData(5, minFrom + 30, minFrom + 40); // category 5
 
   return calcNextSpeed(shpitzDests, numOfSpeedCategories);
 }
