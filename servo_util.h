@@ -75,7 +75,7 @@ bool beforeStart; // flag that determine if the making of the plate hasn't start
 int diggingSpeed = 135;
 int currentEncoderSpeed;
 bool isShpitzing;
-int shpitzOdds = 5;
+int shpitzOdds = 3;
 //-------------------------------------- END DATA SETTING
 
 void servo_start()
@@ -126,6 +126,20 @@ int getNextShpitzSpeed()
   shpitzSpeeds[4].initData(4, 191, 220); // category 4
 
   return calcNextSpeed(shpitzSpeeds, numOfSpeedCategories);
+}
+
+int getNextShpitzDest()
+{
+  // FIXME: move to properties section when possible
+  int numOfSpeedCategories = 5;
+  WaveSpeed shpitzDests[numOfSpeedCategories + 1];
+  shpitzDests[1].initData(1, minFrom + 3, minFrom + 6);   // category 1
+  shpitzDests[2].initData(2, minFrom + 3, minFrom + 6);   // category 2
+  shpitzDests[3].initData(3, minFrom + 10, minFrom + 14); // category 3
+  shpitzDests[4].initData(4, minFrom + 20, minFrom + 25); // category 4
+  shpitzDests[5].initData(5, minFrom + 20, minFrom + 25); // category 5
+
+  return calcNextSpeed(shpitzDests, numOfSpeedCategories);
 }
 
 void calcNextLengthOfServoAction()
@@ -284,7 +298,7 @@ bool servo_update()
 
       previousServoDestination = lastServoLoc;
       waveSpeed = getNextServoSpeed();
-      currentServoDestination = getNextServoDestination(toMoveUp, previousServoDestination);
+      currentServoDestination = getNextShpitzDest();
     }
 
     // write to monitor
