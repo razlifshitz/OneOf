@@ -19,11 +19,11 @@ bool isCupMod = false;
  * Servo Movement bounderies 
 */
 // Bottom range
-int minFrom = 92;
-int maxFrom = 96;
+int minFrom = 102;
+int maxFrom = 106;
 // Upper range
-int minTo = 96;
-int maxTo = 103;
+int minTo = 106;
+int maxTo = 113;
 
 /*
  * SPEED
