@@ -47,7 +47,7 @@ long lastUpdate;
 int minFrom = 60; // Bottom range - minimum
 int maxFrom = 64; // Bottom range - maximum
 int minTo = 86;   // Upper range - minimum
-int maxTo = 110;  // Upper range - maximum
+int maxTo = 100;  // Upper range - maximum
 
 // Delay length
 int randDelay = -1;
@@ -105,10 +105,10 @@ int getNextServoSpeed()
   // FIXME: move to properties section when possible
   int numOfSpeedCategories = 4;
   WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
-  waveSpeeds[1].initData(1, 8, 20);    // category 1
-  waveSpeeds[2].initData(2, 25, 70);   // category 2
-  waveSpeeds[3].initData(3, 70, 100);  // category 3
-  waveSpeeds[4].initData(4, 110, 130); // category 4
+  waveSpeeds[1].initData(1, 5, 12);  // category 1
+  waveSpeeds[2].initData(2, 15, 30); // category 2
+  waveSpeeds[3].initData(3, 31, 40); // category 3
+  waveSpeeds[4].initData(4, 41, 55); // category 4
 
   return calcNextSpeed(waveSpeeds, numOfSpeedCategories);
 }
