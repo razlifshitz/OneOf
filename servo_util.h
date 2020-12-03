@@ -105,7 +105,7 @@ int getNextServoSpeed()
   // FIXME: move to properties section when possible
   int numOfSpeedCategories = 4;
   WaveSpeed waveSpeeds[numOfSpeedCategories + 1];
-  waveSpeeds[1].initData(1, 5, 12);  // category 1
+  waveSpeeds[1].initData(1, 5, 9);   // category 1
   waveSpeeds[2].initData(2, 15, 30); // category 2
   waveSpeeds[3].initData(3, 31, 40); // category 3
   waveSpeeds[4].initData(4, 41, 55); // category 4
