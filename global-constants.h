@@ -20,8 +20,8 @@ const int MAIN_BRANCH_LOCATION = 92;
 // ENCODER
 const long NO_MANS_LAND = 150;
 const long EDGE_LEAF_NO_MANS_LAND = 800;
-const int MIN_ENCODER_SEEED = 110;
-const int MAX_ENCODER_SEEED = 110;
+const int MIN_ENCODER_SEEED = 130;
+const int MAX_ENCODER_SEEED = 130;
 
 // LEAFS
 const int MIN_LEAFS = 2;
