@@ -20,18 +20,18 @@ const int MAIN_BRANCH_LOCATION = 92;
 // ENCODER
 const long NO_MANS_LAND = 150;
 const long EDGE_LEAF_NO_MANS_LAND = 800;
-const int MIN_ENCODER_SEEED = 160;
-const int MAX_ENCODER_SEEED = 170;
+const int MIN_ENCODER_SEEED = 60;
+const int MAX_ENCODER_SEEED = 80;
 
 // LEAFS
 const int MIN_LEAFS = 2;
 const int MAX_LEAFS = 5;
-const int MIN_SERVO_SEEED = 10;
-const int MAX_SERVO_SEEED = 10;
-const int MIN_SERVO_DESTINATION_UP = 94; // Pnim Maagal
-const int MAX_SERVO_DESTINATION_UP = 95;
-const int MIN_SERVO_DESTINATION_DOWN = 88; // Hutz Maagal
-const int MAX_SERVO_DESTINATION_DOWN = 89;
+const int MIN_SERVO_SEEED = 1;
+const int MAX_SERVO_SEEED = 13;
+const int MIN_SERVO_DESTINATION_UP = 92; // Pnim Maagal
+const int MAX_SERVO_DESTINATION_UP = 97;
+const int MIN_SERVO_DESTINATION_DOWN = 83; // Hutz Maagal
+const int MAX_SERVO_DESTINATION_DOWN = 88;
 
 // GENERAL
 const int DEFAULT_SPEED = 90;
