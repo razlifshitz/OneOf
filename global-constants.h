@@ -20,16 +20,16 @@ const int MAIN_BRANCH_LOCATION = 92;
 // ENCODER
 const long NO_MANS_LAND = 150;
 const long EDGE_LEAF_NO_MANS_LAND = 800;
-const int MIN_ENCODER_SEEED = 60;
-const int MAX_ENCODER_SEEED = 80;
+const int MIN_ENCODER_SEEED = 130;
+const int MAX_ENCODER_SEEED = 150;
 
 // LEAFS
 const int MIN_LEAFS = 2;
 const int MAX_LEAFS = 5;
-const int MIN_SERVO_SEEED = 4;
-const int MAX_SERVO_SEEED = 4;
-const int MIN_SERVO_DESTINATION_UP = 95;
-const int MAX_SERVO_DESTINATION_UP = 97;
+const int MIN_SERVO_SEEED = 2;
+const int MAX_SERVO_SEEED = 2;
+const int MIN_SERVO_DESTINATION_UP = 93;
+const int MAX_SERVO_DESTINATION_UP = 95;
 const int MIN_SERVO_DESTINATION_DOWN = 87;
 const int MAX_SERVO_DESTINATION_DOWN = 89;
 
