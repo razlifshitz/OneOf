@@ -211,7 +211,7 @@ void drawSecondWave()
 
 void finishPaint()
 {
-    numberOfDrawnBranches = (numberOfDrawnBranches + 1) % 4;
+    numberOfDrawnBranches = (numberOfDrawnBranches + 1) % 8;
 
     pausePaint();
 
