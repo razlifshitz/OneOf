@@ -1,7 +1,7 @@
 // clicks per rotation (64) * gear ration (70) * teeth ration (128/16=8)
 // 360 degrees: 50000
 #define CLICKS_PER_ROUND 67500L
-long QUARTER_CLICKS_PER_ROUND = CLICKS_PER_ROUND * 0.25;
+long QUARTER_CLICKS_PER_ROUND = CLICKS_PER_ROUND * 0.125; // beit binyamini 2021, originally CLICKS_PER_ROUND * 0.25
 long EIGHTH_CLICKS_PER_ROUND = QUARTER_CLICKS_PER_ROUND / 2;
 long NOT_PAINTING_AREA = EIGHTH_CLICKS_PER_ROUND * 0.05;
 

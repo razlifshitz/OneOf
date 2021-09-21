@@ -181,11 +181,11 @@ void drawLeafPartB()
 
 void finishPaint()
 {
-    numberOfDrawnBranches = (numberOfDrawnBranches + 1) % 4;
+    numberOfDrawnBranches = (numberOfDrawnBranches + 1) % 8;
 
     pausePaint();
 
-    // finishing paint after drawing 4 branches
+    // finishing paint after drawing 8 branches
     if (numberOfDrawnBranches == 0)
     {
         finishPain();
