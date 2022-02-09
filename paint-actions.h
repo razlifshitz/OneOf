@@ -3,7 +3,7 @@ void initDataBeforeFirstRun()
     attachEncoder(&encoder);
     attachServo();
 
-    state = BEFORE_DRAWING_MAIN_BRANCH;
+    state = CALCULATE_LEAFS_SETTINGS;
     dataCalculated = false;
 }
 
@@ -72,7 +72,7 @@ void calculateLeafsSettings()
 
     // generatings leafs data
     generateLeafs(upLeafs, upLeafsCount, UP);
-    generateLeafs(downLeafs, downLeafsCount, DOWN);
+    // generateLeafs(downLeafs, downLeafsCount, DOWN);
 
     state = MOVING_TO_NEXT_LEAF_CREATION_SPOT;
 }
@@ -102,7 +102,7 @@ void moveToNextLeafCreationSpot()
         Serial.println(String("encoderLocation: ") + (encoderLoc));
 
         // encoder reached head of main branch
-        state = FINISH;
+        state = CALCULATE_LEAFS_SETTINGS;
         onFinishAction();
     }
     // encoder reached location to draw leaf (UP)
