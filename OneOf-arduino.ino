@@ -49,7 +49,7 @@ void loop()
 
 		if (buttonState == 3)
 		{
-			finishPain();
+			_finishPaint();
 			numberOfDrawnBranches = 0;
 		}
 

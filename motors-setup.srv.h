@@ -44,9 +44,9 @@ boolean detachEncoder()
 
 // GENERAL
 
-void finishPain()
+void _finishPaint()
 {
-    Serial.println(String("finishPain()"));
+    Serial.println(String("_finishPaint()"));
 
     state = BEFORE_START;
     detachServo();
