@@ -24,8 +24,8 @@ const int MIN_ENCODER_SEEED = 110;
 const int MAX_ENCODER_SEEED = 110;
 
 // LEAFS
-const int MIN_LEAFS = 2;
-const int MAX_LEAFS = 5;
+const int MIN_LEAFS = 12;
+const int MAX_LEAFS = 30;
 const int MIN_SERVO_SEEED = 2;
 const int MAX_SERVO_SEEED = 2;
 const int MIN_SERVO_DESTINATION_UP = 94; // Pnim Maagal

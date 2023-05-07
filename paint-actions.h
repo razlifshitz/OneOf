@@ -46,7 +46,7 @@ void drawMainBranch()
         dataCalculated = true;
 
         // main branch length
-        encoderDestination = getEncdoerLocation() + EIGHTH_CLICKS_PER_ROUND - (NOT_PAINTING_AREA * 2);
+        encoderDestination = getEncdoerLocation() + FULL_ROUND_MINUS_10_DEGREES;
 
         Serial.println(String("----------------------encoderLocation: ") + (getEncdoerLocation()));
         Serial.println(String("----------------------encoderDestination: ") + (encoderDestination));
@@ -91,7 +91,7 @@ void moveToNextLeafCreationSpot()
 
         // moving back to to head of the main branch,
         // painting leafs on the way.
-        encoderDestination = getEncdoerLocation() - EIGHTH_CLICKS_PER_ROUND + (NOT_PAINTING_AREA * 2);
+        encoderDestination = getEncdoerLocation() - FULL_ROUND_MINUS_10_DEGREES;
 
         Serial.println(String("encoderLocation: ") + (encoderLoc));
         Serial.println(String("encoderDestination: ") + (encoderDestination));
@@ -181,15 +181,8 @@ void drawLeafPartB()
 
 void finishPaint()
 {
-    numberOfDrawnBranches = (numberOfDrawnBranches + 1) % 4;
-
-    pausePaint();
-
-    // finishing paint after drawing 4 branches
-    if (numberOfDrawnBranches == 0)
-    {
-        finishPain();
-    }
+    finishPain();
+    
     // changing state to prepare next branch
     else
     {
